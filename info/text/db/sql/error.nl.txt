@@ -1,0 +1,1 @@
+Fout in query "%1$s": "%2$s".

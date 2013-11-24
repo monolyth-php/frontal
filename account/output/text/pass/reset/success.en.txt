@@ -1,0 +1,1 @@
+Your password has been set to the new value, and you may now login using it.

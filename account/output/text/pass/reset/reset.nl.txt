@@ -1,0 +1,1 @@
+Uw nieuwe wachtwoord is <strong>%1$s</strong>.

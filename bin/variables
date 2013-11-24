@@ -1,0 +1,126 @@
+#!/usr/bin/php
+<?php
+
+namespace monolyth;
+use monolyth\adapter\sql;
+use ErrorException;
+
+/**
+ * Take a (generated) piece of javascript or CSS and replace variables.
+ * The variables should simply be of the form $varname.
+ *
+ * As of Monolyth 0.38, this also accepts callables. These should be defined
+ * in the following manner in your output/css/variables.php file:
+ * <code>
+ * $mycallable = function($arg1, $arg2) {
+ *     return <<<EOT
+ *     color: $arg1;
+ *     background: $arg2;
+ * EOT;
+ * };
+ * </code>
+ * ...and in your CSS:
+ * <code>
+ * body {
+ *     $mycallable($white, $black);
+ * }
+ * </code>
+ * The "simple" variable substitution is done first, so you can still use
+ * variables when "calling" the function. Of course, you could also pass
+ * literals instead:
+ * <code>
+ * body {
+ *     $mycallable(green, red);
+ * }
+ * </code>
+ *
+ * As of Monolyth 0.43, this also queries the monolyth_variable table.
+ */
+
+/** Turn on all errors so we can catch exceptions. */
+error_reporting(E_ALL);
+/** Define the generic error handler. */
+set_error_handler(
+    function($errno, $errstr, $errfile, $errline, $errcontext) {
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    },
+    error_reporting()
+);
+require_once 'monolyth/Monolyth.php';
+$data = '';
+while (false !== ($line = fgets(STDIN))) {
+    $data .= $line;
+}
+if (!isset($argv[1])) {
+    $argv[1] = 'css';
+}
+if (!isset($argv[2])) {
+    $argv[2] = 'output/%s/variables.php';
+}
+require 'config/adapters.php';
+$adapter = is_callable($_current) ? $_current() : $_current;
+$vars = call_user_func(function() use($argv, $adapter) {
+    try {
+        foreach ($adapter->rows(
+            'monolyth_variable v LEFT JOIN monolyth_media m ON v.media = m.id',
+            ['v.*', 'm.md5'],
+            ['v.target' => $argv[1]]
+        ) as $row) {
+            ${$row['name']} = $row['value'];
+        }
+    } catch (sql\Exception $e) {
+        unset($e);
+    }
+    unset($row, $adapter);
+    try {
+        include sprintf($argv[2], $argv[1]);
+    } catch (ErrorException $e) {
+        unset($e);
+    }
+    unset($argv, $adapter);
+    return get_defined_vars();
+});
+$callables = [];
+$data = preg_replace_callback(
+    '@\$(\w+)@',
+    function($match) use($vars, &$callables) {
+        if (!isset($vars[$match[1]])) {
+            return $match[0];
+        }
+        if (is_callable($vars[$match[1]])) {
+            $callables[$match[1]] = $vars[$match[1]];
+            return $match[0];
+        }
+        return $vars[$match[1]];
+    },
+    $data
+);
+if ($callables) {
+    $data = preg_replace_callback(
+        '@\$(\w+)\((.*)\);?@',
+        function($match) use($callables) {
+            if (!isset($callables[$match[1]])) {
+                return $match[0];
+            }
+            $args = explode(',', $match[2]);
+            return call_user_func_array($callables[$match[1]], $args);
+        },
+        $data
+    );
+}
+foreach ($vars as $name => $value) {
+    if (isset($callables[$name])) {
+        continue;
+    }
+    try {
+        $data = preg_replace(
+            "@\\\$$name(\W|$)@m",
+            "$value\\1",
+            $data
+        );
+    } catch (ErrorEXception $e) {
+        // Most probably a callable; let's ignore these.
+    }
+}
+fwrite(STDOUT, $data);
+

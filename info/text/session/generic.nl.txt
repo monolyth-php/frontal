@@ -1,0 +1,1 @@
+Uw sessie is afgebroken, met de volgende reden: "%1$s".

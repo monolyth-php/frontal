@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:monolyth="http://www.monomelodies.nl/schema/form"
+    id="create" method="post">
+    <description><![CDATA[_(register.description)]]></description>
+    <fields autofill="post">
+        <field name="email" type="text" required="true"
+            mustmatch="/^[-_a-zA-Z0-9.]+@[a-zA-Z0-9][-a-zA-Z0-9.]+\.[a-zA-Z]{2,4}$/"/>
+        <field name="name" type="text" required="true" mustmatch="email"/>
+        <field name="pass" type="password" required="true"/>
+        <field name="pass2" type="password" required="true" mustmatch="pass"/>
+        <field name="submit" type="button:submit" default="_(register.submit)"/>
+    </fields>
+</form>

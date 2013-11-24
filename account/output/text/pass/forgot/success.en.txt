@@ -1,0 +1,1 @@
+Instructions on resetting your password were sent to %1$s.

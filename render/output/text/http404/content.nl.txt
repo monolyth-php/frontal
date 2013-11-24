@@ -1,0 +1,6 @@
+<p>
+    Het bestand dat u zocht werd niet gevonden op deze server. Wellicht een
+    typefout in de URI? Indien u hier kwam via een link op een andere site kunt
+    u misschien de betreffende webmaster informeren.
+</p>
+

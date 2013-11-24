@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:monolyth="http://www.monomelodies.nl/schema/form"
+    id="update_email" method="post">
+    <description><![CDATA[_(email/update/description)]]></description>
+    <fields autofill="post">
+        <field name="current" type="text" disabled="true"
+            value="u:email">
+            <label>_(email/update/current)</label>
+        </field>
+        <field name="new" type="text" required="true"
+            mustmatch="c:monolyth\utils\Regex::EMAIL">
+            <label>_(email/update/new)</label>
+        </field>
+        <field name="new2" type="text" required="true"
+            mustmatch="new">
+            <label>_(email/update/new2)</label>
+        </field>
+        <field name="submit" type="button:submit"
+            default="_(email/update/submit)"/>
+    </fields>
+</form>

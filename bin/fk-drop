@@ -1,0 +1,24 @@
+#!/bin/bash
+
+schema="$1"
+user="root"
+pass="$2"
+mysql="mysql -p$pass -u $user $schema"
+echo $mysql
+
+fksQueryResult=`echo \
+    "SELECT TABLE_NAME, CONSTRAINT_NAME" \
+    "FROM information_schema.TABLE_CONSTRAINTS"\
+    "WHERE CONSTRAINT_TYPE='FOREIGN KEY' AND TABLE_SCHEMA='$schema';"\
+| $mysql`
+declare -a fks
+fks=($fksQueryResult)
+for((i=2;i<${#fks[@]};i+=2)); do
+    iinc=i+1
+    tableName=${fks[$i]}
+    keyName=${fks[$iinc]}
+    echo "Dropping $tableName : $keyName"
+    echo "ALTER TABLE $tableName"\
+         "DROP FOREIGN KEY $keyName;"\
+         | $mysql
+done

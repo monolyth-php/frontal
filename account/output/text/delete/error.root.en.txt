@@ -1,0 +1,1 @@
+This user is the root user and cannot be deleted.

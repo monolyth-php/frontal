@@ -1,0 +1,91 @@
+#!/usr/bin/php5
+<?php
+
+/**
+ * Crawl an entire directory structure, and report missing texts.
+ * This also checks the entire database for missing language entries,
+ * assuming the 'language' column signifies the language.
+ */
+
+$dir = $BASE = realpath(__DIR__.'/../../..');
+set_include_path(implode(PATH_SEPARATOR, [
+    "$dir",
+    "$dir/.libraries",
+    '/usr/share/php5',
+]));
+require_once 'monolyth/Monolyth.php';
+require 'config/adapters.php';
+if (is_callable($_current)) {
+    $_current = call_user_func($_current);
+}
+$adapter = $_current;
+$languages = [];
+foreach ($adapter->rows(
+    'monolyth_language JOIN monolyth_language_all USING(id)',
+    '*'
+) as $lang) {
+    $languages[$lang['id']] = $lang['code'];
+}
+
+$walk = null;
+$texts = [];
+$walk = function($dir) use($languages, &$walk, &$texts, $BASE)
+{
+    if (preg_match("@/(\.libraries|admin|monad)$@", $dir)) { 
+        return;
+    }
+    $d = Dir($dir);
+    while (false !== ($entry = $d->read())) {
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+        if (is_dir("$dir/$entry")) {
+            call_user_func($walk, "$dir/$entry");
+            continue;
+        }
+        if (preg_match("@\.(\w+)\.txt$@", $entry, $match)) {
+            $id = preg_replace("@\.\w+\.txt@", '', $entry);
+            $id = str_replace($BASE, '', "$dir/$id");
+            if (!isset($texts[$id])) {
+                $texts[$id] = [];
+            }
+            $texts[$id][] = $match[1];
+        }
+    }
+};
+
+$walk($dir);
+if (isset($argv[1])) {
+    $fp = fopen($argv[1], 'w');
+    fputcsv($fp, array_merge(['id'], array_values($languages)), ';', '"');
+    foreach ($texts as $id => $data) {
+        $row = [$id];
+        $missing = false;
+        foreach ($languages as $lang) {
+            if (!in_array($lang, $data)) {
+                $missing = true;
+            }
+        }
+        if ($missing) {
+            foreach ($languages as $lang) {
+                try {
+                    $row[] = trim(file_get_contents("$BASE/$id.$lang.txt"));
+                } catch (ErrorException $e) {
+                    $row[] = '';
+                }
+            }
+            fputcsv($fp, $row, ';', '"');
+        }
+    }
+    fclose($fp);
+} else {
+    foreach ($texts as $id => $data) {
+        foreach ($languages as $lang) {
+            if (!in_array($lang, $data)) {
+                echo "Missing: $id/$lang\n";
+            }
+        }
+    }
+    echo "\n";
+}
+

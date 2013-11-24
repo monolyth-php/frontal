@@ -1,0 +1,76 @@
+#!/usr/bin/php5
+<?php
+
+$args = $argv;
+array_shift($args);
+$help = <<<EOT
+
+Command line tool to (re)insert cities for the given country in your project.
+Usage:
+
+./cities -h host -d database -u user -p password -a adapter -c countrycode
+
+The 'host' parameter defaults to localhost, the 'user' parameter to 'root',
+the password to empty and the adapter to 'mysql'.
+
+Alternative supported adapters are, at time of writing:
+'pgsql' for PostgreSQL.
+
+
+EOT;
+for ($i = 0; $i < count($args); $i += 2) {
+    if (!in_array($args[$i], ['-h', '-d', '-u', '-p', '-a', '-c'])
+        || !isset($args[$i + 1])
+    ) {
+        die($help);
+    }
+    $varname = $args[$i]{1};
+    $$varname = $args[$i + 1];
+}
+if (!isset($d, $c)) {
+    die($help);
+}
+if (!isset($h)) {
+    $h = 'localhost';
+}
+if (!isset($u)) {
+    $u = 'root';
+}
+if (!isset($p)) {
+    $p = null;
+}
+if (!isset($a)) {
+    $a = 'mysql';
+}
+$options = [PDO::ATTR_PERSISTENT => true];
+if ($a == 'mysql') {
+    $options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET names UTF8';
+}
+$db = new PDO("$a:host=$h;dbname=$d", $u, $p, $options);
+if (!file_exists("./../info/cities/{$c}.json")) {
+    die("\nUnknown country: $c\n");
+}
+$cities = json_decode(file_get_contents("./../info/cities/{$c}.json"));
+$stmt = $db->prepare("SELECT id FROM monolyth_country WHERE code = ?");
+$stmt->execute([$c]);
+$country = $stmt->fetchColumn();
+$instr = [];
+foreach ($cities as $city) {
+    $instr[] = $db->quote($city->name);
+}
+$db->exec(sprintf(
+    "DELETE FROM monolyth_city WHERE country = %s AND name NOT IN (%s)",
+    $db->quote($country),
+    implode(', ', $instr)
+));
+$insert1 = $db->prepare("INSERT INTO monolyth_city VALUES (NULL, ?, ?, ?)");
+$insert2 = $db->prepare("INSERT INTO monolyth_city VALUES (NULL, ?, NULL, ?)");
+foreach ($cities as $city) {
+    if ($city->language) {
+        $insert1->execute([$country, $city->language, $city->name]);
+    } else {
+        $insert2->execute([$country, $city->name]);
+    }
+}
+echo "\nOk; done!\n\n";
+

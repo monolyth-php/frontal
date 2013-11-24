@@ -1,0 +1,3 @@
+Uw nieuwe wachtwoord is <code>%1$s</code>. U kunt hiermee inloggen, en
+vervolgens een nieuwe kiezen (daarbij heeft u dit wachtwoord nodig, dus
+noteert u hem alstublieft!).

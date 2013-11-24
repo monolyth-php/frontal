@@ -1,0 +1,6 @@
+<p>Beste %1$s,</p>
+
+<p>
+    Om uw nieuwe e-mailadres te bevestigen en uw account te heractiveren,
+    verzoeken wij u op onderstaande link te klikken:
+</p>

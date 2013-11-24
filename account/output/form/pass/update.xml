@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:monolyth="http://www.monomelodies.nl/schema/form"
+    id="update_pass" method="post">
+    <description><![CDATA[_(pass/update/description)]]></description>
+    <fields autofill="post">
+        <field name="current" type="password" mustmatch="u:pass">
+            <label>_(pass/update/current)</label>
+        </field>
+        <field name="new" type="password" required="true">
+            <label>_(pass/update/new)</label>
+        </field>
+        <field name="new2" type="password" required="true"
+            mustmatch="new">
+            <label>_(pass/update/new2)</label>
+        </field>
+        <field name="submit" type="button:submit"
+            default="_(pass/update/submit)"/>
+    </fields>
+</form>

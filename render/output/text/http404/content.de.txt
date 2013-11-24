@@ -1,0 +1,6 @@
+<p>
+    Die Datei, die Sie gesucht haben existiert nicht auf diesem Server.
+    Vielleicht haben Sie sich vertippt die URI?
+    Wenn Sie hierher gekommen, &uuml;ber einen Link auf einer anderen Website,
+    Bitte informieren Sie den Webmaster.
+</p>

@@ -1,0 +1,3 @@
+Your account was successfully created. A confirmation email was sent to the
+address you supplied; please follow the instructions in this email to
+complete your registration.

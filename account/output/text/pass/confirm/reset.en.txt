@@ -1,0 +1,3 @@
+Your new password is <code>%1$s</code>. You may login with this password, and
+select a new one afterwards (for which you'll need this password, so please
+write it down!).

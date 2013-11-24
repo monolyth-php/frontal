@@ -1,0 +1,3 @@
+An activation e-mail was sent to %1$s. Please follow the instructions
+in this e-mail to finalise your registration.
+

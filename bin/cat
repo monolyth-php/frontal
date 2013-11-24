@@ -1,0 +1,10 @@
+#!/usr/bin/php5
+<?php
+
+/**
+ * Simple utility to emulate the cat command for non-Unix systems.
+ */
+while (false !== ($line = fgets(STDIN))) {
+    fwrite(STDOUT, $line);
+}
+

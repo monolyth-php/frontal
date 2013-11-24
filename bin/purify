@@ -1,0 +1,40 @@
+#!/usr/bin/php5
+<?php
+
+require_once 'HTMLPurifier.auto.php';
+$PATH = realpath(__DIR__);
+require_once "$PATH/../3rdparty/HTMLPurifier/Filter.php";
+require_once "$PATH/../3rdparty/HTMLPurifier/Filter/Flash.php";
+$html = '';
+while (false !== ($line = fgets(STDIN))) {
+    $html .= $line;
+}
+$config = HTMLPurifier_Config::createDefault();
+$config->set('HTML.Doctype', 'HTML 4.01 Strict');
+$config->set('CSS.Proprietary', true);
+$config->set('CSS.AllowTricky', true);
+$config->set('Filter.Custom', [new HTMLPurifier_Filter_Flash()]);
+$config->set('HTML.DefinitionID', 'enduser-customize.html html5');
+$config->set('HTML.DefinitionRev', 1);
+if ($def = $config->maybeGetRawHTMLDefinition()) {
+    $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+    $def->addElement('section', 'Block', 'Flow', 'Common');
+    $def->addElement('article', 'Block', 'Flow', 'Common');
+    $def->addElement('header', 'Block', 'Flow', 'Common');
+    $def->addElement('footer', 'Block', 'Flow', 'Common');
+    $def->addElement('aside', 'Block', 'Flow', 'Common');
+    $def->addElement('time', 'Inline', 'Inline', 'Common', [
+        'datetime' => 'Text',
+        'pubdate' => 'Bool',
+    ]);
+    $def->addElement('figure', 'Inline', 'Inline', 'Common');
+    $def->addElement('figcaption', 'Inline', 'Inline', 'Common');
+}
+if (isset($argv[1])) {
+    call_user_func(require $argv[1], $config);
+}
+$purifier = new HTMLPurifier($config);
+$html = $purifier->purify("<p>$html</p>");
+$html = preg_replace("@<p>\s*?</p>@m", '', $html);
+fwrite(STDOUT, $html);
+

@@ -1,0 +1,51 @@
+#!/usr/bin/php5
+<?php
+
+if (count($argv) < 2) {
+    die("Usage: ./crush STARTING_FOLDER\n\n");
+}
+
+// traverse dirs
+function get_files($base)
+{
+    $d = Dir($base);
+    while (false != ($entry = $d->read())) {
+        if ($entry{0} == '.') continue;
+        print "$entry ";
+        $ext = substr($entry, strrpos($entry, '.') + 1);
+        if (is_dir($base.'/'.$entry)) {
+            get_files($base.'/'.$entry);
+        } elseif ($ext == 'png') {
+            crushpng($base.'/'.$entry);
+        } elseif ($ext == 'jpg' || $ext == 'jpeg') {
+            crushjpeg($base.'/'.$entry);
+        }
+    }
+}
+
+function crushpng($png)
+{
+    `pngcrush -rem gAMA -rem cHRM -rem iCCP -rem sRGB -rem alla -rem text -brute '$png' '{$png}.2'`;
+    `rm '$png'`;
+    `mv '{$png}.2' '$png'`;
+}
+
+function crushjpeg($jpeg)
+{
+    $i = imagecreatefromjpeg($jpeg);
+    if (!$i) {
+        return;
+    }
+    $max = max(imagesx($i), imagesy($i));
+    if ($max < 80) {
+        imagejpeg($i, $jpeg, 60);
+    } elseif ($max < 200) {
+        imagejpeg($i, $jpeg, 75);
+    } else {
+        imagejpeg($i, $jpeg, 85);
+    }
+}
+
+get_files($argv[1]);
+print "\n\n";
+

@@ -1,0 +1,94 @@
+#!/usr/bin/php5
+<?php
+
+$args = $argv;
+array_shift($args);
+$help = <<<EOT
+
+Command line tool to (re)insert countries in the available languages in your
+project. Usage:
+
+./countries -h host -d database -u user -p password -a adapter
+
+The 'host' parameter defaults to localhost, the 'user' parameter to 'root',
+the password to empty and the adapter to 'mysql'.
+
+Alternative supported adapters are, at time of writing:
+'pgsql' for PostgreSQL.
+
+
+EOT;
+for ($i = 0; $i < count($args); $i += 2) {
+    if (!in_array($args[$i], ['-h', '-d', '-u', '-p', '-a'])
+        || !isset($args[$i + 1])
+    ) {
+        die($help);
+    }
+    $varname = $args[$i]{1};
+    $$varname = $args[$i + 1];
+}
+if (!isset($d)) {
+    die($help);
+}
+if (!isset($h)) {
+    $h = 'localhost';
+}
+if (!isset($u)) {
+    $u = 'root';
+}
+if (!isset($p)) {
+    $p = null;
+}
+if (!isset($a)) {
+    $a = 'mysql';
+}
+$options = [PDO::ATTR_PERSISTENT => true];
+if ($a == 'mysql') {
+    $options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET names UTF8';
+}
+$db = new PDO("$a:host=$h;dbname=$d", $u, $p, $options);
+$d = Dir("./../render/output/text/country");
+$texts = [];
+while (false !== ($entry = $d->read())) {
+    if ($entry{0} == '.') continue;
+    $p = explode('.', $entry);
+    if (!isset($texts[$p[0]])) {
+        $texts[$p[0]] = [];
+    }
+    $texts[$p[0]][$p[1]] = file_get_contents("./../render/output/text/country/$entry");
+}
+ksort($texts);
+foreach ($texts as $code => $names) {
+    $test = $db->query("SELECT id FROM monolyth_country WHERE code = '$code'");
+    $id = null;
+    foreach ($test as $row) {
+        $id = $row['id'];
+    }
+    if (!isset($id)) {
+        $mods = $db->exec("INSERT INTO monolyth_country (code) VALUES ('$code')\n");
+        if (!$mods) {
+            die(print_r($db->errorInfo(), true));
+        }
+        $id = $db->lastInsertId();
+    }
+    foreach ($names as $lang => $name) {
+        $name = $db->quote($name);
+        $lid = $db->query("SELECT id FROM
+            monolyth_language l
+            JOIN monolyth_language_all a USING(id, title)
+            WHERE code = '$lang'");
+        if (!$lid) {
+            continue;
+        }
+        foreach ($lid as $l) {
+            $test = $db->query("SELECT * FROM monolyth_country_i18n WHERE id = '$id'
+                AND language = '{$l['id']}'");
+            foreach ($test as $found) {
+                continue 2;
+            }
+            $db->exec("INSERT INTO monolyth_country_i18n VALUES ('$id', '{$l['id']}', $name)");
+        }
+    }
+}
+echo "\nOk; done!\n\n";
+

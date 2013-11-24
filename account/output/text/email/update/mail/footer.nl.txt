@@ -1,0 +1,8 @@
+<p>
+    U kunt de link ook kopieren/plakken naar de adresbalk van uw favoriete
+    browser. Let u hierbij op dat u de <em>volledige</em> link overneemt;
+    sommige mailprogramma's breken lange links af over meerdere regels.
+</p>
+
+<p>Met vriendelijke groet,</p>
+<p>Uw webmaster</p>

@@ -1,0 +1,26 @@
+
+#main .menu-text a {
+    background-image: url(menu/texts.png);
+    }
+#main .menu-user a {
+    background-image: url(menu/users.png);
+    }
+#main .menu-group a {
+    background-image: url(menu/groups.png);
+    }
+#main .menu-permission a {
+    background-image: url(menu/permissions.png);
+    }
+#main .menu-mail a {
+    background-image: url(menu/mail.png);
+    }
+#main .menu-mail_template a {
+    background-image: url(menu/mail_template.png);
+    }
+#main .menu-language a {
+    background-image: url(menu/languages.png);
+    }
+#main .menu-media a {
+    background-image: url(menu/medias.png);
+    }
+

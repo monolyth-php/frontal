@@ -1,0 +1,52 @@
+#!/usr/bin/php5
+<?php
+
+/**
+ * Simple utility to compact STDIN to STDOUT.
+ *
+ * E.g.: ./compact < bigJavascriptFile.js > small.js
+ *
+ * Compact.php basically strips whitespace, where possible.
+ */
+$data = '';
+while (false !== ($line = fgets(STDIN))) {
+    $data .= $line;
+}
+if (!strlen(trim($data))) {
+    fwrite(STDOUT, '');
+    die();
+}
+// Remove comments.
+$data = preg_replace("@^/\*.*?\*/@ms", '', $data);
+$data = preg_replace("@\s/\*.*?\*/@ms", '', $data);
+$lines = explode("\n", $data);
+foreach ($lines as &$line) {
+    if (substr(trim($line), 0, 2) == '//') {
+        $line = '';
+    }
+}
+$data = implode('', $lines);
+// Remove whitespace.
+$data = preg_replace("@\s+@ms", ' ', $data);
+// Remove whitespace in statements (valid for css and javascript).
+$data = preg_replace_callback(
+    "@(\s?[,:;\-\*\?\(\){}\|\[\]=]+\s?)@m",
+    function($matches) {
+        return str_replace(' ', '', $matches[1]);
+    },
+    $data
+);
+// Over-zealous programmers write stuff like 'foo + ++bar'.
+// Prevent that from becoming the (invalid) 'foo+++bar'.
+$data = preg_replace("@\s+\+\s+(?!\+)@ms", '+', $data);
+$data = preg_replace("@(px|em|%|ex)(-\d+)@", "\\1 \\2", $data);
+// Remove semicolons before closing curly braces.
+$data = str_replace(";}", '}', $data);
+// Force a space after a return statement.
+$data = str_replace('return{', 'return {', $data);
+// Force a space after a closing bracket
+// (or IE doesn't get backgrounds with positioning).
+$data = preg_replace("@\)(\w)@ms", ") \\1", $data);
+
+fwrite(STDOUT, $data);
+
