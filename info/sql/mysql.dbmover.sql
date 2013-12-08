@@ -1,5 +1,5 @@
 
-/* {{{ v4.1.2 */
+-- {{{ v4.1.2
 CREATE TABLE monolyth_auth (
     id bigint UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(16),
@@ -888,7 +888,6 @@ INSERT INTO monolyth_language_all VALUES
     (NULL, 'es', 'es_ES', 'Espanyol', NULL);
 INSERT INTO monolyth_language VALUES (1, 'English', 1, 1);
 
-ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner)
-    REFERENCES monolyth_auth(id) ON DELETE CASCADE;
-/* }}} */
+ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
+-- }}}
 
