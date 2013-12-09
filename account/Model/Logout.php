@@ -15,6 +15,7 @@ class Logout_Model extends Model implements Project_Access, Session_Access
 {
     public function __invoke(&$redir = null)
     {
+        unset($_COOKIE['monolyth_persist']);
         setcookie(
             'monolyth_persist',
             '',
