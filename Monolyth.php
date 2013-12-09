@@ -96,12 +96,11 @@ abstract class Monolyth
             $file = str_replace('\\', DIRECTORY_SEPARATOR, $namespace)
                    .DIRECTORY_SEPARATOR;
         }
-        include_once "Project.php";
         $parts = explode('_', $class);
         $parts = array_reverse($parts);
         $file .= implode(DIRECTORY_SEPARATOR, $parts).'.php';
         try {
-            include_once $file;
+            include $file;
             if (!(class_exists($orig, false)
                 || interface_exists($orig, false)
             )) {
