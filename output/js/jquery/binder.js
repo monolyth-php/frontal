@@ -74,9 +74,9 @@ this.update = function(type, element, data) {
         }
         s.attr('data-binder-id', data[i][u]);
         if (b.template.attr('data-binder-append')) {
-            b.template.before(s);
-        } else {
             b.template.after(s);
+        } else {
+            b.template.before(s);
         }
     }
 
