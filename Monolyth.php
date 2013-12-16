@@ -110,7 +110,7 @@ abstract class Monolyth
         } catch (ErrorException $e) {
             if (strpos(
                 $e->getMessage(),
-                "include_once($file): failed to open stream"
+                "include($file): failed to open stream"
             ) === false) {
                 throw $e;
             }
