@@ -101,11 +101,11 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
         $Groups = [];
         try {
             $q = $this->adapter->rows(
-                'monolyth_auth_group AS a
-                 JOIN monolyth_auth_link_auth_group l
-                 ON a.id = l.auth_group',
+                'monolyth_group AS g
+                 JOIN monolyth_auth_group ag
+                 ON g.id = ag.auth_group',
                 ['name', 'auth_group'],
-                ['l.auth' => $u['id']]
+                ['ag.auth' => $u['id']]
             );
             foreach ($q as $row) {
                 $Groups[$row['auth_group']] = $row['name'];
