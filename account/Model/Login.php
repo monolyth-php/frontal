@@ -98,22 +98,22 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
             );
         }
         // Cache some basic ACL info:
-        $Group = [];
+        $Groups = [];
         try {
             $q = $this->adapter->rows(
                 'monolyth_auth_group AS a
                  JOIN monolyth_auth_link_auth_group l
                  ON a.id = l.auth_group',
-                'auth_group',
+                ['name', 'auth_group'],
                 ['l.auth' => $u['id']]
             );
             foreach ($q as $row) {
-                $Group[] = $row['auth_group'];
+                $Groups[$row['auth_group']] = $row['name'];
             }
         } catch (NoResults_Exception $e) {
             // No problem; not all users belong to groups per se.
         }
-        $this->session->set(compact('Group'));
+        $this->session->set(compact('Groups'));
         return null;
     }
 
