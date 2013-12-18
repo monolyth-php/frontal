@@ -891,3 +891,11 @@ INSERT INTO monolyth_language VALUES (1, 'English', 1, 1);
 ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
 -- }}}
 
+-- {{{ v4.3.0
+DROP TABLE monolyth_acl;
+DROP TABLE monolyth_acl_resource;
+ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
+ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
+ALTER TABLE monolyth_temp RENAME TO monolyth_group;
+-- }}}
+
