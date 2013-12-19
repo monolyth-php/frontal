@@ -39,13 +39,24 @@ class User_Model implements Session_Access, Message_Access, User_Constants
         return $this->adapter->field('monolyth_auth', 'name', compact('id'));
     }
 
-    public function group()
+    public function groups()
     {
-        try {
-            return $this->session->get('Group');
-        } catch (ErrorException $e) {
-            return null;
+        $groups = $this->session->get('Groups');
+        if ($groups) {
+            return $groups;
         }
+        return [];
+    }
+
+    public function inGroup($group)
+    {
+        $groups = $this->groups();
+        foreach (func_get_args() as $group) {
+            if (in_array($group, $groups)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function __call($name, $arguments)
@@ -76,7 +87,6 @@ class User_Model implements Session_Access, Message_Access, User_Constants
                     )
                 );                    
             }
-            $this->acl->flush();
         }
         return $error;
     }

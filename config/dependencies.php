@@ -34,14 +34,6 @@ $container->using(__NAMESPACE__, function() use($container) {
             return $session;
         }
     );
-    $container->register(
-        'ACL',
-        ['resourceModel' => function() { return new ACLResource_Model; }],
-        function($acl) {
-            $acl->init();
-            return $acl;
-        }
-    );
     /**
      * Override this after loading Monolyth dependencies to use different
      * types of session.
@@ -82,14 +74,9 @@ $container->using(__NAMESPACE__, function() use($container) {
     $container->register(
         'User_Model',
         [
-            'acl' => function($o) { return new ACL_Model($o); },
             'login' => function() { return new account\Login_Model; },
             'logout' => function() { return new account\Logout_Model; },
-        ],
-        function($user) {
-            $user->acl->init();
-            return $user;
-        }
+        ]
     );
     $container->register(
         'Comment_Finder',
