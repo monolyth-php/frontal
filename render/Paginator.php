@@ -18,14 +18,19 @@ class Paginator
     }
     
     protected $objects = [];
-    private $currentPage, $nextPage, $lastPage, $totalPages, $url,
-            $args = [], $params;
+    private $currentPage;
+    private $nextPage;
+    private $lastPage;
+    private $totalPages;
+    private $url;
+    private $args = [];
+    private $params = [];
 
     public function init($url, array $args, Resultset $model, $params = null)
     {
         $this->url = $url;
         $this->args = $args;
-        $this->params = $params;
+        $this->params = isset($params) ? $params : [];
         $this->push($model);
         return $this;
     }
