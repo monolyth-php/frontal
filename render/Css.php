@@ -19,10 +19,12 @@ class Css extends External
                         $file
                     );
                 }
-                $out .= sprintf(
-                    '<link rel="stylesheet" href="%s">'."\n",
-                    $this->httpimg($this->assemble($collection))
-                );
+                if ($collection) {
+                    $out .= sprintf(
+                        '<link rel="stylesheet" href="%s">'."\n",
+                        $this->httpimg($this->assemble($collection))
+                    );
+                }
             }
         } catch (Exception $e) {
             $out = $e->getMessage();
