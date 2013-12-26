@@ -22,7 +22,7 @@ if (isset($description) && is_array($description)) {
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?=implode(' - ', $title)?></title>
-    <meta name="generator" content="Monolyth 0.46">
+    <meta name="generator" content="Monolyth 4.0.48">
 <?php if (isset($keywords) && $keywords) { ?>
     <meta name="keywords" content="<?=htmlentities(implode(', ', $keywords))?>">
 <?php } ?>
