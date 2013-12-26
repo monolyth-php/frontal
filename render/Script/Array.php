@@ -13,10 +13,12 @@ class Array_Script extends Script
                 foreach ($this->extractExternal($collection) as $file) {
                     $out[] = "'$file'";
                 }
-                $out[] = sprintf(
-                    "'%s'",
-                    $this->httpimg($this->assemble($collection))
-                );
+                if ($collection) {
+                    $out[] = sprintf(
+                        "'%s'",
+                        $this->httpimg($this->assemble($collection))
+                    );
+                }
             }
             return implode(',', $out);
         } catch (ErrorException $e) {
