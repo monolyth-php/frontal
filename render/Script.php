@@ -17,10 +17,12 @@ class Script extends External
                         $file
                     );
                 }
-                $out .= sprintf(
-                    '<script src="%s"></script>'."\n",
-                    $this->httpimg($this->assemble($collection))
-                );
+                if ($collection) {
+                    $out .= sprintf(
+                        '<script src="%s"></script>'."\n",
+                        $this->httpimg($this->assemble($collection))
+                    );
+                }
             }
             return $out;
         } catch (ErrorException $e) {
