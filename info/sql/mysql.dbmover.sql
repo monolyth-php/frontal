@@ -898,7 +898,7 @@ ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
 ALTER TABLE monolyth_temp RENAME TO monolyth_group;
 -- }}}
 
--- {{{ v4.3.2
+-- {{{ v4.3.1
 ALTER TABLE monolyth_group CHANGE COLUMN countmember members BIGINT NOT NULL DEFAULT 0;
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
 DELIMITER $$
