@@ -533,7 +533,6 @@ END;
 $$
 DELIMITER ;
 
-
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_link_auth_group_after_insert AFTER INSERT ON monolyth_auth_link_auth_group
@@ -897,5 +896,18 @@ DROP TABLE monolyth_acl_resource;
 ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
 ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
 ALTER TABLE monolyth_temp RENAME TO monolyth_group;
+-- }}}
+
+-- {{{ v4.3.1
+ALTER TABLE monolyth_group CHANGE COLUMN countmember members BIGINT NOT NULL DEFAULT 0;
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group
+FOR EACH ROW
+BEGIN
+    UPDATE monolyth_group SET members = members + 1 WHERE id = NEW.auth_group;
+END;
+$$
+DELIMITER ;
 -- }}}
 
