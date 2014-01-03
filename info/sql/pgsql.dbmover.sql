@@ -915,6 +915,7 @@ CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_gr
 -- }}}
 
 -- {{{ v4.3.3
+
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete ON monolyth_auth_group;
 DROP FUNCTION monolyth_auth_link_auth_group_after_delete();
 CREATE OR REPLACE FUNCTION monolyth_auth_group_after_delete() RETURNS "trigger" AS $$
