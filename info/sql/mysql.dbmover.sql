@@ -911,3 +911,15 @@ $$
 DELIMITER ;
 -- }}}
 
+-- {{{ v4.3.3
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group
+FOR EACH ROW
+BEGIN
+    UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
+END;
+$$
+DELIMITER ;
+-- }}}
+
