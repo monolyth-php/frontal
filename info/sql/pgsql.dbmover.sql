@@ -895,10 +895,33 @@ ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES mo
 -- }}}
 
 -- {{{ v4.3.0
-DROP TABLE monolyth_acl;
-DROP TABLE monolyth_acl_resource;
+DROP TABLE monolyth_acl CASCADE;
+DROP TABLE monolyth_acl_resource CASCADE;
 ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
 ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
 ALTER TABLE monolyth_temp RENAME TO monolyth_group;
+-- }}}
+
+-- {{{ v4.3.2
+ALTER TABLE monolyth_group RENAME COLUMN countmember TO members;
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert ON monolyth_auth_group;
+DROP FUNCTION monolyth_auth_link_auth_group_after_insert();
+CREATE OR REPLACE FUNCTION monolyth_auth_group_after_insert() RETURNS "trigger" AS $$
+BEGIN
+    UPDATE monolyth_group SET members = members + 1 WHERE id = NEW.auth_group;
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_insert();
+
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete ON monolyth_auth_group;
+DROP FUNCTION monolyth_auth_link_auth_group_after_delete();
+CREATE OR REPLACE FUNCTION monolyth_auth_group_after_delete() RETURNS "trigger" AS $$
+BEGIN
+    UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
+    RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_delete();
 -- }}}
 
