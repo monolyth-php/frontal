@@ -430,9 +430,13 @@ abstract class Adapter implements monolyth\adapter\Adapter
             str_replace("'", '', implode(', ', array_keys($fields))),
             implode(', ', $this->values($fields, $bind))
         );
+        $start = microtime(true);
         $statement = $this->pdo->prepare($sql);
         try {
             $statement->execute($bind);
+            $end = microtime(true) - $start;
+            $this->logger->log($sql, $end);
+            $this->querytime += $end;
         } catch (PDOException $e) {
             throw new InsertNone_Exception(
                 $this->error(
@@ -479,6 +483,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
                 $value = $key.' = '.$this->value($value, $bind);
             }
         }
+        $start = microtime(true);
         $sql = sprintf(
             "UPDATE %s SET %s WHERE %s %s",
             $table,
@@ -489,6 +494,9 @@ abstract class Adapter implements monolyth\adapter\Adapter
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
+            $end = microtime(true) - $start;
+            $this->logger->log($sql, $end);
+            $this->querytime += $end;
         } catch (PDOException $e) {
             throw new Exception(
                 $this->error(
@@ -539,8 +547,12 @@ abstract class Adapter implements monolyth\adapter\Adapter
                 $table,
                 $this->where($where, $bind)
             );
+            $start = microtime(true);
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
+            $end = microtime(true) - $start;
+            $this->logger->log($sql, $end);
+            $this->querytime += $end;
             $affected = $statement->rowCount();
             if (!$affected) {
                 $info = $statement->errorInfo();
