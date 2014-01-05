@@ -8,21 +8,24 @@
 namespace monolyth\account;
 use monolyth\User_Model as Base_Model;
 use monolyth\User_Access;
-use monolyth\adapter;
+use adapter\Access as Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\DeleteNone_Exception;
 use monolyth\adapter\sql\Exception;
 use monolyth\core\Post_Form;
 
-class User_Model extends Base_Model implements User_Access, adapter\Access
+class User_Model extends Base_Model
 {
+    use Adapter_Access;
+    use User_Access;
+
     public function name(Post_Form $form)
     {
         if (call_user_func(
             $this->check,
             $form['pass']->value,
-            $this->user->pass(),
-            $this->user->salt()
+            self::user()->pass(),
+            self::user()->salt()
         ) != null) {
             return 'password';
         }
@@ -30,12 +33,12 @@ class User_Model extends Base_Model implements User_Access, adapter\Access
             return 'exists';
         }
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_auth',
                 ['name' => $form['name']->value],
-                ['id' => $this->user->id()]
+                ['id' => self::user()->id()]
             );
-            $this->user->name($form['name']->value);
+            self::user()->name($form['name']->value);
             return null;
         } catch (UpdateNone_Exception $e) {
             return 'unchanged';
@@ -46,11 +49,12 @@ class User_Model extends Base_Model implements User_Access, adapter\Access
 
     public function email(Post_Form $form)
     {
+        $check = new Check_Pass_Model;
         if (call_user_func(
-            $this->check,
+            $check,
             $form['pass']->value,
-            $this->user->pass(),
-            $this->user->salt()
+            self::user()->pass(),
+            self::user()->salt()
         ) != null) {
             return 'password';
         }
@@ -58,18 +62,19 @@ class User_Model extends Base_Model implements User_Access, adapter\Access
             return 'exists';
         }
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_auth',
                 ['email' => $form['new']->value],
-                ['id' => $this->user->id()]
+                ['id' => self::user()->id()]
             );
-            $this->user->email($form['new']->value);
-            $status = $this->user->status();
-            $user = $this->user;
+            self::user()->email($form['new']->value);
+            $status = self::user()->status();
+            $user = self::user();
             $status |= $user::STATUS_REACTIVATE
                 | $user::STATUS_EMAIL_UNCONFIRMED;
             $user->status($status);
-            $this->activate->request($user->id());
+            $activate = new Activate_Model;
+            $activate->request($user->id());
             return null;
         } catch (UpdateNone_Exception $e) {
             return 'unchanged';
@@ -85,7 +90,7 @@ class User_Model extends Base_Model implements User_Access, adapter\Access
             $where['id'] = ['<>' => $id];
         }
         try {
-            $this->adapter->field('monolyth_auth', 1, $where);
+            self::adapter()->field('monolyth_auth', 1, $where);
             return true;
         } catch (NoResults_Exception $e) {
             return false;
@@ -94,20 +99,20 @@ class User_Model extends Base_Model implements User_Access, adapter\Access
 
     public function delete()
     {
-        $this->adapter->beginTransaction();
+        self::adapter()->beginTransaction();
         try {
-            $this->adapter->delete(
+            self::adapter()->delete(
                 'monolyth_auth',
-                ['id' => $this->user->id()]
+                ['id' => self::user()->id()]
             );
-            call_user_func($this->user->logout);
-            $this->adapter->commit();
+            call_user_func(self::user()->logout);
+            self::adapter()->commit();
             if (method_exists($this, 'notify')) {
                 $this->notify();
             }
             return null;
         } catch (DeleteNone_Exception $e) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return 'generic';
         }
     }
