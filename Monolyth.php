@@ -13,6 +13,7 @@ namespace monolyth;
 use adapter\Access as Adapter_Access;
 use ErrorException;
 use monolyth\core\Project;
+use monad\admin\Project as Monad_Project;
 
 /** Turn on all errors so we can catch exceptions. */
 error_reporting(E_ALL & ~E_STRICT);
@@ -53,7 +54,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
  */
 require_once 'adapter/Access.php';
 require_once 'monolyth/Access/Language.php';
-require_once 'monolyth/Access/Project.php';
 require_once 'monolyth/render/Access/Router.php';
 
 /**
@@ -176,34 +176,16 @@ abstract class Monolyth
                 } catch (LanguageNotFound_Exception $e) {
                 }
             }
-            /*
-            $container = new DependencyContainer;
-            $container->register('monolyth\Country_Access', compact('country'));
-            $container->register(
-                ['monolyth\Router_Access', 'monolyth\render\Url_Helper'],
-                compact('router')
-            );
-            $container->register(
-                ['monolyth\Language_Access', 'monolyth\render\Url_Helper'],
-                compact('language')
-            );
-            $adapter = $adapters->_current;
-            $container->register(
-                'monolyth\adapter\Access',
-                compact('adapter', 'adapters')
-            );
-            $container->register('monolyth\Project_Access', compact('project'));
+            require 'config/aliases.php';
             if ($match
                 && (array_key_exists(
                     'monad\core\Controller',
                     class_parents($match['controller'])
                 )
             )) {
-                require 'monad/config/dependencies.php';
-            } else {
-                require 'config/dependencies.php';
+                static::$project = new Monad_Project($theme);
+                static::$project['public'] = $project['public'];
             }
-            */
             if (!$match) {
                 throw new HTTP404_Exception;
             }
@@ -228,7 +210,6 @@ abstract class Monolyth
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
             $e = new render\DatabaseDown_Controller(new DependencyContainer);
-            $e->project = $project;
             $e('GET', []);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
@@ -331,10 +312,6 @@ if (isset($_REQUEST['repost'])) {
  * autoloaders first, or with the prepend-argument set to true.
  */
 spl_autoload_register(['monolyth\Monolyth', '__autoload']);
-try {
-    include_once 'config/dependencies.php';
-} catch (ErrorException $e) {
-}
 
 /** Alias base class manually. */
 class_alias('monolyth\Monolyth', 'Monolyth');
