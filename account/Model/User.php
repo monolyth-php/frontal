@@ -105,7 +105,7 @@ class User_Model extends Base_Model
                 'monolyth_auth',
                 ['id' => self::user()->id()]
             );
-            call_user_func(self::user()->logout);
+            self::user()->logout();
             self::adapter()->commit();
             if (method_exists($this, 'notify')) {
                 $this->notify();
