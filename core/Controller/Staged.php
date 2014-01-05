@@ -12,7 +12,7 @@ use monolyth\DependencyContainer;
 use monolyth\HTTP301_Exception;
 use ErrorException;
 
-abstract class Staged_Controller extends Controller implements Session_Access
+abstract class Staged_Controller extends Controller
 {
     protected static
         /** Available steps. */
@@ -20,7 +20,7 @@ abstract class Staged_Controller extends Controller implements Session_Access
         /** Current step. */
         $currentStage = 0;
 
-    public function __construct(DependencyContainer $container)
+    public function __construct()
     {
         if (isset($_POST['__stage'])) {
             if (isset($_POST['act_previous'])) {
@@ -31,9 +31,9 @@ abstract class Staged_Controller extends Controller implements Session_Access
         if (!isset($stage) || $stage < 0) {
             $stage = 0;
         }
-        parent::__construct($container); 
-        if (isset($this->session) && !$this->session->exists('Form')) {
-            $this->session->set('Form', []);
+        parent::__construct(); 
+        if (!self::session()->exists('Form')) {
+            self::session()->set('Form', []);
         }
         $this->setStage($stage);
         $this->setForm($stage);
@@ -49,7 +49,7 @@ abstract class Staged_Controller extends Controller implements Session_Access
         $me = substr($me, 0, strrpos($me, '_Controller'));
         $me = substr($me, strrpos($me, '\\') + 1);
         $class = "$ns\\{$name}_{$me}_Form";
-        $this->form = $this->container->satisfy(new $class);
+        $this->form = new $class;
         if (isset($_REQUEST['act_cancel'])) {
             $this->cancel();
         }
@@ -83,9 +83,9 @@ abstract class Staged_Controller extends Controller implements Session_Access
             && !$this->form->errors()
             && (!method_exists($this, $check) || $this->$check($args))
         ) {
-            $this->session->set(
+            self::session()->set(
                 'Form',
-                $this->form->getArrayCopy() + $this->session->get('Form')
+                $this->form->getArrayCopy() + self::session()->get('Form')
             );
             $this->nextStage();
             $this->setForm(static::$currentStage);
