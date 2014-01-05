@@ -8,6 +8,7 @@
 namespace monolyth\account;
 use monolyth\HTTP301_Exception;
 use monolyth\Message;
+use monolyth\Confirm_Form;
 
 class Do_Activate_Controller extends Activate_Controller
 {
@@ -18,8 +19,10 @@ class Do_Activate_Controller extends Activate_Controller
     protected function get(array $args)
     {
         extract($args);
-        $this->form->addSource(compact('id', 'hash'))->load();
-        if (!($error = call_user_func($this->activate, $this->form))) {
+        $form = new Confirm_Form;
+        $form->addSource(compact('id', 'hash'))->load();
+        $activate = new Activate_Model;
+        if (!($error = call_user_func($activate, $form))) {
             self::message()->add(
                 Message::SUCCESS,
                 $this->text('./success')
