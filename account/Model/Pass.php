@@ -9,17 +9,18 @@ namespace monolyth\account;
 use monolyth\core\Model;
 use monolyth\User_Access;
 
-class Pass_Model extends Model implements User_Access
+class Pass_Model extends Model
 {
+    use User_Access;
+
     public function update($pass, $id = null)
     {
-        $user = $this->user;
         if (!isset($id)) {
-            $id = $user->id();
+            $id = self::user()->id();
         }
         try {
             $fields = compact('pass');
-            $q = $this->adapter->row(
+            $q = self::adapter()->row(
                 'monolyth_auth',
                 '*',
                 compact('id')
@@ -36,7 +37,7 @@ class Pass_Model extends Model implements User_Access
                 "status = status & ~%d",
                 $user::STATUS_GENERATED_PASS
             );
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_auth',
                 $fields,
                 compact('id')
