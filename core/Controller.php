@@ -38,8 +38,10 @@ use monolyth\account\Must_Activate_Controller;
 use monolyth\account\Request_Re_Activate_Controller;
 use StdClass;
 use ErrorException;
-use monolyth;
+use monolyth\Monolyth;
 use monolyth\Trait_Helper;
+use monolyth\Message;
+use monolyth\Text_Model;
 
 abstract class Controller
 {
@@ -186,7 +188,7 @@ abstract class Controller
             $user->loggedIn() && $user->status() & $user::STATUS_INACTIVE,
             function() use($user) {
                 self::message()->add(
-                    Message_Model::MESSAGE_INFO,
+                    Message::INFO,
                     $this->text('./noneed')
                 );
                 throw new HTTP301_Exception($this->url('monolyth/account'));
@@ -324,7 +326,8 @@ abstract class Controller
                     // Automatically add error messages based on form errors.
                     $test = [get_class($this->form), get_class($this)];
                     $self = $this;
-                    $fn = function($field, $err) use ($test, $self) {
+                    $text = new Text_Model($this);
+                    $fn = function($field, $err) use ($test, $text) {
                         $opts = [];
                         foreach ($test as $option) {
                             $try = strtolower(str_replace(
@@ -332,8 +335,8 @@ abstract class Controller
                                 DIRECTORY_SEPARATOR,
                                 $this->merge($field, $option)
                             ));
-                            if ($self->text->exists($try)) {
-                                $label = $self->text->get($try);
+                            if ($text->exists($try)) {
+                                $label = $text->get($try);
                             } else {
                                 $label = $field;
                             }
@@ -341,11 +344,11 @@ abstract class Controller
                             $try = substr($try, 0, strrpos($try, '/'));
                             $opts[] = "$try/error.$err";
                         }
-                        return $self->text->get($opts, $label);
+                        return $text->get($opts, $label);
                     };
                     foreach ($errors as $field => $err) {
                         self::message()->add(
-                            Message_Model::ERROR,
+                            Message::ERROR,
                             $fn($field, $err)
                         );
                     }
