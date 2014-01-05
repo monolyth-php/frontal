@@ -10,7 +10,7 @@
  * @package monolyth
  * @subpackage core
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2013
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2013, 2014
  */
 namespace monolyth\core;
 use monolyth\render\View;
@@ -42,13 +42,16 @@ use monolyth;
 use monolyth\Trait_Helper;
 
 abstract class Controller
-implements Message_Access,
-           User_Access,
-           Project_Access,
-           Language_Access,
-           HTTP_Access
 {
-    use Translatable, Viewable, Name_Helper, Url_Helper;
+    use Language_Access;
+    use Translatable;
+    use Viewable;
+    use Name_Helper;
+    use Url_Helper;
+    use User_Access;
+    use Message_Access;
+    use Project_Access;
+    use HTTP_Access;
 
     private $end = false, $start = 0,
         $attachments = [], $requirements = [], $arguments = [];
@@ -60,22 +63,27 @@ implements Message_Access,
      * controllers with a custom constructor should always call this
      * manually (or stuff will break all over the place).
      */
-    public function __construct(DependencyContainer $container)
+    public function __construct()
     {
         Monolyth::setBookmark('Initialising controller');
-        $this->container = $container;
-        $container->satisfy($this);
         $traits = [];
+        $accessMethods = [];
         foreach (class_parents($this) + ['me' => $this] as $parent) {
             $traits += class_uses($parent);
         }
         $methods = [];
         foreach ($traits as $trait) {
-            $methods = array_merge($methods, get_class_methods($trait));
+            $classmethods = get_class_methods($trait);
+            $methods = array_merge($methods, $classmethods);
+            if (substr($trait, -6) == 'Access') {
+                $accessMethods = array_merge($accessMethods, $classmethods);
+            }
         }
         $attach = [];
         foreach (get_class_methods($this) as $method) {
-            if (in_array($method, $methods)) {
+            if (in_array($method, $classmethods)) {
+                $attach += [$method => $this->$method()];
+            } elseif (in_array($method, $methods)) {
                 $attach += [$method => function() use($method) {
                     return call_user_func_array(
                         [$this, $method],
@@ -118,8 +126,8 @@ implements Message_Access,
             && !($this instanceof Redirect_Controller
              || $this instanceof HTTP404_Controller
         )) {
-            $new = $this->http->url(true);
-            $q = $this->http->query();
+            $new = self::http()->url(true);
+            $q = self::http()->query();
             $q = preg_replace("@&?sid={$_GET['sid']}@", '&', $q);
             if ($q == '&') {
                 $q = '';
@@ -131,89 +139,87 @@ implements Message_Access,
         }
 
         // Add default Monolyth requirements.
-        if (isset($this->user)) {
-            $user = $this->user;
-            $project = $this->project;
-            $redir = $this->http->getRedir();
-            $http = $this->http;
-            $this->addRequirement(
-                'monolyth\Login_Required',
-                $user->loggedIn(),
-                function() use($project, $redir) {
-                    throw new HTTP301_Exception(
-                        $this->url('monolyth/account/login')
-                       .'?redir='.urlencode($redir)
-                    );
+        $user = self::user();
+        $project = self::project();
+        $redir = self::http()->getRedir();
+        $http = self::http();
+        $this->addRequirement(
+            'monolyth\Login_Required',
+            $user->loggedIn(),
+            function() use($project, $redir) {
+                throw new HTTP301_Exception(
+                    $this->url('monolyth/account/login')
+                   .'?redir='.urlencode($redir)
+                );
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Nologin_Required',
+            !$user->loggedIn(),
+            function() { throw new HTTP301_Exception($this->url('')); }
+        );
+        $this->addRequirement(
+            'monolyth\Logout_Required',
+            !$user->loggedIn(),
+            function() use($user) {
+                $user->logout();
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Active_Required',
+            !($this instanceof Must_Activate_Controller
+                || $this instanceof Request_Re_Activate_Controller
+            )
+                && !($user->status() & $user::STATUS_INACTIVE),
+            function() use($redir, $user) {
+                $page = $user->status() & $user::STATUS_ACTIVATE ?
+                    'must_activate' :
+                    'request_re_activate';
+                throw new HTTP301_Exception(
+                    $this->url("monolyth/account/$page")
+                   .'?redir='.urlencode($redir)
+                );
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Inactive_Required',
+            $user->loggedIn() && $user->status() & $user::STATUS_INACTIVE,
+            function() use($user) {
+                self::message()->add(
+                    Message_Model::MESSAGE_INFO,
+                    $this->text('./noneed')
+                );
+                throw new HTTP301_Exception($this->url('monolyth/account'));
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Enabled_Required',
+            !($user->status() & $user::STATUS_DISABLED),
+            function() use($redir) {
+                throw new HTTP301_Exception(
+                    $this->url('monolyth/account/disabled')
+                   .'?redir='.urlencode($redir)
+                );
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Ajax_Required',
+            $http->isXMLHttpRequest(),
+            function() {
+                if (isset($this->parentUrl)) {
+                    throw new HTTP301_Exception($this->parentUrl);
+                } else {
+                    throw new HTTP400_Exception;
                 }
-            );
-            $this->addRequirement(
-                'monolyth\Nologin_Required',
-                !$this->user->loggedIn(),
-                function() { throw new HTTP301_Exception($this->url('')); }
-            );
-            $this->addRequirement(
-                'monolyth\Logout_Required',
-                !$user->loggedIn(),
-                function() use($user) {
-                    $user->logout();
-                }
-            );
-            $this->addRequirement(
-                'monolyth\Active_Required',
-                !($this instanceof Must_Activate_Controller
-                    || $this instanceof Request_Re_Activate_Controller
-                )
-                    && !($user->status() & $user::STATUS_INACTIVE),
-                function() use($redir, $user) {
-                    $page = $user->status() & $user::STATUS_ACTIVATE ?
-                        'must_activate' :
-                        'request_re_activate';
-                    throw new HTTP301_Exception(
-                        $this->url("monolyth/account/$page")
-                       .'?redir='.urlencode($redir)
-                    );
-                }
-            );
-            $this->addRequirement(
-                'monolyth\Inactive_Required',
-                $user->loggedIn() && $user->status() & $user::STATUS_INACTIVE,
-                function() use($user) {
-                    $this->message->add(
-                        $this::MESSAGE_INFO,
-                        $this->text('./noneed')
-                    );
-                    throw new HTTP301_Exception($this->url('monolyth/account'));
-                }
-            );
-            $this->addRequirement(
-                'monolyth\Enabled_Required',
-                !($user->status() & $user::STATUS_DISABLED),
-                function() use($redir) {
-                    throw new HTTP301_Exception(
-                        $this->url('monolyth/account/disabled')
-                       .'?redir='.urlencode($redir)
-                    );
-                }
-            );
-            $this->addRequirement(
-                'monolyth\Ajax_Required',
-                $http->isXMLHttpRequest(),
-                function() {
-                    if (isset($this->parentUrl)) {
-                        throw new HTTP301_Exception($this->parentUrl);
-                    } else {
-                        throw new HTTP400_Exception;
-                    }
-                }
-            );
-            $this->addRequirement(
-                'monolyth\Test_Required',
-                $project['test'],
-                function() {
-                    throw new HTTP404_Exception;
-                }
-            );
-        }
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Test_Required',
+            $project['test'],
+            function() {
+                throw new HTTP404_Exception;
+            }
+        );
     }
 
     public function arguments(array $override = [])
@@ -270,7 +276,7 @@ implements Message_Access,
         $this->arguments = $arguments;
         $this->checkRequirements();
         if (isset($arguments['language'])
-            && $this->language->isAvailable($arguments['language'])
+            && self::language()->isAvailable($arguments['language'])
         ) {
             try {
                 setcookie(
@@ -278,7 +284,7 @@ implements Message_Access,
                     $arguments['language'],
                     time() + 60 * 60 * 24 * 365,
                     '/',
-                    $this->project['cookiedomain']
+                    self::project()['cookiedomain']
                 );
             } catch (ErrorException $e) {
             }
@@ -306,7 +312,7 @@ implements Message_Access,
         }
         switch (strtoupper($method)) {
             case 'POST':
-//                if (!$this->http->isValidPost()) {
+//                if (!self::http()->isValidPost()) {
 //                    throw new HTTP403_Exception();
 //                }
                 if (isset($this->form)
@@ -338,8 +344,8 @@ implements Message_Access,
                         return $self->text->get($opts, $label);
                     };
                     foreach ($errors as $field => $err) {
-                        $this->message->add(
-                            self::MESSAGE_ERROR,
+                        self::message()->add(
+                            Message_Model::ERROR,
                             $fn($field, $err)
                         );
                     }
@@ -355,10 +361,9 @@ implements Message_Access,
         if (strtoupper($method) == 'GET'
             and $view instanceof View
             and $time = $view->getModifiedTime($view->data())
-            and isset($this->http)
             and !$this->checkExpiry(
                 $time,
-                md5($time.$this->http->url().serialize(isset($this->session) ?
+                md5($time.self::http()->url().serialize(isset($this->session) ?
                     $this->session->all() :
                     ''
                 ))
