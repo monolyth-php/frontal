@@ -6,10 +6,12 @@ use monolyth\utils\Translatable;
 use monolyth\utils\Name_Helper;
 use ErrorException;
 use Exception as E;
+use monolyth\render\form\Label;
 
 abstract class Element
 {
-    use Translatable, Name_Helper;
+    use Translatable;
+    use Name_Helper;
 
     /** {{{ Default form-element errors. */
     /** Error: field is required. */
@@ -148,10 +150,7 @@ abstract class Element
 
     public function setLabel($label)
     {
-        if (!is_object($this->_Label)) {
-            return $this;
-        }
-        $l = clone $this->_Label;
+        $l = new Label;
         if (substr($label, 0, 3) == ':t:') {
             $me = preg_replace('@\[.*?\]@', '', $this->name);
             $label = "./$me/".substr($label, 3);
