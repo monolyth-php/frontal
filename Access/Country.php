@@ -12,5 +12,14 @@ trait Country_Access
         }
         return $country;
     }
+
+    public function countries()
+    {
+        static $countries;
+        if (!isset($countries)) {
+            $countries = new Country_Finder;
+        }
+        return $countries;
+    }
 }
 
