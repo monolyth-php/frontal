@@ -104,7 +104,7 @@ abstract class Session_Model
      *
      * @return void
      */
-    public function __construct()
+    protected function __construct()
     {
         static $inited = false;
         if ($inited) {
