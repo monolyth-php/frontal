@@ -15,8 +15,9 @@ class Pass_Model extends Model
 
     public function update($pass, $id = null)
     {
+        $user = self::user();
         if (!isset($id)) {
-            $id = self::user()->id();
+            $id = $user->id();
         }
         try {
             $fields = compact('pass');
