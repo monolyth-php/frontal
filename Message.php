@@ -50,8 +50,10 @@
 namespace monolyth;
 use StdClass;
 
-class Message implements Session_Access
+class Message
 {
+    use Session_Access;
+
     const SUCCESS = 1;
     const INFO = 2;
     const WARNING = 4;
@@ -71,10 +73,10 @@ class Message implements Session_Access
         if ($inited) {
             return;
         }
-        if (!($this->session->exists('Messages')
-            && is_array($this->session->get('Messages'))
+        if (!(self::session()->exists('Messages')
+            && is_array(self::session()->get('Messages'))
         )) {
-            $this->session->set(
+            self::session()->set(
                 'Messages',
                 [
                     self::SUCCESS => [],
@@ -84,7 +86,7 @@ class Message implements Session_Access
                 ]
             );
         }
-        self::$messages = $this->session->get('Messages');
+        self::$messages = self::session()->get('Messages');
         $inited = true;
     }
 
@@ -95,7 +97,7 @@ class Message implements Session_Access
         $o->code = $flag;
         $o->type = $this->types[$flag];
         $o->body = $body;
-        $this->session->set('Messages', self::$messages);
+        self::session()->set('Messages', self::$messages);
     }
 
     public function has($flag = null)
@@ -123,7 +125,7 @@ class Message implements Session_Access
                 $messages = [];
             }
         }
-        $this->session->set('Messages', self::$messages);
+        self::session()->set('Messages', self::$messages);
         return $return;
     }
 }
