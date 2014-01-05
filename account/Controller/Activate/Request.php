@@ -10,7 +10,7 @@ use monolyth\User;
 use monolyth\model\Auth;
 use monolyth\render\Url_Helper;
 use monolyth\HTTP301_Exception;
-use monolyth\db;
+use monolyth\Message;
 
 class Request_Activate_Controller extends Activate_Controller
 {
@@ -20,9 +20,9 @@ class Request_Activate_Controller extends Activate_Controller
     protected function get(array $args)
     {
         extract($args);
-        $user = $this->user;
+        $user = self::user();
         if (!($user->status() & $user::STATUS_INACTIVE)) {
-            $this->message->add(self::MESSAGE_INFO, $this->text('./noneed'));
+            self::message()->add(Message::INFO, $this->text('./noneed'));
             throw new HTTP301_Exception($this->url('monolyth/account'));
         }
         return $this->view('page/activate/request');
@@ -32,12 +32,12 @@ class Request_Activate_Controller extends Activate_Controller
     {
         extract($args);
         if (!isset($id, $hash)) {
-            if ($error = $this->activate->request($this->user->id())) {
+            if ($error = $this->activate->request(self::user()->id())) {
                 return $this->view('page/activate/resendfailed');
             }
-            $this->message->add(
-                self::MESSAGE_SUCCESS,
-                $this->text('./success', $this->user->email())
+            self::message()->add(
+                Message::SUCCESS,
+                $this->text('./success', self::user()->email())
             );
             return $this->view('page/activate/resent');
         }
