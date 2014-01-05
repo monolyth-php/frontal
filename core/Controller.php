@@ -81,7 +81,7 @@ abstract class Controller
         }
         $attach = [];
         foreach (get_class_methods($this) as $method) {
-            if (in_array($method, $classmethods)) {
+            if (in_array($method, $accessMethods)) {
                 $attach += [$method => $this->$method()];
             } elseif (in_array($method, $methods)) {
                 $attach += [$method => function() use($method) {
