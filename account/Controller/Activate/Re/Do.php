@@ -7,6 +7,7 @@
 
 namespace monolyth\account;
 use monolyth\HTTP301_Exception;
+use monolyth\Message;
 
 class Do_Re_Activate_Controller extends Activate_Controller
 {
@@ -19,13 +20,13 @@ class Do_Re_Activate_Controller extends Activate_Controller
         extract($args);
         $this->form->addSource(compact('id', 'hash'))->load();
         if (!($error = call_user_func($this->activate, $this->form))) {
-            $this->message->add(
-                self::MESSAGE_SUCCESS,
+            self::message()->add(
+                Message::SUCCESS,
                 $this->text('./success')
             );
             return $this->view('page/reactivate/success');
         }
-        $this->message->add(self::MESSAGE_ERROR, $this->text("./error.$error"));
+        self::message()->add(Message::ERROR, $this->text("./error.$error"));
         throw new HTTP301_Exception($this->url(
             'monolyth/account/request_reactivate'
         ));
