@@ -5,15 +5,16 @@ use monolyth\adapter\Adapter;
 use monolyth\adapter\nosql\Cache;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
+use adapter\Access as Adapter_Access;
 
 class Country_Model extends core\I18n_Model
 {
-    public function __construct(
-        Adapter $adapter,
-        Cache $cache = null,
-        Language_Model $language
-    )
+    use Adapter_Access;
+    use Language_Access;
+
+    public function __construct()
     {
+        $cache = self::adapterCache();
         if (isset($cache)) {
             try {
                 $rows = $cache->get('countries');
@@ -22,11 +23,11 @@ class Country_Model extends core\I18n_Model
         }
         if (!isset($rows)) {
             try {
-                $rows = $adapter->rows(
+                $rows = self::adapter()->rows(
                     "monolyth_country c
                      JOIN monolyth_country_i18n i USING(id)",
                     '*',
-                    ['language' => $language->current->id],
+                    ['language' => self::language()->current->id],
                     ['order' => 'LOWER(title)']
                 );
                 if (isset($cache)) {
