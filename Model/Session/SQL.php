@@ -290,9 +290,11 @@ class SQL_Session_Model extends Session_Model
         }
         $random = substr($id, 32);
         $id = substr($id, 0, 32);
-        try {
-            $this->cache->delete("session/$id/$random");
-        } catch (adapter\nosql\KeyNotFound_Exception $e) {
+        if ($cache = self::adapterCache()) {
+            try {
+                $cache->delete("session/$id/$random");
+            } catch (adapter\nosql\KeyNotFound_Exception $e) {
+            }
         }
         if (isset($this->userid) && $this->userid) {
             try {
