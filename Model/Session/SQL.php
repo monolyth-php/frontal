@@ -222,9 +222,11 @@ class SQL_Session_Model extends Session_Model
     {
         $this->state(self::STATE_DELETED);
         $_COOKIE[session_name()] = null;
-        try {
-            $this->cache->delete("session/$id/$random");
-        } catch (adapter\nosql\KeyNotFound_Exception $e) {
+        if ($cache = self::adapterCache()) {
+           try {
+               $cache->delete("session/$id/$random");
+            } catch (adapter\nosql\KeyNotFound_Exception $e) {
+            }
         }
         $this->__savecount__ = 0;
         try {
