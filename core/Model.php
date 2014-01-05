@@ -20,19 +20,21 @@
  * @package monolyth
  * @subpackage core
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 namespace monolyth\core;
 use ArrayObject;
-use monolyth\adapter\Access;
+use adapter\Access as Adapter_Access;
 
 /**
  * The base Model class. This defines a few universal helper methods, and
  * further can be useful in type-hinting. Aditionally, it provides a default
  * framework for implementing observer patterns.
  */
-abstract class Model extends ArrayObject implements Access
+abstract class Model extends ArrayObject
 {
+    use Adapter_Access;
+
     private $_new = true,
             $_orig = [],
             $_after = [],
