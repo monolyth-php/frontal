@@ -12,12 +12,16 @@ use monolyth\core;
 use monolyth\utils\Name_Helper;
 use monolyth\Project_Access;
 use monolyth\User_Access;
+use monolyth\Logger_Access;
 use monolyth\adapter\sql;
 use ErrorException;
 
-final class View implements Project_Access, User_Access
+final class View
 {
     use Name_Helper;
+    use User_Access;
+    use Project_Access;
+    use Logger_Access;
 
     private $controller, $files = [], $parsers = [];
     private static $data = [];
@@ -86,8 +90,8 @@ final class View implements Project_Access, User_Access
         if (!isset($args['self'])) {
             $args['self'] = $this;
         }
-        if (!isset($args['project']) && isset($this->project)) {
-            $args['project'] = $this->project;
+        if (!isset($args['project'])) {
+            $args['project'] = self::project();
         }
         if (!isset($args['form']) && isset($this->controller->form)) {
             $args['form'] = $this->controller->form;
@@ -258,12 +262,10 @@ final class View implements Project_Access, User_Access
             $html
         );
         $config = monolyth\Config::get('monolyth');
-        if (isset($this->project)
-            && ($this->project['test']
-                || (isset($_SERVER['REMOTE_ADDR'])
-                    && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
-                || $this->user->name() == 'root'
-                )
+        if (self::project()['test']
+            || (isset($_SERVER['REMOTE_ADDR'])
+                && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
+                || self::user()->name() == 'root'
             )
         ) {
             Monolyth::setBookmark('End [finished outputting]');
@@ -284,7 +286,7 @@ final class View implements Project_Access, User_Access
                 $bookmark[1] - $start,
                 $bookmark[2] / 1024 / 1024
             );
-            $stats = $this->logger->export();
+            $stats = self::logger()->export();
             $debug .= sprintf(
                 "Queries: %d, time: %0.4f\n\n",
                 count($stats['total']),
