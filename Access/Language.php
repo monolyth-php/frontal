@@ -8,7 +8,7 @@ trait Language_Access
     {
         static $language;
         if (!isset($language)) {
-            $language = new Language_Model;
+            $language = Language_Model::instance();
         }
         return $language;
     }
