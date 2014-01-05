@@ -7,10 +7,10 @@
  *
  * @package monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 namespace monolyth;
-use monolyth\DependencyContainer;
+use adapter\Access as Adapter_Access;
 use ErrorException;
 use monolyth\core\Project;
 
@@ -48,11 +48,14 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 }
 
 /**
- * Register monolyth autoloader. Note that it throws an Exception if the class
- * could not be loaded; hence, you'll probably want to define additional
- * autoloaders first, or with the prepend-argument set to true.
+ * Since we don't have the autoloader here yet, we need to manually include the
+ * Access adapters the Monolyth base class needs.
  */
-spl_autoload_register(['monolyth\Monolyth', '__autoload']);
+require_once 'adapter/Access.php';
+require_once 'monolyth/Access/Language.php';
+require_once 'monolyth/Access/Country.php';
+require_once 'monolyth/Access/Project.php';
+require_once 'monolyth/render/Access/Router.php';
 
 /**
  * The Monolyth base-class.
@@ -63,10 +66,16 @@ spl_autoload_register(['monolyth\Monolyth', '__autoload']);
  *
  * @package MonoLyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright Copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright Copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 abstract class Monolyth
 {
+    private static $project;
+    private static $router;
+
+    use Language_Access;
+    use Country_Access;
+
     private static $renderTimes = [];
 
     /**
@@ -145,24 +154,13 @@ abstract class Monolyth
      */
     public static function run(Project $project, $theme = 'default')
     {
+        static::$project = $project;
         try {
-            $adapters = Config::get('adapters');
-            $cache = null;
-            foreach ($adapters as $adapter) {
-                if ($adapter instanceof adapter\nosql\Cache) {
-                    $cache = $adapter;
-                    break;
-                }
-            }
-            $language = new Language_Model($adapters->_current, $cache);
-            $country = new Country_Model(
-                $adapters->_current,
-                $cache,
-                $language
-            );
+            $language = self::language();
+            $country = self::country();
             $router = call_user_func(
                 require_once 'config/routing.php',
-                new Advanced_Router($project, $language)
+                self::router()
             );
             $uri = isset($_GET['path']) ?
                 urldecode($_GET['path']) :
@@ -181,6 +179,7 @@ abstract class Monolyth
                 } catch (LanguageNotFound_Exception $e) {
                 }
             }
+            /*
             $container = new DependencyContainer;
             $container->register('monolyth\Country_Access', compact('country'));
             $container->register(
@@ -207,6 +206,7 @@ abstract class Monolyth
             } else {
                 require 'config/dependencies.php';
             }
+            */
             if (!$match) {
                 throw new HTTP404_Exception;
             }
@@ -216,7 +216,7 @@ abstract class Monolyth
             self::setBookmark('Found controller');
             $controller = $match['controller'];
             unset($match['controller']);
-            $o = new $controller($container);
+            $o = new $controller;
             return $o($_SERVER['REQUEST_METHOD'], $match);
             $output = $function($uri);
         } catch (adapter\sql\Exception $e) {
@@ -246,7 +246,7 @@ abstract class Monolyth
                 $namespace = substr($class, 0, strrpos($class, '\\'));
                 try {
                     $e = "$namespace\\render\HTTP{$code}_Controller";
-                    $e = new $e($container);
+                    $e = new $e;
                     $e('GET', []);
                     unset($e);
                     break;
@@ -270,7 +270,7 @@ abstract class Monolyth
                 $namespace = substr($class, 0, strrpos($class, '\\'));
                 try {
                     $e = "$namespace\\render\HTTP{$code}_Controller";
-                    $e = new $e($container);
+                    $e = new $e;
                     $e('GET', []);
                     unset($e);
                     break;
@@ -288,10 +288,10 @@ abstract class Monolyth
                 '',
                 strtolower(get_class($e))
             );
-            if (isset($o) && $o->http->isXMLHttpRequest()) {
-                $o = new Ajax_Redirect_Controller($container);
+            if (isset($o) && $o::http()->isXMLHttpRequest()) {
+                $o = new Ajax_Redirect_Controller;
             } else {
-                $o = new Redirect_Controller($container);
+                $o = new Redirect_Controller;
             }
             session_write_close();
             $o(
@@ -304,6 +304,19 @@ abstract class Monolyth
         }
         session_write_close();
     }
+
+    public function project()
+    {
+        return self::$project;
+    }
+
+    public function router()
+    {
+        if (!isset(self::$router)) {
+            self::$router = new render\Router;
+        }
+        return self::$router;
+    }
 }
 
 Monolyth::setBookmark('Start [included Monolyth]');
@@ -313,6 +326,17 @@ if (isset($_REQUEST['repost'])) {
     if ($post) {
         $_POST = array_merge($post, $_POST);
     }
+}
+
+/**
+ * Register monolyth autoloader. Note that it throws an Exception if the class
+ * could not be loaded; hence, you'll probably want to define additional
+ * autoloaders first, or with the prepend-argument set to true.
+ */
+spl_autoload_register(['monolyth\Monolyth', '__autoload']);
+try {
+    include_once 'config/dependencies.php';
+} catch (ErrorException $e) {
 }
 
 /** Alias base class manually. */
