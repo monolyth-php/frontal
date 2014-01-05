@@ -53,7 +53,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
  */
 require_once 'adapter/Access.php';
 require_once 'monolyth/Access/Language.php';
-require_once 'monolyth/Access/Country.php';
 require_once 'monolyth/Access/Project.php';
 require_once 'monolyth/render/Access/Router.php';
 
@@ -74,7 +73,6 @@ abstract class Monolyth
     private static $router;
 
     use Language_Access;
-    use Country_Access;
 
     private static $renderTimes = [];
 
@@ -157,7 +155,6 @@ abstract class Monolyth
         static::$project = $project;
         try {
             $language = self::language();
-            $country = self::country();
             $router = call_user_func(
                 require_once 'config/routing.php',
                 self::router()
