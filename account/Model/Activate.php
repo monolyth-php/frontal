@@ -36,7 +36,8 @@ class Activate_Model extends Model
             ['id' => self::user()->id()]
         ));
         try {
-            if ($result = $this->confirm->process($form['hash']->value)) {
+            $confirm = new Confirm_Model;
+            if ($result = $confirm->process($form['hash']->value)) {
                 self::adapter()->rollBack();
                 return $result;
             }
@@ -49,6 +50,7 @@ class Activate_Model extends Model
             self::adapter()->commit();
             return null;
         } catch (Exception $e) {
+            var_dump($e->getMessage()); die();
             self::adapter()->rollback();
             return 'generic';
         }
