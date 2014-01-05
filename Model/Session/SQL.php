@@ -21,13 +21,14 @@ use adapter\Access as Adapter_Access;
 class SQL_Session_Model extends Session_Model
 {
     use Adapter_Access;
+    use core\Singleton;
 
     /**
      * Constructor. Initialise a new or existing session.
      *
      * @return void
      */
-    public function __construct()
+    protected function __construct()
     {
         parent::__construct();
         $q = null;
