@@ -7,7 +7,8 @@
  * @subpackage render
  */
 namespace monolyth\render;
-use monolyth;
+use monolyth\Monolyth;
+use monolyth\Config;
 use monolyth\core;
 use monolyth\utils\Name_Helper;
 use monolyth\Project_Access;
@@ -97,7 +98,6 @@ final class View
             $args['form'] = $this->controller->form;
         }
         foreach ($this->files as $file) {
-            Monolyth::setBookmark("Rendering $file");
             $content = call_user_func(function() use($file, &$args, $content) {
                 ob_start();
                 $data = call_user_func(function($file, $args) use($content) {
@@ -261,7 +261,7 @@ final class View
             },
             $html
         );
-        $config = monolyth\Config::get('monolyth');
+        $config = Config::get('monolyth');
         if (self::project()['test']
             || (isset($_SERVER['REMOTE_ADDR'])
                 && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
