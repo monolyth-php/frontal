@@ -8,7 +8,7 @@ trait SQL_Session_Access
     {
         static $session;
         if (!isset($session)) {
-            $session = new SQL_Session_Model;
+            $session = SQL_Session_Model::instance();
         }
         return $session;
     }
