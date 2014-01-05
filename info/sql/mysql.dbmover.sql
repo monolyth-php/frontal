@@ -918,7 +918,8 @@ DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth
 FOR EACH ROW
 BEGIN
-    INSERT INTO monolyth_auth_group VALUES (NEW.id, (SELECT id FROM monolyth_group WHERE name = 'Users'));
+    SELECT id FROM monolyth_group WHERE name = 'Users' INTO @groupid;
+    INSERT INTO monolyth_auth_group VALUES (NEW.id, @groupid);
 END;
 $$
 DELIMITER ;
