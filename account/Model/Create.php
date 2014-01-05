@@ -69,7 +69,6 @@ class Create_Model extends Model
             ));
             $data['id'] = $this['id'];
         } catch (InsertNone_Exception $e) {
-            echo $e->getMessage();
             self::adapter()->rollback();
             return 'insert failed';
         } catch (Exception $e) {
