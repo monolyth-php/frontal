@@ -8,7 +8,7 @@ trait Message_Access
     {
         static $message;
         if (!isset($message)) {
-            $message = new Message;
+            $message = Message::instance();
         }
         return $message;
     }
