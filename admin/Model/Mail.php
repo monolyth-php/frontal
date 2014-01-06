@@ -26,13 +26,13 @@ class Mail_Model extends Model
         }
         try {
             if ($id) {
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_mail',
                     $data,
                     ['CONCAT(id, language)' => $id]
                 );
             } else {
-                $this->adapter->insert('monolyth_mail', $data);
+                self::adapter()->insert('monolyth_mail', $data);
             }
         } catch (InsertNone_Exception $e) {
             return 'insert';
@@ -45,7 +45,7 @@ class Mail_Model extends Model
     public function delete()
     {
         try {
-            $this->adapter->delete(
+            self::adapter()->delete(
                 'monolyth_mail',
                 ['CONCAT(id, language)' => $this['id'].$this['language']]
             );
