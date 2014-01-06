@@ -53,6 +53,7 @@ use StdClass;
 class Message
 {
     use Session_Access;
+    use core\Singleton;
 
     const SUCCESS = 1;
     const INFO = 2;
@@ -67,7 +68,7 @@ class Message
         self::ERROR => 'error',
     ];
 
-    public function init()
+    protected function __construct()
     {
         static $inited = false;
         if ($inited) {
