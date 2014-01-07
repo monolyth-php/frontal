@@ -5,6 +5,7 @@ namespace monolyth;
 class Comment_Model extends core\Model implements User_Access
 {
     use utils\HTML_Helper;
+    use User_Access;
 
     /**
      * By default, allow HTML in comments. Set this to false in your
@@ -20,9 +21,9 @@ class Comment_Model extends core\Model implements User_Access
     {
         $values = ['hash' => ''];
         $values['reference'] = $form['references']->value;
-        if ($this->user->loggedIn()) {
-            $values['owner'] = $this->user->id();
-            $values['name'] = $this->user->name();
+        if (self::user()->loggedIn()) {
+            $values['owner'] = self::user()->id();
+            $values['name'] = self::user()->name();
         }
         $values['ip'] = $_SERVER['REMOTE_ADDR'];
         $values['status'] = (int)$form['status']->value;
