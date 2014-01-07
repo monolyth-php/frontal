@@ -36,6 +36,7 @@ use monolyth\utils\Name_Helper;
 use monolyth\render\Url_Helper;
 use monolyth\account\Must_Activate_Controller;
 use monolyth\account\Request_Re_Activate_Controller;
+use monolyth\account\Auto_Login_Model;
 use StdClass;
 use ErrorException;
 use monolyth\Monolyth;
@@ -119,10 +120,10 @@ abstract class Controller
 
         $this->start = microtime(true);
         if (isset($_COOKIE['monolyth_persist'])
-            && !$this->user->loggedIn()
+            && !self::user()->loggedIn()
             && !$this instanceof Logout_Controller
         ) {
-            call_user_func($this->autologin, $_COOKIE['monolyth_persist']);
+            call_user_func(new Auto_Login_Model, $_COOKIE['monolyth_persist']);
         }
         if (isset($_GET['sid'])
             && !($this instanceof Redirect_Controller
