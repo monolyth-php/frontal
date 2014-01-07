@@ -9,6 +9,7 @@ namespace monolyth\account;
 use ErrorException;
 use monolyth\Project_Access;
 use monolyth\Session_Access;
+use monolyth\HTTP_Access;
 use adapter\Access as Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\UpdateNone_Exception;
@@ -19,6 +20,7 @@ class Login_Model
     use Project_Access;
     use Adapter_Access;
     use Session_Access;
+    use HTTP_Access;
 
     public function __construct()
     {
