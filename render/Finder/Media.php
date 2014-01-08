@@ -2,11 +2,13 @@
 
 namespace monolyth\render;
 use monolyth\Finder;
-use monolyth\adapter;
+use adapter\Access as Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 
-class Media_Finder implements Finder, adapter\Access
+class Media_Finder implements Finder
 {
+    use Adapter_Access;
+
     public function find($id)
     {
         return $this->query(compact('id'));
@@ -19,7 +21,7 @@ class Media_Finder implements Finder, adapter\Access
             if ($ids) {
                 $where['id'] = ['IN' => $ids];
             }
-            return $this->adapter->rows('monolyth_media', '*', $where);
+            return self::adapter()->rows('monolyth_media', '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }
@@ -28,7 +30,7 @@ class Media_Finder implements Finder, adapter\Access
     public function query(array $where)
     {
         try {
-            return $this->adapter->row('monolyth_media', '*', $where);
+            return self::adapter()->row('monolyth_media', '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }
