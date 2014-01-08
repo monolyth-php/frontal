@@ -1,9 +1,12 @@
 <?php
 
 namespace monolyth;
+use adapter\Access as Adapter_Access;
 
-class User_Finder implements Finder, adapter\Access
+class User_Finder implements Finder
 {
+    use Adapter_Access;
+
     public function find($nameOrId)
     {
         try {
@@ -11,7 +14,7 @@ class User_Finder implements Finder, adapter\Access
             if (is_numeric($nameOrId)) {
                 $where = [[$where, ['id' => $nameOrId]]];
             }
-            return $this->adapter->row('monolyth_auth', '*', $where);
+            return self::adapter()->row('monolyth_auth', '*', $where);
         } catch (adapter\sql\NoResults_Exception $e) {
             return null;
         }
@@ -20,7 +23,7 @@ class User_Finder implements Finder, adapter\Access
     public function idByName($name)
     {
         try {
-            return $this->adapter->field(
+            return self::adapter()->field(
                 'monolyth_auth',
                 'id',
                 ['LOWER(name)' => strtolower($name)]
