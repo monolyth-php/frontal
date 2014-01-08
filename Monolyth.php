@@ -176,7 +176,6 @@ abstract class Monolyth
                 } catch (LanguageNotFound_Exception $e) {
                 }
             }
-            require 'config/aliases.php';
             if ($match
                 && (array_key_exists(
                     'monad\core\Controller',
