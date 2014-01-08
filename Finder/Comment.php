@@ -2,13 +2,21 @@
 
 namespace monolyth;
 use monolyth\adapter\sql\NoResults_Exception;
+use adapter\Access as Adapter_Access;
 
-class Comment_Finder implements Finder, adapter\Access
+class Comment_Finder implements Finder
 {
+    use Adapter_Access;
+
+    public function __construct()
+    {
+        $this->config = Config::get('monolyth');
+    }
+
     public function since($reference, $since)
     {
         try {
-            return $this->adapter->rows(
+            return self::adapter()->rows(
                 'monolyth_comment c',
                 ['*'],
                 [
@@ -43,17 +51,15 @@ class Comment_Finder implements Finder, adapter\Access
             'c.datecreated',
             'c.owner',
         ];
-        $comment = $this->comment;
-        $status = $comment::STATUS_DELETED | $comment::STATUS_HIDDEN;
         try {
-            return $this->adapter->pages(
+            return self::adapter()->pages(
                 "monolyth_comment c
                  JOIN $referer r ON r.comments = c.reference
                  LEFT JOIN monolyth_auth a ON a.id = c.owner",
                 $fields,
                 $where + [sprintf(
                     "c.status & '%d'",
-                    $status
+                    Comment_Model::STATUS_DELETED | Comment_Model::STATUS_HIDDEN
                 ) => 0],
                 $options
             );
