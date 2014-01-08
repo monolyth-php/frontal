@@ -1,14 +1,16 @@
 <?php
 
 namespace monolyth\render;
-use monolyth\adapter;
+use adapter\Access as Adapter_Access;
 use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use ErrorException;
 
-class Media_Helper implements adapter\Access, Project_Access
+class Media_Helper
 {
     use Url_Helper;
+    use Adapter_Access;
+    use Project_Access;
     use Static_Helper;
 
     public function http($img, array $options = [])
@@ -16,7 +18,7 @@ class Media_Helper implements adapter\Access, Project_Access
         $found = null;
         if (is_numeric($img)) {
             try {
-                $img = $this->adapter->row(
+                $img = self::adapter()->row(
                     'monolyth_media',
                     '*',
                     ['id' => $img]
