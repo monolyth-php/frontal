@@ -108,7 +108,7 @@ abstract class Element
 
     public function disabled($set = true)
     {
-        return $this->setOption('disabled', true);
+        return $this->setOption('disabled', $set);
     }
 
     public function setOption($name, $value)
@@ -204,15 +204,21 @@ abstract class Element
             if ($name == 'type') {
                 $value = array_shift(explode('/', $value));
             }
-            if (is_bool($value) && $value) {
-                if (!$this->expandAttributes) {
-                    $tmp[$name] = $name;
-                } else {
-                    $tmp[$name] = sprintf('%s="%s"', $name, $name);
+            if (is_bool($value)) {
+                if ($value) {
+                    if (!$this->expandAttributes) {
+                        $tmp[$name] = $name;
+                    } else {
+                        $tmp[$name] = sprintf('%s="%s"', $name, $name);
+                    }
                 }
-                continue;
+            } else {
+                $tmp[$name] = sprintf(
+                    '%s="%s"',
+                    $name,
+                    htmlspecialchars($value)
+                );
             }
-            $tmp[$name] = sprintf('%s="%s"', $name, htmlspecialchars($value));
         }
         return implode(' ', $tmp);
     }
