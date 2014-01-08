@@ -45,11 +45,11 @@ class Comment_Model extends core\Model implements User_Access
         $success = 10;
         while ($success) {
             try {
-                $this->adapter->insert('monolyth_comment', $values);
-                $this->load($this->adapter->row(
+                self::adapter()->insert('monolyth_comment', $values);
+                $this->load(self::adapter()->row(
                     'monolyth_comment',
                     '*',
-                    ['id' => $this->adapter->lastInsertId(
+                    ['id' => self::adapter()->lastInsertId(
                         'monolyth_comment_id_seq'
                     )]
                 ));
@@ -84,7 +84,7 @@ class Comment_Model extends core\Model implements User_Access
         $success = 10;
         while ($success) {
             try {
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_comment',
                     $values,
                     $this['id']
@@ -104,7 +104,7 @@ class Comment_Model extends core\Model implements User_Access
     public function delete()
     {
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_comment',
                 ['status' => [sprintf("status | '%d'", self::STATUS_DELETED)]],
                 ['id' => $this['id']]
