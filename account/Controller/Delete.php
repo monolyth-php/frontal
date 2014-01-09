@@ -4,18 +4,25 @@ namespace monolyth\account;
 use monolyth\Login_Required;
 use monolyth\HTTP301_Exception;
 use monolyth\core\Staged_Controller;
+use monolyth\Message;
 
 class Delete_Controller extends Staged_Controller implements Login_Required
 {
     protected static $stages = ['confirm', 'success'];
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Delete_Form;
+    }
+
     protected function post(array $args)
     {
         if (!$this->form->errors()) {
             // Delete account:
-            if ($error = $this->delete->delete()) {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+            if ($error = (new User_Model)->delete()) {
+                self::message()->add(
+                    Message::ERROR,
                     $this->text("./error.$error")
                 );
             }
