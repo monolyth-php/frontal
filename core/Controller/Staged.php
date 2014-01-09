@@ -11,6 +11,7 @@ use monolyth\Session_Access;
 use monolyth\DependencyContainer;
 use monolyth\HTTP301_Exception;
 use ErrorException;
+use monolyth\Message;
 
 abstract class Staged_Controller extends Controller
 {
@@ -131,7 +132,7 @@ abstract class Staged_Controller extends Controller
     protected function cancel()
     {
         $this->text = $this->text;
-        $this->message->add(self::MESSAGE_INFO, $this->text('./cancelled'));
+        self::message()->add(Message::INFO, $this->text('./cancelled'));
         throw new HTTP301_Exception('/');
     }
 }
