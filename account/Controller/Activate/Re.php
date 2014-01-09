@@ -24,9 +24,9 @@ class Re_Activate_Controller extends Controller implements Login_Required
     protected function get(array $args)
     {
         extract($args);
-        $user = $this->user;
+        $user = self::user();
         if (!($user->status() & $user::STATUS_EMAIL_UNCONFIRMED)) {
-            $this->message->add(self::MESSAGE_INFO, $this->text('./noneed'));
+            self::message()->add(Message::INFO, $this->text('./noneed'));
             throw new HTTP301_Exception($this->url('monolyth/account'));
         }
 
@@ -43,7 +43,7 @@ class Re_Activate_Controller extends Controller implements Login_Required
     {
         extract($args);
         if (!isset($id, $hash)) {
-            if ($error = $this->activate->request($this->user->id())) {
+            if ($error = (new Activate_Model)->request(self::user()->id())) {
                 return $this->view('page/activate/re/resendfailed');
             }
             return $this->view('page/activate/re/resent');
