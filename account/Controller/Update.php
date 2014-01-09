@@ -8,15 +8,20 @@
 namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\HTTP301_Exception;
-use monolyth\Session_Access;
 use monolyth\Login_Required;
+use monolyth\Message;
 
-class Update_Controller extends Controller
-implements Session_Access, Login_Required
+class Update_Controller extends Controller implements Login_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Update_Form;
+    }
+
     protected function get(array $args)
     {
-        $this->form->addSource($this->session->get('User'))
+        $this->form->addSource(self::session()->get('User'))
                    ->load();
         return $this->view('page/update');
     }
@@ -26,15 +31,15 @@ implements Session_Access, Login_Required
         $View = $this->get($args);
         $data = $View->data();
         if (!$this->form->errors()) {
-            if (!$error = $this->update->save($this->form)) {
-                $this->message->add(
-                    self::MESSAGE_SUCCESS,
+            if (!$error = (new Update_Model)->save($this->form)) {
+                self::message()->add(
+                    Message::SUCCESS,
                     $this->text('./success')
                 );
-                throw new HTTP301_Exception($this->http->getSelf());
+                throw new HTTP301_Exception(self::http()->getSelf());
             } else {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+                self::message()->add(
+                    Message::ERROR,
                     $this->text("./error.$error")
                 );
             }
