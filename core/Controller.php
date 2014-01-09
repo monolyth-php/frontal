@@ -29,6 +29,7 @@ use monolyth\Message_Access;
 use monolyth\User_Access;
 use monolyth\Project_Access;
 use monolyth\Language_Access;
+use monolyth\Session_Access;
 use monolyth\HTTP_Access;
 use monolyth\render\Viewable;
 use monolyth\utils\Translatable;
@@ -55,6 +56,7 @@ abstract class Controller
     use Message_Access;
     use Project_Access;
     use HTTP_Access;
+    use Session_Access;
 
     private $end = false, $start = 0,
         $attachments = [], $requirements = [], $arguments = [];
@@ -367,10 +369,7 @@ abstract class Controller
             and $time = $view->getModifiedTime($view->data())
             and !$this->checkExpiry(
                 $time,
-                md5($time.self::http()->url().serialize(isset($this->session) ?
-                    $this->session->all() :
-                    ''
-                ))
+                md5($time.self::http()->url().serialize(self::session()->all()))
             )
         ) {
             return;
