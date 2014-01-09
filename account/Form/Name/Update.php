@@ -18,22 +18,21 @@ class Update_Name_Form extends Post_Form
              ->isRequired()
              ->isNotEqualTo(self::user()->name())
              ->mustMatch(self::user()::MATCH_NAME)
-             ->addTest(function($value) use(self::adapter()) {
+             ->addTest(function($value) {
                 try {
                     self::adapter()->field(
                         'monolyth_auth',
                         'name',
                         ['name' => $value]
                     );
-                    $text = $this['name'];
-                    return $text::ERROR_EXISTS;
+                    return $this::ERROR_EXISTS;
                 } catch (NoResults_Exception $e) {
                     return null;
                 }
              });
         $this->addPassword('pass', $this->text('./pass'))
              ->isRequired()
-             ->isEqualTo($this->user->pass(), $this->user->salt());
+             ->isEqualTo(self::user()->pass(), self::user()->salt());
         $this->addButton(self::BUTTON_SUBMIT, $this->text('./submit'));
         return parent::prepare();
     }
