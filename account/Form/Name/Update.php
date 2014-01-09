@@ -2,23 +2,25 @@
 
 namespace monolyth\account;
 use monolyth\core\Post_Form;
-use monolyth\adapter;
+use adapter\Access as Adapter_Access;
 use monolyth\User_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 
-class Update_Name_Form extends Post_Form implements adapter\Access, User_Access
+class Update_Name_Form extends Post_Form
 {
-    public function prepare()
+    use Adapter_Access;
+    use User_Access;
+
+    public function __construct()
     {
-        $user = $this->user;
-        $adapter = $this->adapter;
+        parent::__construct();
         $this->addText('name', $this->text('./name'))
              ->isRequired()
-             ->isNotEqualTo($user->name())
-             ->mustMatch($user::MATCH_NAME)
-             ->addTest(function($value) use($adapter) {
+             ->isNotEqualTo(self::user()->name())
+             ->mustMatch(self::user()::MATCH_NAME)
+             ->addTest(function($value) use(self::adapter()) {
                 try {
-                    $adapter->field(
+                    self::adapter()->field(
                         'monolyth_auth',
                         'name',
                         ['name' => $value]
