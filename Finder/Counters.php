@@ -1,9 +1,12 @@
 <?php
 
 namespace monolyth;
+use Adapter_Access;
 
-class Counters_Finder implements Finder, adapter\Access
+class Counters_Finder implements Finder
 {
+    use Adapter_Access;
+
     public function find($name)
     {
         try {

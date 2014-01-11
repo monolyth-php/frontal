@@ -2,7 +2,7 @@
 
 namespace monolyth;
 use monolyth\adapter\sql\NoResults_Exception;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Comment_Finder implements Finder
 {
