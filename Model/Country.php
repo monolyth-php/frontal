@@ -5,7 +5,7 @@ use monolyth\adapter\Adapter;
 use monolyth\adapter\nosql\Cache;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Country_Model extends core\I18n_Model
 {
@@ -14,7 +14,7 @@ class Country_Model extends core\I18n_Model
 
     public function __construct()
     {
-        $cache = self::adapterCache();
+        $cache = self::cache();
         if (isset($cache)) {
             try {
                 $rows = $cache->get('countries');
