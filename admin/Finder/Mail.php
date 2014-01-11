@@ -3,7 +3,7 @@
 namespace monolyth\admin;
 use monad\core;
 use monolyth\adapter\sql\NoResults_Exception;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Mail_Finder extends core\Finder
 {
