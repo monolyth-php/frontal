@@ -9,7 +9,7 @@ namespace monolyth\account;
 use monolyth\core\Model;
 use monolyth\Project_Access;
 use monolyth\Session_Access;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\adapter;
 
 class Logout_Model extends Model

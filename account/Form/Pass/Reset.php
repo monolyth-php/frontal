@@ -8,7 +8,7 @@
 namespace monolyth\account;
 use monolyth\core\Post_Form;
 use monolyth\adapter\sql\NoResults_Exception;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Reset_Pass_Form extends Post_Form
 {

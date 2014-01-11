@@ -8,7 +8,7 @@
 namespace monolyth\account;
 use monolyth\User_Model as Base_Model;
 use monolyth\User_Access;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\DeleteNone_Exception;
 use monolyth\adapter\sql\Exception;

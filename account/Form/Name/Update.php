@@ -2,7 +2,7 @@
 
 namespace monolyth\account;
 use monolyth\core\Post_Form;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\User_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 

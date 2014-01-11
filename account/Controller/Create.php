@@ -8,11 +8,12 @@
 namespace monolyth\account;
 use monolyth\core\Staged_Controller;
 use monolyth\Nologin_Required;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
-class Create_Controller extends Staged_Controller
-implements Nologin_Required, Adapter_Access
+class Create_Controller extends Staged_Controller implements Nologin_Required
 {
+    use Adapter_Access;
+
     protected static $stages = ['profile', 'accept', 'success'];
 
     protected function postProfile(array $args)

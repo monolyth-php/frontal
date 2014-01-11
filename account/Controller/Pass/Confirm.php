@@ -7,7 +7,7 @@
 
 namespace monolyth\account;
 use monolyth\Controller;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\render\Url_Helper;
 use monolyth\HTTP301_Exception;
 use monolyth\Confirm_Model;
