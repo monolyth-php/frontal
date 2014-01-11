@@ -52,7 +52,10 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
  * Since we don't have the autoloader here yet, we need to manually include the
  * Access adapters the Monolyth base class needs.
  */
-require_once 'adapter/Access.php';
+require_once 'Access/Adapter.php';
+require_once 'monolyth/core/Singleton.php';
+require_once 'monolyth/Logger.php';
+require_once 'monolyth/Access/Logger.php';
 require_once 'monolyth/Access/Language.php';
 require_once 'monolyth/render/Access/Router.php';
 
@@ -73,6 +76,7 @@ abstract class Monolyth
     private static $router;
 
     use Language_Access;
+    use Logger_Access;
 
     private static $renderTimes = [];
 
@@ -125,24 +129,6 @@ abstract class Monolyth
         }
     }
 
-    public static function setBookmark($id)
-    {
-        static $start;
-        if (!self::$renderTimes) {
-            $start = microtime(true);
-        }
-        self::$renderTimes[] = [
-            $id,
-            microtime(true) - $start,
-            memory_get_usage(true),
-        ];
-    }
-    
-    public static function getBookmarks()
-    {
-        return self::$renderTimes;
-    }
-
     /**
      * When done setting up, run MonoLyth.
      *
@@ -191,7 +177,7 @@ abstract class Monolyth
             if ($match['controller'] instanceof Redirect) {
                 throw new HTTP301_Exception("{$match['controller']}");
             }
-            self::setBookmark('Found controller');
+            self::logger()->log('Found controller');
             $controller = $match['controller'];
             unset($match['controller']);
             $o = new $controller;
@@ -296,7 +282,7 @@ abstract class Monolyth
     }
 }
 
-Monolyth::setBookmark('Start [included Monolyth]');
+Monolyth::logger()->log('Start [included Monolyth]');
 
 if (isset($_REQUEST['repost'])) {
     $post = @unserialize(@base64_decode($_REQUEST['repost']));
