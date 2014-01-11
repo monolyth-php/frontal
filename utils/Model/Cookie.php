@@ -1,7 +1,7 @@
 <?php
 
 namespace monolyth\utils;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\Project_Access;
 use monolyth\adapter\sql\InsertNone_Exception;
 
