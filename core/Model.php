@@ -24,7 +24,7 @@
  */
 namespace monolyth\core;
 use ArrayObject;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 /**
  * The base Model class. This defines a few universal helper methods, and
