@@ -16,7 +16,7 @@
 namespace monolyth;
 use monolyth\core\Session_Model;
 use ErrorException;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class SQL_Session_Model extends Session_Model
 {
