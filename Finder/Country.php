@@ -1,7 +1,7 @@
 <?php
 
 namespace monolyth;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 
 class Country_Finder implements Finder
@@ -17,7 +17,7 @@ class Country_Finder implements Finder
         if (!isset($language)) {
             $language = self::language()->current->id;
         }
-        if ($cache = self::adapterCache()) {
+        if ($cache = self::cache()) {
             try {
                 return $cache->get("countries/$language");
             } catch (adapter\nosql\KeyNotFound_Exception $e) {
