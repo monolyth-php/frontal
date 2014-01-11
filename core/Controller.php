@@ -545,13 +545,13 @@ abstract class Controller
     {
         $texts = array_flip($ids);
         foreach ($texts as $id => &$text) {
-            $text = [$id, $this->language->current->code];
+            $text = [$id, self::language()->current->code];
         }
         $this->text->load($texts);
         foreach ($texts as $id => &$text) {
             $text = [
                 $id,
-                $this->text->retrieve($id, $this->language->current->code)
+                $this->text->retrieve($id, self::language()->current->code)
             ];
         }
         return array_values($texts);
