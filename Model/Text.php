@@ -344,7 +344,7 @@ class Text_Model
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        $cache = self::adapterCache();
+        $cache = self::cache();
         if (isset($cache)) {
             foreach ($ids as $id) {
                 try {
