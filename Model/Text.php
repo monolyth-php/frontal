@@ -62,7 +62,7 @@
 
 namespace monolyth;
 use ErrorException;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 /**
  * Base Text model. If you prefer handling i18n via gettext, you can override
@@ -168,7 +168,7 @@ class Text_Model
         }
         $parts[] = $args;
         $parts[] = $callback;
-        $cache = self::adapterCache();
+        $cache = self::cache();
         if (isset($cache)) {
             foreach ($ids as $id) {
                 try {
@@ -217,7 +217,7 @@ class Text_Model
                 ],
             ];
         }
-        $cache = self::adapterCache();
+        $cache = self::cache();
         try {
             foreach (self::adapter()->rows(
                 'monolyth_text JOIN monolyth_text_i18n USING(id)',
