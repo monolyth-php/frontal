@@ -6,7 +6,7 @@
 
 namespace monolyth;
 use ErrorException;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class User_Model implements User_Constants
 {
@@ -88,7 +88,7 @@ class User_Model implements User_Constants
         ))) {
             if ($this->status() & $this::STATUS_GENERATED_PASS) {
                 self::message()->add(
-                    Message::INFO,
+                    'info',
                     $this->text(
                         'monolyth\account\pass/generated',
                         $this->url('monolyth/account/update_pass')
