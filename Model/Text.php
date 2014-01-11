@@ -68,7 +68,7 @@ use Adapter_Access;
  * Base Text model. If you prefer handling i18n via gettext, you can override
  * this in your custom project.
  *
- * @see adapter\Access
+ * @see Adapter_Access
  * @see monolyth\utils\Name_Helper
  */
 class Text_Model
