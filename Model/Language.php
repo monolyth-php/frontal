@@ -21,7 +21,7 @@ use monolyth\adapter\Adapter;
 use monolyth\adapter\nosql\Adapter as Nadapter;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Language_Model extends I18n_Model
 {
@@ -32,7 +32,7 @@ class Language_Model extends I18n_Model
 
     protected function __construct()
     {
-        $cache = self::adapterCache();
+        $cache = self::cache();
         if (isset($cache)) {
             try {
                 $rows = unserialize($cache->get('languages'));
