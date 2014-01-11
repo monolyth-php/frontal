@@ -11,7 +11,7 @@
 
 namespace monolyth\core;
 use monolyth\Project_Access;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\utils\Translatable;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
 use ErrorException;
@@ -207,7 +207,7 @@ abstract class Session_Model
     {
         try {
             $q = json_decode(
-                self::adapterCache()->get("session/{$this->id}/{$this->random}"),
+                self::cache()->get("session/{$this->id}/{$this->random}"),
                 true
             );
             if (isset($q['user_agent'], $q['dateactive'])) {
@@ -221,7 +221,7 @@ abstract class Session_Model
 
     protected function saveToCache($fields, $force = false)
     {
-        if ($cache = self::adapterCache()
+        if ($cache = self::cache()
             and $cache->set(
                 "session/{$this->id}/{$this->random}",
                 json_encode([
