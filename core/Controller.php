@@ -42,8 +42,8 @@ use StdClass;
 use ErrorException;
 use monolyth\Monolyth;
 use monolyth\Trait_Helper;
-use monolyth\Message;
 use monolyth\Text_Model;
+use monolyth\Logger_Access;
 
 abstract class Controller
 {
@@ -57,6 +57,7 @@ abstract class Controller
     use Project_Access;
     use HTTP_Access;
     use Session_Access;
+    use Logger_Access;
 
     private $end = false, $start = 0,
         $attachments = [], $requirements = [], $arguments = [];
@@ -70,7 +71,7 @@ abstract class Controller
      */
     public function __construct()
     {
-        Monolyth::setBookmark('Initialising controller');
+        self::logger()->log('Initialising controller');
         $traits = [];
         $accessMethods = [];
         foreach (class_parents($this) + ['me' => $this] as $parent) {
@@ -190,10 +191,7 @@ abstract class Controller
             'monolyth\Inactive_Required',
             $user->loggedIn() && $user->status() & $user::STATUS_INACTIVE,
             function() use($user) {
-                self::message()->add(
-                    Message::INFO,
-                    $this->text('./noneed')
-                );
+                self::message()->add('info', $this->text('./noneed'));
                 throw new HTTP301_Exception($this->url('monolyth/account'));
             }
         );
@@ -350,10 +348,7 @@ abstract class Controller
                         return $text->get($opts, $label);
                     };
                     foreach ($errors as $field => $err) {
-                        self::message()->add(
-                            Message::ERROR,
-                            $fn($field, $err)
-                        );
+                        self::message()->add('error', $fn($field, $err));
                     }
                 }
             case 'GET':
@@ -402,7 +397,7 @@ abstract class Controller
                 $view->data($data);
             }
             $template->data($data + ['parse' => true]);
-            Monolyth::setBookmark('Rendering template');
+            self::logger()->log('Rendering template');
             echo $template($html);
         } else {
             echo $view('', $view->data() + ['parse' => true]);
