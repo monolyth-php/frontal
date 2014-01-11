@@ -199,7 +199,7 @@ final class View
      */
     protected function parse($html)
     {
-        Monolyth::setBookmark('Invoke all parsers');
+        self::logger()->log('Invoke all parsers');
         foreach ($this->parsers as $parser) {
             $p = $parser[0];
             $parser[0] = $html;
@@ -268,37 +268,19 @@ final class View
                 || self::user()->name() == 'root'
             )
         ) {
-            Monolyth::setBookmark('End [finished outputting]');
-            $debug = "\n<!--\n\n";
-            foreach (Monolyth::getBookmarks() as $i => $bookmark) {
-                if (!$i) {
-                    $start = $bookmark[1];
-                }
+            self::logger()->log('End [finished outputting]');
+            $debug = "<script>\n";
+            $stats = self::logger()->export();
+            foreach ($stats as $line) {
                 $debug .= sprintf(
-                    "%s: %0.4f seconds, %0.2fmb memory\n",
-                    $bookmark[0],
-                    $bookmark[1],
-                    $bookmark[2] / 1024 / 1024
+                    "console.log(%s);\n",
+                    json_encode($line)
                 );
             }
-            $debug .= sprintf(
-                "\n\nTOTAL: %0.4f seconds, %0.2fmb memory\n\n",
-                $bookmark[1] - $start,
-                $bookmark[2] / 1024 / 1024
-            );
-            $stats = self::logger()->export();
-            $debug .= sprintf(
-                "Queries: %d, time: %0.4f\n\n",
-                count($stats['total']),
-                $stats['time']
-            );
-            foreach ($stats['total'] as $sql) {
-                $debug .= preg_replace("@\s+@m", ' ', $sql)."\n";
-            }
-            $debug .= "\n";
+            $debug .= "</script>\n";
             $html = str_replace(
                 '</body>',
-                "$debug-->\n</body>",
+                "$debug</body>",
                 $html
             );
         }
