@@ -5,8 +5,9 @@ use monolyth\core\Post_Form;
 
 class Accept_Create_Form extends Post_Form
 {
-    public function prepare()
+    public function __construct()
     {
+        parent::__construct();
         $this->addRadios(
             'terms',
             $this->text('./terms'),

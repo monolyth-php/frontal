@@ -8,7 +8,7 @@
  *
  * @package monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  * @see Session
  * @see core\Session
  */
@@ -16,21 +16,25 @@
 namespace monolyth;
 use monolyth\core\Session_Model;
 use ErrorException;
+use Adapter_Access;
 
-class SQL_Session_Model extends Session_Model implements adapter\Access
+class SQL_Session_Model extends Session_Model
 {
+    use Adapter_Access;
+    use core\Singleton;
+
     /**
-     * "Constructor". Initialise a new or existing session.
+     * Constructor. Initialise a new or existing session.
      *
      * @return void
      */
-    public function init()
+    protected function __construct()
     {
-        parent::init();
+        parent::__construct();
         $q = null;
         if (!($found = $this->getFromCache($q))) {
             try {
-                $q = $this->adapter->row(
+                $q = self::adapter()->row(
                     'monolyth_session',
                     '*',
                     ['id' => $this->id]
@@ -80,7 +84,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
     {
         $this->state(self::STATE_NEW);
         try {
-            return $this->adapter->insert('monolyth_session', $this->data);
+            return self::adapter()->insert('monolyth_session', $this->data);
         } catch (adapter\sql\Exception $e) {
             /**
              * Session expired but re-insert is attempted,
@@ -140,7 +144,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
             $this->state(self::STATE_UPDATED);
         }
         $fields['data'] = $data;
-        $fields['dateactive'] = $this->adapter->now();
+        $fields['dateactive'] = self::adapter()->now();
         if (!isset($this->data['ip']) or $this->ip != $this->data['ip']) {
             $fields['ip'] = $this->ip;
         }
@@ -150,7 +154,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
                 if ($this->userid) {
                     try {
                         $ids = [];
-                        foreach ($this->adapter->rows(
+                        foreach (self::adapter()->rows(
                             'monolyth_session',
                             'id',
                             [
@@ -162,7 +166,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
                             $ids[] = $row['id'];
                         }
                         if ($ids) {
-                            $this->adapter->update(
+                            self::adapter()->update(
                                 'monolyth_session',
                                 ['userid' => null],
                                 [
@@ -175,7 +179,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
                     } catch (adapter\sql\NoResults_Exception $e) {
                     }
                 }
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_session',
                     $fields,
                     ['id' => $this->id]
@@ -218,13 +222,15 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
     {
         $this->state(self::STATE_DELETED);
         $_COOKIE[session_name()] = null;
-        try {
-            $this->cache->delete("session/$id/$random");
-        } catch (adapter\nosql\KeyNotFound_Exception $e) {
+        if ($cache = self::cache()) {
+           try {
+               $cache->delete("session/$id/$random");
+            } catch (adapter\nosql\KeyNotFound_Exception $e) {
+            }
         }
         $this->__savecount__ = 0;
         try {
-            return $this->adapter->delete(
+            return self::adapter()->delete(
                 'monolyth_session',
                 ['id' => $id]
             );
@@ -245,7 +251,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
     {
         try {
             if (method_exists($this, 'notify')) {
-                $this->expireds = $this->adapter->rows(
+                $this->expireds = self::adapter()->rows(
                     'monolyth_session',
                     '*',
                     ['dateactive' => ['<' => date(
@@ -255,7 +261,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
                 );
                 $this->notify();
             }
-            return $this->adapter->delete(
+            return self::adapter()->delete(
                 'monolyth_session',
                 ['dateactive' => ['<' => date(
                     'Y-m-d H:i:s',
@@ -286,13 +292,15 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
         }
         $random = substr($id, 32);
         $id = substr($id, 0, 32);
-        try {
-            $this->cache->delete("session/$id/$random");
-        } catch (adapter\nosql\KeyNotFound_Exception $e) {
+        if ($cache = self::cache()) {
+            try {
+                $cache->delete("session/$id/$random");
+            } catch (adapter\nosql\KeyNotFound_Exception $e) {
+            }
         }
         if (isset($this->userid) && $this->userid) {
             try {
-                foreach ($this->adapter->row(
+                foreach (self::adapter()->row(
                     'monolyth_auth',
                     '*',
                     ['id' => $this->userid]
@@ -302,7 +310,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
             } catch (adapter\sql\NoResults_Exception $e) {
                 $_SESSION['User'] = null;
                 try {
-                    $this->adapter->update(
+                    self::adapter()->update(
                         'monolyth_session',
                         ['userid' => null],
                         compact('id') + ['randomid' => (int)$random]
@@ -314,7 +322,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
         } else {
             try {
                 unset($_SESSION['User']);
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_session',
                     ['userid' => null],
                     compact('id') + ['randomid' => (int)$random]
@@ -329,7 +337,7 @@ class SQL_Session_Model extends Session_Model implements adapter\Access
         if ($_SERVER['REMOTE_ADDR'] == 'unknown') {
             return 0;
         }
-        return $this->adapter->field(
+        return self::adapter()->field(
             'monolyth_session',
             'count(*)',
             [

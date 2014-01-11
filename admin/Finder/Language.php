@@ -7,7 +7,7 @@ class Language_Finder extends Finder
 {
     public function all($size, $page = 1)
     {
-        return $this->adapter->pages(
+        return self::adapter()->pages(
             'monolyth_language',
             '*',
             [],

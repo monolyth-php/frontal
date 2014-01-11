@@ -1,15 +1,20 @@
 <?php
 
 namespace monolyth\render;
+use monolyth\Project_Access;
 
 trait Static_Helper
 {
+    use Project_Access {
+        Project_Access::project as staticProject;
+    }
+
     public function assemble(array $files)
     {
         // Build a unified unique identifier for this file.
         // The 'UUID' consists of the total filesize of the files,
         // as well as an MD5 of the concatenated filenames.
-        $project = $this->project->export();
+        $project = self::staticProject()->export();
         $size = 0;
         clearstatcache();
         foreach ($files as $file) {
@@ -148,7 +153,7 @@ trait Static_Helper
     public function httpimg($file, $site = null, $secure = null)
     {
         $file = "$file";
-        $project = $this->project->export();
+        $project = self::staticProject()->export();
         if (!isset($secure)) {
             $secure = $project['secure'];
         }

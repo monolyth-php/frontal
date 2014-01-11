@@ -6,15 +6,22 @@
  */
 
 namespace monolyth\render;
-use monolyth\adapter;
+use Adapter_Access;
 use monolyth\utils\HTML_Helper;
 use monolyth\Project_Access;
+use monolyth\Language_Access;
 use ErrorException;
 use Closure;
+use Mail;
+use Mail_mime;
 
-class Email implements adapter\Access, Project_Access
+class Email
 {
-    use Url_Helper, HTML_Helper;
+    use Url_Helper;
+    use HTML_Helper;
+    use Adapter_Access;
+    use Project_Access;
+    use Language_Access;
 
     const TYPE_HTML = 1;
     const TYPE_PLAIN = 2;
@@ -42,6 +49,20 @@ class Email implements adapter\Access, Project_Access
             $this->setVariables($vars);
         } catch (ErrorException $e) {
         }
+        $this->parser = new Translate_Parser;
+        /** @see PEAR::Mail */
+        require_once 'Mail.php';
+        /** @see PEAR::Mail_mime */
+        require_once 'Mail/mime.php';
+        $this->mail = new Mail_mime([
+            'head_charset' => 'UTF-8',
+            'html_charset' => 'UTF-8',
+            'text_charset' => 'UTF-8',
+            'html_encoding' => 'quoted-printable',
+            'text_encoding' => 'quoted-printable',
+            'eol' => "\n",
+        ]);
+        $this->send = Mail::factory('mail');
     }
 
     /**
@@ -101,14 +122,14 @@ class Email implements adapter\Access, Project_Access
     public function setSource($mail)
     {
         try {
-            $data = $this->adapter->row(
+            $data = self::adapter()->row(
                 "monolyth_mail m
                  LEFT JOIN monolyth_mail_template t ON t.id = m.template
                     AND t.language = m.language",
                 ['m.*', 't.html AS thtml', 't.plain AS tplain'],
                 [
                     'm.id' => $mail,
-                    'm.language' => $this->language->current->id,
+                    'm.language' => self::language()->current->id,
                 ]
             );
             if (!$data['thtml']) {
@@ -197,7 +218,7 @@ class Email implements adapter\Access, Project_Access
                     );
                 }
             }
-            $project = $this->project;
+            $project = self::project();
             if (method_exists($project, 'httpimg')) {
                 $replace = function($matches) use($project) {
                     return str_replace(
@@ -210,7 +231,7 @@ class Email implements adapter\Access, Project_Access
                 $replace = function($matches) {
                     return str_replace(
                         $matches[1],
-                        "{$this->project['http']}{$matches[1]}",
+                        "{self::project()['http']}{$matches[1]}",
                         $matches[0]
                     );
                 };
@@ -225,9 +246,9 @@ class Email implements adapter\Access, Project_Access
             $this->mail->$fn($content);
         }
         $body = $this->mail->get();
-        if ($this->project['test']) {
-            if (isset($this->project['testmail'])) {
-                $to = $this->project['testmail'];
+        if (self::project()['test']) {
+            if (isset(self::project()['testmail'])) {
+                $to = self::project()['testmail'];
             } else {
                 $to = null;
             }

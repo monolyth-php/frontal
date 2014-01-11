@@ -2,13 +2,13 @@
 
 namespace monolyth;
 
-trait Session_Access
+trait SQL_Session_Access
 {
     public function session()
     {
         static $session;
         if (!isset($session)) {
-            $session = new PHP_Session_Model;
+            $session = SQL_Session_Model::instance();
         }
         return $session;
     }

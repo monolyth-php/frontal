@@ -1,13 +1,16 @@
 <?php
 
 namespace monolyth;
+use Adapter_Access;
 
-class Counters_Finder implements Finder, adapter\Access
+class Counters_Finder implements Finder
 {
+    use Adapter_Access;
+
     public function find($name)
     {
         try {
-            return $this->adapter->field(
+            return self::adapter()->field(
                 'monolyth_counters',
                 'value',
                 compact('name')
@@ -21,7 +24,7 @@ class Counters_Finder implements Finder, adapter\Access
     {
         $counters = [];
         try {
-            foreach ($this->adapter->rows(
+            foreach (self::adapter()->rows(
                 'monolyth_counters',
                 '*',
                 [],
