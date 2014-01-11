@@ -10,7 +10,6 @@
  * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 namespace monolyth;
-use adapter\Access as Adapter_Access;
 use ErrorException;
 use monolyth\core\Project;
 use monad\admin\Project as Monad_Project;
