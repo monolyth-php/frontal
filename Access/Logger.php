@@ -1,7 +1,6 @@
 <?php
 
 namespace monolyth;
-use monolyth\adapter\Logger;
 
 trait Logger_Access
 {
@@ -9,7 +8,7 @@ trait Logger_Access
     {
         static $logger;
         if (!isset($logger)) {
-            $logger = new Logger;
+            $logger = Logger::instance();
         }
         return $logger;
     }
