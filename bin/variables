@@ -4,7 +4,7 @@
 namespace monolyth;
 use monolyth\adapter\sql;
 use ErrorException;
-use adapter\Finder as Adapter_Finder;
+use Adapter_Finder;
 
 /**
  * Take a (generated) piece of javascript or CSS and replace variables.
