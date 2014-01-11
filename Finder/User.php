@@ -1,7 +1,7 @@
 <?php
 
 namespace monolyth;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class User_Finder implements Finder
 {
