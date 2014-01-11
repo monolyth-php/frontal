@@ -5,7 +5,7 @@ use monolyth\Controller;
 use monolyth\Config;
 use monolyth\adapter\sql\NoResults_Exception;
 use ErrorException;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 
 class Edit_Media_Controller extends Controller
 {

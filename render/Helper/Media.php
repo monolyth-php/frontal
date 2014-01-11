@@ -1,7 +1,7 @@
 <?php
 
 namespace monolyth\render;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use ErrorException;

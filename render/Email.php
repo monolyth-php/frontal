@@ -6,7 +6,7 @@
  */
 
 namespace monolyth\render;
-use adapter\Access as Adapter_Access;
+use Adapter_Access;
 use monolyth\utils\HTML_Helper;
 use monolyth\Project_Access;
 use monolyth\Language_Access;
