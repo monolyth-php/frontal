@@ -7,7 +7,7 @@
  * @subpackage adapter
  * @subpackage sql
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2007, 2008, 2009, 2010, 2011, 2012, 2013
+ * @copyright MonoMelodies 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014
  */
 
 namespace monolyth\adapter\sql;
@@ -17,10 +17,12 @@ use Exception;
 use PDOStatement;
 use ArrayObject;
 use monolyth;
-use monolyth\adapter\Logger;
+use monolyth\Logger_Access;
 
 abstract class Adapter implements monolyth\adapter\Adapter
 {
+    use Logger_Access;
+
     protected $cache = [], $querytime = 0, $prepared = [],
               $translevel = 0, $index;
 
@@ -32,8 +34,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         } catch (PDOException $e) {
             throw new ConnectionFailed_Exception($e->getMessage());
         }
-        Monolyth::setBookmark('Initialised database connection');
-        $this->logger = new Logger();
+        self::logger()->log('Initialised database connection');
     }
 
     /**
@@ -104,8 +105,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         } else {
             $q = $this->pdo->query($sql);
         }
-        $end = microtime(true) - $start;
-        $this->logger->log($sql, $end);
+        self::logger()->log($sql, $start);
         $this->querytime += $end;
         if (!($q && count($q))) {
             throw new NoResults_Exception($sql, $bind, 'No results.');
@@ -155,10 +155,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $key = ++$counter;
         }
         call_user_func_array([$statement, 'setFetchMode'], $args);
-        $this->logger->log(
-            $statement->queryString,
-            microtime(true) - $start
-        );
+        self::logger()->log($statement->queryString, $start);
         if (false !== ($result = $statement->$fn())
             and $result !== []
         ) {
@@ -434,9 +431,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         $statement = $this->pdo->prepare($sql);
         try {
             $statement->execute($bind);
-            $end = microtime(true) - $start;
-            $this->logger->log($sql, $end);
-            $this->querytime += $end;
+            self::logger()->log($sql, $start);
         } catch (PDOException $e) {
             throw new InsertNone_Exception(
                 $this->error(
@@ -494,9 +489,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
-            $end = microtime(true) - $start;
-            $this->logger->log($sql, $end);
-            $this->querytime += $end;
+            self::logger()->log($sql, $start);
         } catch (PDOException $e) {
             throw new Exception(
                 $this->error(
@@ -550,9 +543,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $start = microtime(true);
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
-            $end = microtime(true) - $start;
-            $this->logger->log($sql, $end);
-            $this->querytime += $end;
+            self::logger()->log($sql, $start);
             $affected = $statement->rowCount();
             if (!$affected) {
                 $info = $statement->errorInfo();
