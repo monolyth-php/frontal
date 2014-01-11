@@ -11,7 +11,6 @@ use adapter\Access as Adapter_Access;
 use monolyth\render\Url_Helper;
 use monolyth\HTTP301_Exception;
 use monolyth\Confirm_Model;
-use monolyth\Message;
 
 class Confirm_Pass_Controller extends Controller
 {
@@ -43,18 +42,18 @@ class Confirm_Pass_Controller extends Controller
                 );
                 (new Pass_Model)->update($pw, $id);
                 self::message()->add(
-                    Message::SUCCESS,
+                    'success',
                     $this->text('pass/reset/success', ['pass' => $pw])
                 );
                 return $this->view('page/pass/display', ['pass' => $pw]);
             } elseif ($error == 'contains outdated elements') {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text('pass/reset/error.date')
                 );
             } else {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text('pass/reset/error.generic')
                 );
             }

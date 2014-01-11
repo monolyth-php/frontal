@@ -9,7 +9,6 @@ namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\Nologin_Required;
 use monolyth\HTTP301_Exception;
-use monolyth\Message;
 
 class Forgot_Pass_Controller extends Controller implements Nologin_Required
 {
@@ -30,12 +29,12 @@ class Forgot_Pass_Controller extends Controller implements Nologin_Required
             $reset = new Reset_Pass_Model;
             if ($error = call_user_func($reset, $this->form)) {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text("pass/forgot/error.$error")
                 );
             } else {
                 self::message()->add(
-                    Message::SUCCESS,
+                    'success',
                     $this->text(
                         'pass/forgot/success',
                         $this->form['email']->value

@@ -8,7 +8,6 @@
 namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\Login_Required;
-use monolyth\Message;
 
 class Update_Email_Controller extends Controller implements Login_Required
 {
@@ -29,12 +28,12 @@ class Update_Email_Controller extends Controller implements Login_Required
             $account = new User_Model;
             if (!($error = $account->email($this->form))) {
                 self::message()->add(
-                    Message::SUCCESS,
+                    'success',
                     $this->text('./confirm')
                 );
             } else {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text("./error.$error")
                 );
             }

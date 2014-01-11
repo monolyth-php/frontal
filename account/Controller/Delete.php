@@ -4,7 +4,6 @@ namespace monolyth\account;
 use monolyth\Login_Required;
 use monolyth\HTTP301_Exception;
 use monolyth\core\Staged_Controller;
-use monolyth\Message;
 
 class Delete_Controller extends Staged_Controller implements Login_Required
 {
@@ -22,7 +21,7 @@ class Delete_Controller extends Staged_Controller implements Login_Required
             // Delete account:
             if ($error = (new User_Model)->delete()) {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text("./error.$error")
                 );
             }

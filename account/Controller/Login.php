@@ -9,7 +9,6 @@ namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\Logout_Required;
 use monolyth\HTTP301_Exception;
-use monolyth\Message;
 
 class Login_Controller extends Controller implements Logout_Required
 {
@@ -52,7 +51,7 @@ class Login_Controller extends Controller implements Logout_Required
         } else {
             if (isset($error)) {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text("login/error.$error")
                 );
             }

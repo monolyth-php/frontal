@@ -9,7 +9,6 @@ namespace monolyth\account;
 use monolyth\HTTP301_Exception;
 use monolyth\Controller;
 use monolyth\Login_Required;
-use monolyth\Message;
 
 class Update_Pass_Controller extends Controller implements Login_Required
 {
@@ -31,7 +30,7 @@ class Update_Pass_Controller extends Controller implements Login_Required
             $pass = new Pass_Model;
             if (!($error = $pass->update($this->form['new']->value))) {
                 self::message()->add(
-                    Message::SUCCESS,
+                    'success',
                     $this->text('pass/update/success')
                 );
                 $url = $this->url('monolyth/account/update');

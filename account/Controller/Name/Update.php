@@ -4,7 +4,6 @@ namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\Login_Required;
 use monolyth\HTTP301_Exception;
-use monolyth\Message;
 
 class Update_Name_Controller extends Controller implements Login_Required
 {
@@ -24,12 +23,12 @@ class Update_Name_Controller extends Controller implements Login_Required
         if (!$this->form->errors()) {
             if ($error = (new Pass_Model)->name($this->form)) {
                 self::message()->add(
-                    Message::ERROR,
+                    'error',
                     $this->text("./error.$error")
                 );
             } else {
                 self::message()->add(
-                    Message::SUCCESS,
+                    'error',
                     $this->text('./success')
                 );
                 throw new HTTP301_Exception(self::http()->getSelf());

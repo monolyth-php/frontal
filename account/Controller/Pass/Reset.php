@@ -8,15 +8,15 @@
 namespace monolyth\account;
 use monolyth\HTTP301_Exception;
 use monolyth\Controller;
-use monolyth\adapter;
+use Adapter_Access;
 use monolyth\render\Url_Helper;
 use monolyth\Nologin_Required;
 use monolyth\Confirm_Model;
-use monolyth\Message;
 
-class Reset_Pass_Controller extends Controller
-implements adapter\Access, Nologin_Required
+class Reset_Pass_Controller extends Controller implements Nologin_Required
 {
+    use Adapter_Access;
+
     public function __construct()
     {
         parent::__construct();
@@ -37,18 +37,18 @@ implements adapter\Access, Nologin_Required
             );
             $this->pass->update($pw, $id);
             self::message()->add(
-                Message::SUCCESS,
+                'success',
                 $this->text('pass/reset/success', ['pass' => $pw])
             );
             return $this->view('page/pass/display', ['pass' => $pw]);
         } elseif ($error == 'contains outdated elements') {
             self::message()->add(
-                Message::ERROR,
+                'error',
                 $this->text('pass/reset/error.date')
             );
         } else {
             self::message()->add(
-                Message::ERROR,
+                'error',
                 $this->text('pass/reset/error.generic')
             );
         }
