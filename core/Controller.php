@@ -28,7 +28,6 @@ use monolyth\Redirect_Controller;
 use monolyth\Message_Access;
 use monolyth\User_Access;
 use monolyth\Project_Access;
-use monolyth\Language_Access;
 use monolyth\Session_Access;
 use monolyth\HTTP_Access;
 use monolyth\render\Viewable;
@@ -47,7 +46,6 @@ use monolyth\Logger_Access;
 
 abstract class Controller
 {
-    use Language_Access;
     use Translatable;
     use Viewable;
     use Name_Helper;
@@ -74,9 +72,14 @@ abstract class Controller
         self::logger()->log('Initialising controller');
         $traits = [];
         $accessMethods = [];
-        foreach (class_parents($this) + ['me' => $this] as $parent) {
-            $traits += class_uses($parent);
-        }
+        $class = get_class($this);
+        do {
+            $traits = array_merge(class_uses($class), $traits);
+        } while ($class = get_parent_class($class));
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait), $traits);
+        } 
+        $traits = array_unique($traits);
         $methods = [];
         foreach ($traits as $trait) {
             $classmethods = get_class_methods($trait);
