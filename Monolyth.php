@@ -183,20 +183,13 @@ abstract class Monolyth
             return $o($_SERVER['REQUEST_METHOD'], $match);
             $output = $function($uri);
         } catch (adapter\sql\Exception $e) {
-            if (!$project['test']) {
-                mail(
-                    $project['notifymail'],
-                    "Database down for {$project['site']}",
-                    "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
-                );
-            }
             mail(
-                $project['notifymail'],
+                static::$project['notifymail'],
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
-            $e = new render\DatabaseDown_Controller(new DependencyContainer);
-            $e('GET', []);
+            $c = new render\DatabaseDown_Controller(new DependencyContainer);
+            $c('GET', ['exceptionThrown' => $e]);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
             $parts = explode('\\', strtolower(get_class($e)));
