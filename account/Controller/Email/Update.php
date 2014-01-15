@@ -11,6 +11,12 @@ use monolyth\Login_Required;
 
 class Update_Email_Controller extends Controller implements Login_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Update_Email_Form;
+    }
+
     protected function get(array $args)
     {
         return $this->view('page/email/update');
@@ -19,14 +25,15 @@ class Update_Email_Controller extends Controller implements Login_Required
     protected function post(array $args)
     {
         if (!$this->form->errors()) {
-            if (!($error = $this->account->email($this->form))) {
-                $this->message->add(
-                    self::MESSAGE_SUCCESS,
+            $account = new User_Model;
+            if (!($error = $account->email($this->form))) {
+                self::message()->add(
+                    'success',
                     $this->text('./confirm')
                 );
             } else {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+                self::message()->add(
+                    'error',
                     $this->text("./error.$error")
                 );
             }

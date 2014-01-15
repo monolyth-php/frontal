@@ -7,17 +7,22 @@
  * @subpackage render
  */
 namespace monolyth\render;
-use monolyth;
+use monolyth\Monolyth;
+use monolyth\Config;
 use monolyth\core;
 use monolyth\utils\Name_Helper;
 use monolyth\Project_Access;
 use monolyth\User_Access;
+use monolyth\Logger_Access;
 use monolyth\adapter\sql;
 use ErrorException;
 
-final class View implements Project_Access, User_Access
+final class View
 {
     use Name_Helper;
+    use User_Access;
+    use Project_Access;
+    use Logger_Access;
 
     private $controller, $files = [], $parsers = [];
     private static $data = [];
@@ -86,14 +91,13 @@ final class View implements Project_Access, User_Access
         if (!isset($args['self'])) {
             $args['self'] = $this;
         }
-        if (!isset($args['project']) && isset($this->project)) {
-            $args['project'] = $this->project;
+        if (!isset($args['project'])) {
+            $args['project'] = self::project();
         }
         if (!isset($args['form']) && isset($this->controller->form)) {
             $args['form'] = $this->controller->form;
         }
         foreach ($this->files as $file) {
-            Monolyth::setBookmark("Rendering $file");
             $content = call_user_func(function() use($file, &$args, $content) {
                 ob_start();
                 $data = call_user_func(function($file, $args) use($content) {
@@ -195,7 +199,7 @@ final class View implements Project_Access, User_Access
      */
     protected function parse($html)
     {
-        Monolyth::setBookmark('Invoke all parsers');
+        self::logger()->log('Invoke all parsers');
         foreach ($this->parsers as $parser) {
             $p = $parser[0];
             $parser[0] = $html;
@@ -257,46 +261,26 @@ final class View implements Project_Access, User_Access
             },
             $html
         );
-        $config = monolyth\Config::get('monolyth');
-        if (isset($this->project)
-            && ($this->project['test']
-                || (isset($_SERVER['REMOTE_ADDR'])
-                    && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
-                || $this->user->name() == 'root'
-                )
+        $config = Config::get('monolyth');
+        if (self::project()['test']
+            || (isset($_SERVER['REMOTE_ADDR'])
+                && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
+                || self::user()->name() == 'root'
             )
         ) {
-            Monolyth::setBookmark('End [finished outputting]');
-            $debug = "\n<!--\n\n";
-            foreach (Monolyth::getBookmarks() as $i => $bookmark) {
-                if (!$i) {
-                    $start = $bookmark[1];
-                }
+            self::logger()->log('End [finished outputting]');
+            $debug = "<script>\n";
+            $stats = self::logger()->export();
+            foreach ($stats as $line) {
                 $debug .= sprintf(
-                    "%s: %0.4f seconds, %0.2fmb memory\n",
-                    $bookmark[0],
-                    $bookmark[1],
-                    $bookmark[2] / 1024 / 1024
+                    "console.log(%s);\n",
+                    json_encode($line)
                 );
             }
-            $debug .= sprintf(
-                "\n\nTOTAL: %0.4f seconds, %0.2fmb memory\n\n",
-                $bookmark[1] - $start,
-                $bookmark[2] / 1024 / 1024
-            );
-            $stats = $this->logger->export();
-            $debug .= sprintf(
-                "Queries: %d, time: %0.4f\n\n",
-                count($stats['total']),
-                $stats['time']
-            );
-            foreach ($stats['total'] as $sql) {
-                $debug .= preg_replace("@\s+@m", ' ', $sql)."\n";
-            }
-            $debug .= "\n";
+            $debug .= "</script>\n";
             $html = str_replace(
                 '</body>',
-                "$debug-->\n</body>",
+                "$debug</body>",
                 $html
             );
         }

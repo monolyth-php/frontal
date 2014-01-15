@@ -18,7 +18,7 @@ class Select extends Element
             if (is_null($text)) {
                 $text = $value;
             }
-            $o = clone $this->_Option;
+            $o = new Option;
             $o->prepare($name);
             $o->setLabel($text);
             $o->value = $value;

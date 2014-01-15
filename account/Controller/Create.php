@@ -8,11 +8,12 @@
 namespace monolyth\account;
 use monolyth\core\Staged_Controller;
 use monolyth\Nologin_Required;
-use monolyth\adapter;
+use Adapter_Access;
 
-class Create_Controller extends Staged_Controller
-implements Nologin_Required, adapter\Access
+class Create_Controller extends Staged_Controller implements Nologin_Required
 {
+    use Adapter_Access;
+
     protected static $stages = ['profile', 'accept', 'success'];
 
     protected function postProfile(array $args)
@@ -20,13 +21,13 @@ implements Nologin_Required, adapter\Access
         $success = true;
         if (array_key_exists('name', $this->form)) {
             try {
-                $this->adapter->field(
+                self::adapter()->field(
                     'monolyth_auth',
                     1,
                     ['LOWER(name)' => strtolower($this->form['name']->value)]
                 );
                 $success = false;
-                $this->message->add(
+                self::message()->add(
                     self::MESSAGE_ERROR,
                     $this->text('create/error.name')
                 );
@@ -35,13 +36,13 @@ implements Nologin_Required, adapter\Access
         }
         if (array_key_exists('email', $this->form)) {
             try {
-                $this->adapter->field(
+                self::adapter()->field(
                     'monolyth_auth',
                     1,
                     ['LOWER(email)' => strtolower($this->form['email']->value)]
                 );
                 $success = false;
-                $this->message->add(
+                self::message()->add(
                     self::MESSAGE_ERROR,
                     $this->text('create/error.email')
                 );
@@ -54,17 +55,17 @@ implements Nologin_Required, adapter\Access
     protected function postAccept(array $args)
     {
         if ($this->form['terms']->value != 1) {
-            $this->message->add(
+            self::message()->add(
                 self::MESSAGE_ERROR,
                 $this->text('create/error.terms')
             );
             return false;
         }
         if ($error = call_user_func(
-            $this->create,
-            $this->form->getArrayCopy() + $this->session->get('Form')
+            new Create_Model,
+            $this->form->getArrayCopy() + self::session()->get('Form')
         )) {
-            $this->message->add(
+            self::message()->add(
                 self::MESSAGE_ERROR,
                 $this->text('create/error/'.str_replace(' ', '.', $error))
             );

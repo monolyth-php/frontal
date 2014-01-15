@@ -28,15 +28,15 @@ class Text_Model extends Model
         if ($text) {
             try {
                 if ($id) {
-                    $this->adapter->update('monolyth_text', $text, compact('id'));
+                    self::adapter()->update('monolyth_text', $text, compact('id'));
                 } else {
-                    $this->adapter->insert('monolyth_text', $text);
-                    $id = $this->adapter->lastInsertId();
+                    self::adapter()->insert('monolyth_text', $text);
+                    $id = self::adapter()->lastInsertId();
                 }
                 ++$changed;
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_text',
-                    ['usermodified' => $this->user->id()],
+                    ['usermodified' => self::user()->id()],
                     compact('id')
                 );
             } catch (UpdateNone_Exception $e) {
@@ -49,7 +49,7 @@ class Text_Model extends Model
                 continue;
             }
             try {
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_text_i18n',
                     $data,
                     compact('id', 'language')

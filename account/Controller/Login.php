@@ -12,10 +12,16 @@ use monolyth\HTTP301_Exception;
 
 class Login_Controller extends Controller implements Logout_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Login_Form;
+    }
+
     protected function get(array $args)
     {
-        if ($this->user->loggedIn()) {
-            $this->user->logout();
+        if (self::user()->loggedIn()) {
+            self::user()->logout();
         }
         return $this->view('page/login');
     }
@@ -24,9 +30,9 @@ class Login_Controller extends Controller implements Logout_Required
     {
         $view = $this->get($args);
         if (!($this->form->errors()
-            or $error = $this->user->login($this->form)
+            or $error = self::user()->login($this->form)
         )) {
-            $redir = urldecode($this->http->getRedir());
+            $redir = urldecode(self::http()->getRedir());
             if (is_null($redir)
                 || $redir == $this->url(get_class($this))
                 || $redir == $this->url(get_class($this), [], true)
@@ -36,16 +42,16 @@ class Login_Controller extends Controller implements Logout_Required
                 $redir = $this->url('');
             }
             if (preg_match("@^\w+://@", $redir)
-                && !preg_match('@^http://'.$this->http->server().'@', $redir)
+                && !preg_match('@^http://'.self::http()->server().'@', $redir)
             ) {
                 $redir .= strpos($redir, '?') ? '&' : '?';
-                $redir .= 'sid='.$this->session->id();
+                $redir .= 'sid='.self::session()->id();
             }
             throw new HTTP301_Exception($redir);
         } else {
             if (isset($error)) {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+                self::message()->add(
+                    'error',
                     $this->text("login/error.$error")
                 );
             }

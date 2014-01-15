@@ -26,9 +26,9 @@ class Media_Model extends Model
         }
         try {
             if ($id) {
-                $this->adapter->update('monolyth_media', $data, compact('id'));
+                self::adapter()->update('monolyth_media', $data, compact('id'));
             } else {
-                $this->adapter->insert('monolyth_media', $data);
+                self::adapter()->insert('monolyth_media', $data);
             }
         } catch (InsertNone_Exception $e) {
             return 'insert';
@@ -41,7 +41,7 @@ class Media_Model extends Model
     public function delete()
     {
         try {
-            $this->adapter->delete('monolyth_media', ['id' => $this['id']]);
+            self::adapter()->delete('monolyth_media', ['id' => $this['id']]);
             return null;
         } catch (DeleteNone_Exception $e) {
             return 'delete';
