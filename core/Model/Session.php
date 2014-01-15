@@ -205,16 +205,18 @@ abstract class Session_Model
 
     protected function getFromCache(&$q)
     {
-        try {
-            $q = json_decode(
-                self::cache()->get("session/{$this->id}/{$this->random}"),
-                true
-            );
-            if (isset($q['user_agent'], $q['dateactive'])) {
-                return true;
+        if ($cache = self::cache()) {
+            try {
+                $q = json_decode(
+                    $cache->get("session/{$this->id}/{$this->random}"),
+                    true
+                );
+                if (isset($q['user_agent'], $q['dateactive'])) {
+                    return true;
+                }
+            } catch (KeyNotFound_Exception $e) {
+            } catch (ErrorException $e) {
             }
-        } catch (KeyNotFound_Exception $e) {
-        } catch (ErrorException $e) {
         }
         return null;
     }
