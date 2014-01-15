@@ -9,7 +9,6 @@ namespace monolyth\render;
 use Adapter_Access;
 use monolyth\utils\HTML_Helper;
 use monolyth\Project_Access;
-use monolyth\Language_Access;
 use ErrorException;
 use Closure;
 use Mail;
@@ -21,7 +20,6 @@ class Email
     use HTML_Helper;
     use Adapter_Access;
     use Project_Access;
-    use Language_Access;
 
     const TYPE_HTML = 1;
     const TYPE_PLAIN = 2;
