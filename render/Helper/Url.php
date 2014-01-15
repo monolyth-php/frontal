@@ -1,10 +1,12 @@
 <?php
 
 namespace monolyth\render;
+use monolyth\Language_Access;
 
 trait Url_Helper
 {
     use Router_Access;
+    use Language_Access;
 
     /**
      * Generate an URL based on $route, using $args arguments and/or context.
