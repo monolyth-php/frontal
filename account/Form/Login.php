@@ -26,7 +26,6 @@ class Login_Form extends Post_Form
     use Translatable;
     use Url_Helper;
     use HTTP_Access;
-    use Language_Access;
 
     protected $attributes = ['data-history' => 0];
 
