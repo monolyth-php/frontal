@@ -106,7 +106,6 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $q = $this->pdo->query($sql);
         }
         self::logger()->log($sql, $start);
-        $this->querytime += $end;
         if (!($q && count($q))) {
             throw new NoResults_Exception($sql, $bind, 'No results.');
         }
