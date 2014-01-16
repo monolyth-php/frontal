@@ -258,6 +258,7 @@ class Email
                 $body
             );
         }
+        return $this;
     }
 }
 
