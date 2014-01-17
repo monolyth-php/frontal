@@ -14,8 +14,8 @@ class Text_Form extends I18n_Form
     {
         parent::__construct();
         $this->addText('id', $this->text('./id'))->disabled();
-        $language = self::language()->available[0];
-        foreach (self::language()->available as $lang) {
+        $language = self::projectlanguage()->available[0];
+        foreach (self::projectlanguage()->available as $lang) {
             $this->addTextarea("content[{$lang->id}]", $this->text('./content'))
                  ->setClass("language {$lang->code}");
         }
