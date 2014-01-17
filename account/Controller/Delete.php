@@ -24,6 +24,8 @@ class Delete_Controller extends Staged_Controller implements Login_Required
                     'error',
                     $this->text("./error.$error")
                 );
+            } else {
+                throw new HTTP301_Exception($this->url(''));
             }
         }
         return $this->get($args);
