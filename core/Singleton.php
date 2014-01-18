@@ -8,7 +8,7 @@ trait Singleton
     {
         static $instance;
         if (!isset($instance)) {
-            $class = __CLASS__;
+            $class = get_called_class();
             $instance = new $class;
         }
         return $instance;
