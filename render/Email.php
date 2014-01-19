@@ -19,7 +19,7 @@ class Email
     use Url_Helper;
     use HTML_Helper;
     use Adapter_Access;
-    use Project_Access;
+    use Static_Helper;
 
     const TYPE_HTML = 1;
     const TYPE_PLAIN = 2;
@@ -216,24 +216,13 @@ class Email
                     );
                 }
             }
-            $project = self::project();
-            if (method_exists($project, 'httpimg')) {
-                $replace = function($matches) use($project) {
-                    return str_replace(
-                        $matches[1],
-                        $project->httpimg($matches[1]),
-                        $matches[0]
-                    );
-                };
-            } else {
-                $replace = function($matches) {
-                    return str_replace(
-                        $matches[1],
-                        "{self::project()['http']}{$matches[1]}",
-                        $matches[0]
-                    );
-                };
-            }
+            $replace = function($matches) {
+                return str_replace(
+                    $matches[1],
+                    $this->httpimg($matches[1]),
+                    $matches[0]
+                );
+            };
             foreach ([
                 '@src="(/.*?)"@ms',
                 '@url\([\'"]?(/.*?)[\'"]?\)@ms',
@@ -244,9 +233,9 @@ class Email
             $this->mail->$fn($content);
         }
         $body = $this->mail->get();
-        if (self::project()['test']) {
-            if (isset(self::project()['testmail'])) {
-                $to = self::project()['testmail'];
+        if (self::staticProject()['test']) {
+            if (isset(self::staticProject()['testmail'])) {
+                $to = self::staticProject()['testmail'];
             } else {
                 $to = null;
             }
