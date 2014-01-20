@@ -7,8 +7,9 @@ use Adapter_Access;
 class Comment_Finder implements Finder
 {
     use Adapter_Access;
+    use core\Singleton;
 
-    public function __construct()
+    protected function __construct()
     {
         $this->config = Config::get('monolyth');
     }
