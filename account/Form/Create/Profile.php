@@ -15,8 +15,10 @@ class Profile_Create_Form extends Post_Form
 {
     const ERROR_EXISTS = 'exists';
 
-    public function prepare()
+    public function __construct()
     {
+        parent::__construct();
+        $this->account = new User_Model;
         $this->addText('name', $this->text('./name'))
              ->isRequired()
              ->addTest(function($value) {

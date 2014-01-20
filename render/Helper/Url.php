@@ -1,9 +1,13 @@
 <?php
 
 namespace monolyth\render;
+use monolyth\Language_Access;
 
 trait Url_Helper
 {
+    use Router_Access;
+    use Language_Access;
+
     /**
      * Generate an URL based on $route, using $args arguments and/or context.
      *
@@ -17,17 +21,14 @@ trait Url_Helper
      */
     public function url($route, array $args = [], $context = false)
     {
-        if (!isset($this->language, $this->router)) {
-            return '/';
-        }
         if (!isset($args['language'])) {
-            $args['language'] = $this->language->current->code;
+            $args['language'] = self::language()->current->code;
         }
-        if ($url = $this->router->generate($route, $args, $context)) {
+        if ($url = self::router()->generate($route, $args, $context)) {
             return $url;
         }
         unset($args['language']);
-        return $this->router->generate($route, $args, $context);
+        return self::router()->generate($route, $args, $context);
     }
 
     /**

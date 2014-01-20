@@ -3,9 +3,12 @@
 namespace monolyth\admin;
 use monad\core;
 use monolyth\adapter\sql\NoResults_Exception;
+use Adapter_Access;
 
 class Mail_Finder extends core\Finder
 {
+    use Adapter_Access;
+
     public function all($size, $page, array $where = [], array $options = [])
     {
         $options += [
@@ -13,7 +16,7 @@ class Mail_Finder extends core\Finder
             'offset' => ($page - 1) * $size,
         ];
         try {
-            return $this->adapter->pages(
+            return self::adapter()->pages(
                 'monolyth_mail',
                 [
                     'CONCAT(id, language) AS id',
@@ -35,14 +38,13 @@ class Mail_Finder extends core\Finder
         try {
             $where['CONCAT(id, language)'] = $where['id'];
             unset($where['id']);
-            return $this->model->load($this->adapter->row(
+            $model = new Mail_Model;
+            return $model->load(self::adapter()->row(
                 'monolyth_mail',
                 '*',
                 $where
             ));
         } catch (NoResults_Exception $e) {
-            var_dump($where);
-            echo $e->getMessage();
             return null;
         }
     }

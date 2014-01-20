@@ -898,7 +898,7 @@ ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
 ALTER TABLE monolyth_temp RENAME TO monolyth_group;
 -- }}}
 
--- {{{ v4.3.1
+-- {{{ v4.3.2
 ALTER TABLE monolyth_group CHANGE COLUMN countmember members BIGINT NOT NULL DEFAULT 0;
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
 DELIMITER $$
@@ -912,6 +912,28 @@ DELIMITER ;
 -- }}}
 
 -- {{{ v4.3.3
+DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth
+FOR EACH ROW
+BEGIN
+    SELECT id FROM monolyth_group WHERE name = 'Users' INTO @groupid;
+    INSERT INTO monolyth_auth_group VALUES (NEW.id, @groupid);
+END;
+$$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_after_delete AFTER DELETE ON monolyth_auth
+FOR EACH ROW
+BEGIN
+    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
+    UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
+END;
+$$
+DELIMITER ;
+
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group

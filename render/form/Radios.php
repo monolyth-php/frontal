@@ -21,7 +21,7 @@ class Radios extends Element
                 $updated_id = true;
             }
             $options['value'] = $value;
-            $o = clone $this->_Radio;
+            $o = new Radio;
             $o->setParent($this->parent);
             $o->prepare(
                 $name,

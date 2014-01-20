@@ -10,16 +10,20 @@ use monolyth\User_Access;
 use monolyth\core\Model;
 use monolyth\adapter\sql\InsertNone_Exception;
 use Exception;
+use monolyth\Config;
 
-class Create_Model extends Model implements User_Access
+class Create_Model extends Model
 {
+    use User_Access;
+
     public function __invoke(array $data, $login = true)
     {
-        $this->adapter->beginTransaction();
-        if ($this->config->account_name_is_email) {
+        self::adapter()->beginTransaction();
+        $config = Config::get('monolyth');
+        if ($config->account_name_is_email) {
             $data['name'] = $data['email'];
         }
-        $user = $this->user;
+        $user = self::user();
         $fields = [
             'name' => $data['name'],
             'email' => $data['email'],
@@ -33,8 +37,9 @@ class Create_Model extends Model implements User_Access
         if (array_key_exists('optin', $data) && $data['optin'] == 1) {
             $fields['feature'] |= $user::FEATURE_OPTIN;
         }
-        if ($hash = $this->pass->hash()) {
-            $fields['salt'] = $this->pass->salt();
+        $pass = new Pass_Model;
+        if ($hash = $pass->hash()) {
+            $fields['salt'] = $pass->salt();
             $fields['pass'] = "$hash:".hash(
                 $hash, 
                 $data['pass'].$fields['salt']
@@ -45,45 +50,47 @@ class Create_Model extends Model implements User_Access
         }
 
         // Attempt to save basic information.
-        if ($this->account->exists('name', $fields['name'])) {
-            $this->adapter->rollback();
+        $account = new User_Model;
+        if ($account->exists('name', $fields['name'])) {
+            self::adapter()->rollback();
             return 'name';
         }
-        if ($this->account->exists('email', $fields['email'])) {
-            $this->adapter->rollback();
+        if ($account->exists('email', $fields['email'])) {
+            self::adapter()->rollback();
             return 'email';
         }
         try {
-            $this->adapter->insert('monolyth_auth', $fields);
-            $id = $this->adapter->lastInsertId('monolyth_auth_id_seq');
-            $this->load($this->adapter->row(
+            self::adapter()->insert('monolyth_auth', $fields);
+            $id = self::adapter()->lastInsertId('monolyth_auth_id_seq');
+            $this->load(self::adapter()->row(
                 'monolyth_auth',
                 '*',
                 ['id' => $id]
             ));
             $data['id'] = $this['id'];
         } catch (InsertNone_Exception $e) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return 'insert failed';
         } catch (Exception $e) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return 'generic';
         }
         if ($login) {
             $_POST['name'] = $data['email'];
             $_POST['pass'] = $data['pass'];
-            $form = $this->form->addSource([
+            $form = new Login_Form;
+            $form->addSource([
                 'name' => $data['email'],
                 'pass' => $data['pass'],
             ])->load();
-            if ($error = $this->activate->request($id)
-                or $error = $this->user->login($form)
+            if ($error = $activate->request($id)
+                or $error = self::user()->login($form)
             ) {
-                $this->adapter->rollback();
+                self::adapter()->rollback();
                 return $error;
             }
         }
-        $this->adapter->commit();
+        self::adapter()->commit();
         return null;
     }
 }

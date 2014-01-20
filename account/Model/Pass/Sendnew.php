@@ -6,8 +6,7 @@
  */
 
 namespace monolyth\account;
-use monolyth\adapter\sql\NoResults_Exception;
-use monolyth\adapter\sql\InsertNone_Exception;
+use monolyth\Confirm_Model;
 
 class Sendnew_Pass_Model extends Reset_Pass_Model
 {
@@ -16,17 +15,17 @@ class Sendnew_Pass_Model extends Reset_Pass_Model
         if (!($auth = $this->auth($form))) {
             return 'unknown';
         }
-        $this->adapter->beginTransaction();
+        self::adapter()->beginTransaction();
         if ($error = $this->confirm(
             $auth,
             'monolyth\account\pass/send',
-            $this->confirm->getFreeHash($auth['id'].$auth['name']),
+            (new Confirm_Model)->getFreeHash($auth['id'].$auth['name']),
             $this->generate()
         )) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return $error;
         }
-        $this->adapter->commit();
+        self::adapter()->commit();
         return null;
     }
 }

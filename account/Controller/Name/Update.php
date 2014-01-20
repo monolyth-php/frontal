@@ -1,11 +1,18 @@
 <?php
 
 namespace monolyth\account;
-use monolyth;
+use monolyth\Controller;
+use monolyth\Login_Required;
+use monolyth\HTTP301_Exception;
 
-class Update_Name_Controller extends monolyth\Controller 
-implements monolyth\Login_Required
+class Update_Name_Controller extends Controller implements Login_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Update_Name_Form;
+    }
+
     public function get()
     {
         return $this->view('page/name/update');
@@ -14,17 +21,17 @@ implements monolyth\Login_Required
     public function post()
     { 
         if (!$this->form->errors()) {
-            if ($error = $this->update->name($this->form)) {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+            if ($error = (new Pass_Model)->name($this->form)) {
+                self::message()->add(
+                    'error',
                     $this->text("./error.$error")
                 );
             } else {
-                $this->message->add(
-                    self::MESSAGE_SUCCESS,
+                self::message()->add(
+                    'error',
                     $this->text('./success')
                 );
-                throw new monolyth\HTTP301_Exception($this->http->getSelf());
+                throw new HTTP301_Exception(self::http()->getSelf());
             }
         }
         return $this->get(); 

@@ -19,18 +19,19 @@
  * <code>
  * <?php
  *
- * class Foo implements monolyth\Message_Access
+ * class Foo implements
  * {
+ *     use Message_Access;
+ *
  *     public function doSomething()
  *     {
- *         $this->message->add(self::MESSAGE_SUCCESS, 'Done!');
+ *         self::message()->add('success', 'Done!');
  *     }
  *
  *     public function showMessages()
  *     {
- *         $flag = self::MESSAGE_SUCCESS | self::MESSAGE_ERROR;
- *         if ($this->message->has($flag)) {
- *             foreach ($this->message->get($flag) as $message) {
+ *         if ($this->message->has('success', 'error')) {
+ *             foreach ($this->message->get('success', 'error') as $message) {
  *                 printf(
  *                     '<div class="'.$message->type.'">'.$message->body.'</div>',
  *                     $message->type,
@@ -50,80 +51,65 @@
 namespace monolyth;
 use StdClass;
 
-class Message implements Session_Access
+class Message
 {
-    const SUCCESS = 1;
-    const INFO = 2;
-    const WARNING = 4;
-    const ERROR = 8;
+    use Session_Access;
+    use core\Singleton;
 
     private static $messages = [];
-    private $types = [
-        self::SUCCESS => 'success',
-        self::INFO => 'info',
-        self::WARNING => 'warning',
-        self::ERROR => 'error',
-    ];
 
-    public function init()
+    protected function __construct()
     {
         static $inited = false;
         if ($inited) {
             return;
         }
-        if (!($this->session->exists('Messages')
-            && is_array($this->session->get('Messages'))
+        if (!(self::session()->exists('Messages')
+            && is_array(self::session()->get('Messages'))
         )) {
-            $this->session->set(
-                'Messages',
-                [
-                    self::SUCCESS => [],
-                    self::INFO => [],
-                    self::WARNING => [],
-                    self::ERROR => [],
-                ]
-            );
+            self::session()->set('Messages', []);
         }
-        self::$messages = $this->session->get('Messages');
+        self::$messages = self::session()->get('Messages');
         $inited = true;
     }
 
-    public function add($flag, $body)
+    public function add($type, $body)
     {
-        $o =& self::$messages[$flag][];
+        if (!isset(self::$messages[$type])) {
+            self::$messages[$type] = [];
+        }
+        $o =& self::$messages[$type][];
         $o = new StdClass();
-        $o->code = $flag;
-        $o->type = $this->types[$flag];
+        $o->type = $type;
         $o->body = $body;
-        $this->session->set('Messages', self::$messages);
+        self::session()->set('Messages', self::$messages);
     }
 
-    public function has($flag = null)
+    public function has($type = null)
     {
-        if (!isset($flag)) {
-            $flag = self::SUCCESS | self::INFO | self::WARNING | self::ERROR;
-        }
-        foreach (self::$messages as $mcode => $messages) {
-            if ($flag & $mcode && count($messages)) {
-                return true;
+        $types = func_get_args();
+        if (!$types) {
+            foreach (self::$messages as $messages) {
+                if (count($messages)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        return isset(self::$messages[$type]) && count(self::$messages[$type]);
     }
 
-    public function get($flag = null)
+    public function get()
     {
-        if (!isset($flag)) {
-            $flag = self::SUCCESS | self::INFO | self::WARNING | self::ERROR;
-        }
+        $types = func_get_args();
         $return = [];
-        foreach (self::$messages as $mcode => &$messages) {
-            if ($flag & $mcode) {
+        foreach (self::$messages as $type => &$messages) {
+            if (!$types || in_array($type, $types)) {
                 $return = array_merge($return, $messages);
                 $messages = [];
             }
         }
-        $this->session->set('Messages', self::$messages);
+        self::session()->set('Messages', self::$messages);
         return $return;
     }
 }

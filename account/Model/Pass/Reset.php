@@ -12,37 +12,51 @@ use monolyth\User_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\InsertNone_Exception;
 use monolyth\render\Url_Helper;
+use monolyth\Config;
+use monolyth\Confirm_Model;
+use monolyth\Language_Access;
+use monolyth\render\Email;
 
 /**
  * Reset_Pass_Model, implementing core functionality and default invocation,
  * which is to confirm the new password by re-entering the account name.
  */
-class Reset_Pass_Model extends Model implements Project_Access, User_Access
+class Reset_Pass_Model extends Model
 {
     use Url_Helper;
+    use Project_Access;
+    use User_Access;
+    use Language_Access;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function __invoke(Forgot_Pass_Form $form)
     {
         if (!($auth = $this->auth($form))) {
             return 'unknown';
         }
-        $this->adapter->beginTransaction();
+        self::adapter()->beginTransaction();
+        $config = Config::get('monolyth');
+        $confirm = new Confirm_Model;
         if ($error = $this->confirm(
             $auth,
-            $this->config->passResetMail,
-            $this->confirm->getFreeHash($auth['id'].$auth['name']),
+            $config->passResetMail,
+            $confirm->getFreeHash($auth['id'].$auth['name']),
             $this->generate()
         )) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return $error;
         }
-        $this->adapter->commit();
+        self::adapter()->commit();
         return null;
     }
 
     protected function confirm($auth, $mail, $hash, $pwrand)
     {
-        $siteurl = $this->project['url'];
+        $siteurl = self::project()['url'];
         if (!($url = $this->url(
             'monolyth/account/confirm_pass',
             ['id' => $auth['id'], 'hash' => $hash],
@@ -55,10 +69,10 @@ class Reset_Pass_Model extends Model implements Project_Access, User_Access
             );
         }
         try {
-            $a = $this->adapter;
+            $a = self::adapter();
             $week = $a::WEEK;
             if ($mail != 'monolyth\account\pass/send') {
-                $this->adapter->insert(
+                self::adapter()->insert(
                     'monolyth_confirm',
                     [
                         'owner' => $auth['id'],
@@ -70,12 +84,12 @@ class Reset_Pass_Model extends Model implements Project_Access, User_Access
                         'newvalue' => $pwrand,
                         'datevalid' => [
                              "NOW() + "
-                            .$this->adapter->interval($week, 1)
+                            .self::adapter()->interval($week, 1)
                         ],
                     ]
                 );
-                $user = $this->user;
-                $this->adapter->insert(
+                $user = self::user();
+                self::adapter()->insert(
                     'monolyth_confirm',
                     [
                         'owner' => $auth['id'],
@@ -87,19 +101,20 @@ class Reset_Pass_Model extends Model implements Project_Access, User_Access
                         'newvalue' => $user::STATUS_GENERATED_PASS,
                         'datevalid' => [
                              "NOW() + "
-                            .$this->adapter->interval($week, 1)
+                            .self::adapter()->interval($week, 1)
                         ],
                     ]
                 );
             }
-            $this->email->setSource($mail)
-                        ->setVariables([
-                            'name' => $auth['name'],
-                            'url' => $url,
-                            'newpass' => $pwrand,
-                        ])
-                        ->headers(['Reply-to' => "noreply@$siteurl"])
-                        ->send($auth['email']);
+            $email = new Email;
+            $email->setSource($mail)
+                  ->setVariables([
+                      'name' => $auth['name'],
+                      'url' => $url,
+                      'newpass' => $pwrand,
+                  ])
+                  ->headers(['Reply-to' => "noreply@$siteurl"])
+                  ->send($auth['email']);
             return null;
         } catch (InsertNone_Exception $e) {
             return 'error';
@@ -115,7 +130,7 @@ class Reset_Pass_Model extends Model implements Project_Access, User_Access
                     'LOWER(name)' => strtolower($form['name']->value),
                 ];
             }
-            return $this->adapter->row('monolyth_auth', '*', $where);
+            return self::adapter()->row('monolyth_auth', '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }

@@ -7,11 +7,12 @@
  * @package monolyth
  * @subpackage render
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 
 namespace monolyth\render;
 use monolyth\core\Parser;
+use monolyth\Text_Model;
 use ErrorException;
 
 /**
@@ -19,6 +20,11 @@ use ErrorException;
  */
 class Translate_Parser extends Parser
 {
+    public function __construct()
+    {
+        $this->text = new Text_Model($this);
+    }
+
     /**
      * Parse the HTML for translatable strings. Translatable strings are
      * identified by matching $translate([data]).
