@@ -6,6 +6,7 @@ use Adapter_Access;
 class User_Finder implements Finder
 {
     use Adapter_Access;
+    use core\Singleton;
 
     public function find($nameOrId)
     {
