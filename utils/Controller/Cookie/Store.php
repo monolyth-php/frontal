@@ -8,7 +8,7 @@ class Store_Cookie_Controller extends core\Controller implements Ajax_Required
 {
     protected function post(array $args)
     {
-        $this->cookie->store($_POST);
+        (new Cookie_Model)->store($_POST);
         die();
     }
 }
