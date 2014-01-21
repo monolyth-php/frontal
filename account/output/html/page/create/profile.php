@@ -4,7 +4,7 @@ namespace monolyth\account;
 
 echo $view(
     ['monolyth\render\form\slice/table', 'monolyth\render\form\slice/form'],
-    compact('form', 'self')
+    compact('form')
 );
 return ['title' => $text('./title')];
 
