@@ -67,7 +67,7 @@ class Create_Controller extends Staged_Controller implements Nologin_Required
             $this->form->getArrayCopy() + self::session()->get('Form')
         )) {
             self::message()->add(
-                self::MESSAGE_ERROR,
+                'error',
                 $this->text('create/error/'.str_replace(' ', '.', $error))
             );
             while (static::$currentStage) {
