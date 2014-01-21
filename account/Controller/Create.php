@@ -8,6 +8,7 @@
 namespace monolyth\account;
 use monolyth\core\Staged_Controller;
 use monolyth\Nologin_Required;
+use monolyth\adapter\sql\NoResults_Exception;
 use Adapter_Access;
 
 class Create_Controller extends Staged_Controller implements Nologin_Required
@@ -28,10 +29,10 @@ class Create_Controller extends Staged_Controller implements Nologin_Required
                 );
                 $success = false;
                 self::message()->add(
-                    self::MESSAGE_ERROR,
+                    'error',
                     $this->text('create/error.name')
                 );
-            } catch (adapter\sql\NoResults_Exception $e) {
+            } catch (NoResults_Exception $e) {
             }
         }
         if (array_key_exists('email', $this->form)) {
@@ -43,10 +44,10 @@ class Create_Controller extends Staged_Controller implements Nologin_Required
                 );
                 $success = false;
                 self::message()->add(
-                    self::MESSAGE_ERROR,
+                    'error',
                     $this->text('create/error.email')
                 );
-            } catch (adapter\sql\NoResults_Exception $e) {
+            } catch (NoResults_Exception $e) {
             }
         }
         return $success;
@@ -56,7 +57,7 @@ class Create_Controller extends Staged_Controller implements Nologin_Required
     {
         if ($this->form['terms']->value != 1) {
             self::message()->add(
-                self::MESSAGE_ERROR,
+                'error',
                 $this->text('create/error.terms')
             );
             return false;
