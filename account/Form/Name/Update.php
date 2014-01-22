@@ -5,6 +5,7 @@ use monolyth\core\Post_Form;
 use Adapter_Access;
 use monolyth\User_Access;
 use monolyth\adapter\sql\NoResults_Exception;
+use User_Model;
 
 class Update_Name_Form extends Post_Form
 {
@@ -17,7 +18,7 @@ class Update_Name_Form extends Post_Form
         $this->addText('name', $this->text('./name'))
              ->isRequired()
              ->isNotEqualTo(self::user()->name())
-             ->mustMatch(self::user()::MATCH_NAME)
+             ->mustMatch(User_Model::MATCH_NAME)
              ->addTest(function($value) {
                 try {
                     self::adapter()->field(
