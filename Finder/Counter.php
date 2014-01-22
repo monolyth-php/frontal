@@ -3,9 +3,10 @@
 namespace monolyth;
 use Adapter_Access;
 
-class Counters_Finder implements Finder
+class Counter_Finder implements Finder
 {
     use Adapter_Access;
+    use core\Singleton;
 
     public function find($name)
     {

@@ -2,7 +2,7 @@
 
 namespace monolyth;
 
-class Comment_Model extends core\Model implements User_Access
+class Comment_Model extends core\Model
 {
     use utils\HTML_Helper;
     use User_Access;

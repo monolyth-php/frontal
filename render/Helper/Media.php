@@ -2,7 +2,6 @@
 
 namespace monolyth\render;
 use Adapter_Access;
-use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use ErrorException;
 
@@ -10,7 +9,6 @@ class Media_Helper
 {
     use Url_Helper;
     use Adapter_Access;
-    use Project_Access;
     use Static_Helper;
 
     public function http($img, array $options = [])

@@ -58,14 +58,13 @@ class Country_Finder implements Finder
     public function find($code)
     {
         try {
-            return self::adapter()->row(
-                $this->table,
-                '*',
-                [
-                    'code' => $code,
-                    'language' => self::language()->current->id
-                ]
-            );
+            $where = ['language' => self::language()->current->id];
+            if (is_numeric($code)) {
+                $where['id'] = $code;
+            } else {
+                $where['code'] = $code;
+            }
+            return self::adapter()->row($this->table, '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }

@@ -13,6 +13,12 @@ class File_Media_Model extends core\Model
 {
     use User_Access;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->media = new render\Media_Helper;
+    }
+
     public function create(array $file, $folder = null, $owner = null)
     {
         if (!isset($owner)) {

@@ -99,12 +99,12 @@ class Message
         return isset(self::$messages[$type]) && count(self::$messages[$type]);
     }
 
-    public function get($type = null)
+    public function get()
     {
         $types = func_get_args();
         $return = [];
         foreach (self::$messages as $type => &$messages) {
-            if (in_array($type, $types)) {
+            if (!$types || in_array($type, $types)) {
                 $return = array_merge($return, $messages);
                 $messages = [];
             }

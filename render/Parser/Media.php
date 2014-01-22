@@ -85,7 +85,7 @@ class Media_Parser extends Parser
                 "src={$match[2]}{media:{$match[3]}:{$match[4]}}{$match[2]}",
                 sprintf(
                     'src="%s"',
-                    $media->http(
+                    $media->media->http(
                         $imgs[$match[3]],
                         compact('width', 'height')
                     )

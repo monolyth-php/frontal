@@ -1,4 +1,17 @@
-<?php namespace monolyth\render\form ?>
+<?php
+
+namespace monolyth\render\form;
+$has = false;
+foreach ($fields as $f) {
+    if (!($f instanceof Hidden || is_string($f))) {
+        $has = true;
+    }
+}
+if (!$has) {
+    return;
+}
+
+?>
 <fieldset>
 <?php   if (!is_numeric($legend) && $legend) { ?>
     <legend><?=$legend?></legend>

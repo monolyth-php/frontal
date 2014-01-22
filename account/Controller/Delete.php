@@ -12,7 +12,7 @@ class Delete_Controller extends Staged_Controller implements Login_Required
     public function __construct()
     {
         parent::__construct();
-        $this->form = new Delete_Form;
+        $this->form = new Confirm_Delete_Form;
     }
 
     protected function post(array $args)
@@ -24,6 +24,8 @@ class Delete_Controller extends Staged_Controller implements Login_Required
                     'error',
                     $this->text("./error.$error")
                 );
+            } else {
+                throw new HTTP301_Exception($this->url(''));
             }
         }
         return $this->get($args);
