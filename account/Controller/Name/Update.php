@@ -21,14 +21,14 @@ class Update_Name_Controller extends Controller implements Login_Required
     public function post()
     { 
         if (!$this->form->errors()) {
-            if ($error = (new Pass_Model)->name($this->form)) {
+            if ($error = (new User_Model)->name($this->form)) {
                 self::message()->add(
                     'error',
                     $this->text("./error.$error")
                 );
             } else {
                 self::message()->add(
-                    'error',
+                    'success',
                     $this->text('./success')
                 );
                 throw new HTTP301_Exception(self::http()->getSelf());
