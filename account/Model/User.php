@@ -22,7 +22,7 @@ class User_Model extends Base_Model
     public function name(Post_Form $form)
     {
         if (call_user_func(
-            $this->check,
+            new Check_Pass_Model,
             $form['pass']->value,
             self::user()->pass(),
             self::user()->salt()
