@@ -3,15 +3,18 @@
 namespace monolyth\core;
 use monolyth\Session_Access;
 
-class Persistent_Form extends Post_Form implements Session_Access
+class Persistent_Form extends Post_Form
 {
-    public function prepare()
+    use Session_Access;
+
+    public function __construct()
     {
-        if (is_null($this->session->get('Form'))) {
-            $this->session->set('Form', []);
+        parent::__construct();
+        if (is_null(self::session()->get('Form'))) {
+            self::session()->set('Form', []);
         }
-        $this->session->set('Form', $_POST + $this->session->get('Form'));
-        $this->addSource($this->session->get('Form'));
+        self::session()->set('Form', $_POST + self::session()->get('Form'));
+        $this->addSource(self::session()->get('Form'));
         return parent::prepare();
     }
 }

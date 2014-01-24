@@ -1,42 +1,46 @@
 <?php
 
 namespace monolyth;
-use monolyth\Finder;
-use monolyth\adapter;
-use monolyth\Language_Access;
+use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 
-class Country_Finder
-implements Finder, adapter\Access, Language_Access, Cache_Access
+class Country_Finder implements Finder
 {
+    use Adapter_Access;
+    use Language_Access;
+
     protected $table = 'monolyth_country c
                         JOIN monolyth_country_i18n ci USING(id)';
 
     public function all($language = null)
     {
         if (!isset($language)) {
-            $language = $this->language->current->id;
+            $language = self::language()->current->id;
+        }
+        if ($cache = self::cache()) {
+            try {
+                return $cache->get("countries/$language");
+            } catch (adapter\nosql\KeyNotFound_Exception $e) {
+            }
         }
         try {
-            return $this->cache->get("countries/$language");
-        } catch (adapter\nosql\KeyNotFound_Exception $e) {
-        }
-        try {
-            $results = $this->adapter->rows(
+            $results = self::adapter()->rows(
                 $this->table,
                 '*',
                 compact('language'),
                 ['order' => 'title ASC']
             );
         } catch (NoResults_Exception $e) {
-            $language = $this->language->get($language);
+            $language = self::language()->get($language);
             if (isset($language->fallback)) {
                 $results = $this->all($language->fallback);
             } else {
                 $results = null;
             }
         }
-        $this->cache->set("countries/$language", $results);
+        if (isset($cache)) {
+            $cache->set("countries/$language", $results);
+        }
         return $results;
     }
 
@@ -54,14 +58,13 @@ implements Finder, adapter\Access, Language_Access, Cache_Access
     public function find($code)
     {
         try {
-            return $this->adapter->row(
-                $this->table,
-                '*',
-                [
-                    'code' => $code,
-                    'language' => $this->language->current->id
-                ]
-            );
+            $where = ['language' => self::language()->current->id];
+            if (is_numeric($code)) {
+                $where['id'] = $code;
+            } else {
+                $where['code'] = $code;
+            }
+            return self::adapter()->row($this->table, '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }

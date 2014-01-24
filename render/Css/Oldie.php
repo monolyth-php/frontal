@@ -44,7 +44,7 @@ class Oldie_Css extends Css
             $scripts = [];
             echo "<!--[if lt IE 9]>\n";
             preg_match_all('@href="(.*?)"@m', $out, $files);
-            $project = $this->project->export();
+            $project = self::project()->export();
             foreach ($files[1] as $file) {
                 $src = substr($file, strrpos($file, '/css') + 5);
                 if (substr($src, 0, 3) != 'mg.') {

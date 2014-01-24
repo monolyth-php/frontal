@@ -533,7 +533,6 @@ END;
 $$
 DELIMITER ;
 
-
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_link_auth_group_after_insert AFTER INSERT ON monolyth_auth_link_auth_group
@@ -889,5 +888,60 @@ INSERT INTO monolyth_language_all VALUES
 INSERT INTO monolyth_language VALUES (1, 'English', 1, 1);
 
 ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
+-- }}}
+
+-- {{{ v4.3.0
+DROP TABLE monolyth_acl;
+DROP TABLE monolyth_acl_resource;
+ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
+ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
+ALTER TABLE monolyth_temp RENAME TO monolyth_group;
+-- }}}
+
+-- {{{ v4.3.2
+ALTER TABLE monolyth_group CHANGE COLUMN countmember members BIGINT NOT NULL DEFAULT 0;
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group
+FOR EACH ROW
+BEGIN
+    UPDATE monolyth_group SET members = members + 1 WHERE id = NEW.auth_group;
+END;
+$$
+DELIMITER ;
+-- }}}
+
+-- {{{ v4.3.3
+DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth
+FOR EACH ROW
+BEGIN
+    SELECT id FROM monolyth_group WHERE name = 'Users' INTO @groupid;
+    INSERT INTO monolyth_auth_group VALUES (NEW.id, @groupid);
+END;
+$$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_after_delete AFTER DELETE ON monolyth_auth
+FOR EACH ROW
+BEGIN
+    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
+    UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
+END;
+$$
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
+DELIMITER $$
+CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group
+FOR EACH ROW
+BEGIN
+    UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
+END;
+$$
+DELIMITER ;
 -- }}}
 

@@ -12,7 +12,7 @@ class Logout_Controller extends monolyth\Controller
 {
     protected function get(array $args)
     {
-        if ($redir = $this->http->getGet('redir')) {
+        if ($redir = self::http()->getGet('redir')) {
             $redir = urldecode($redir);
         } elseif (isset($_SERVER['HTTP_REFERER'])) {
             $redir = $_SERVER['HTTP_REFERER'];
@@ -23,7 +23,7 @@ class Logout_Controller extends monolyth\Controller
                 $redir = '/';
             }
         }
-        $this->user->logout($redir);
+        self::user()->logout($redir);
         throw new monolyth\HTTP301_Exception($redir);
     }
 }

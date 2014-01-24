@@ -4,6 +4,7 @@
 namespace monolyth;
 use monolyth\adapter\sql;
 use ErrorException;
+use Adapter_Finder;
 
 /**
  * Take a (generated) piece of javascript or CSS and replace variables.
@@ -57,8 +58,7 @@ if (!isset($argv[1])) {
 if (!isset($argv[2])) {
     $argv[2] = 'output/%s/variables.php';
 }
-require 'config/adapters.php';
-$adapter = is_callable($_current) ? $_current() : $_current;
+$adapter = Adapter_Finder::instance()->all()['_current'];
 $vars = call_user_func(function() use($argv, $adapter) {
     try {
         foreach ($adapter->rows(

@@ -12,11 +12,13 @@ namespace monolyth;
  *
  * @package MonoLyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2012, 2014
  * @todo Add code for XSS prevention.
  */
-class HTTP_Model implements Project_Access
+class HTTP_Model
 {
+    use Project_Access;
+
     /**
      * Just a simple hash to store stuff internally.
      */
@@ -35,6 +37,7 @@ class HTTP_Model implements Project_Access
             'c' => &$_COOKIE,
             'r' => &$_REQUEST
         ];
+        $this->link = new utils\Link;
         foreach ($sgs as $key => &$sg) {
             $this->vars[strtolower($key)] =& $sg;
         }
@@ -160,12 +163,12 @@ class HTTP_Model implements Project_Access
             return false;
         }
         $match = [];
-        $protocol = $this->project['secure'] ? 'https' : 'http';
+        $protocol = self::project()['secure'] ? 'https' : 'http';
         foreach (array(
             "$protocol://{$_SERVER['SERVER_NAME']}",
-            $this->project['http'],
-            $this->project['https'] != $this->project['http'] ?
-                $this->project['https'] :
+            self::project()['http'],
+            self::project()['https'] != self::project()['http'] ?
+                self::project()['https'] :
                 '',
         ) as $url) {
             if (!strlen($url)) {
@@ -193,7 +196,7 @@ class HTTP_Model implements Project_Access
      */
     public function getProtocol()
     {
-        return $this->project['protocol'.($this->project['secure'] ? 's' : '')];
+        return self::project()['protocol'.(self::project()['secure'] ? 's' : '')];
     }
 
     /**
@@ -218,10 +221,10 @@ class HTTP_Model implements Project_Access
             $_SERVER['REQUEST_URI']
         );
         $cache = str_replace('&', '&amp;', $cache);
-        $cache = $this->link->fixPrefix($cache, $this->project['secure']);
+        $cache = $this->link->fixPrefix($cache, self::project()['secure']);
         preg_match(
             "@(https?://)@",
-            $this->project[$this->project['secure'] ? 'https' : 'http'],
+            self::project()[self::project()['secure'] ? 'https' : 'http'],
             $match
         );
         $cache = "{$match[1]}{$_SERVER['SERVER_NAME']}$cache";

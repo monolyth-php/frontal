@@ -4,7 +4,7 @@ namespace monolyth\core;
 use monolyth\render\Static_Helper;
 use monolyth\Project_Access;
 
-abstract class External implements Project_Access
+abstract class External
 {
     use Static_Helper;
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace monolyth\admin;
-use monad\admin\Model;
+use monad\core\Model;
 use monolyth\adapter\sql\InsertNone_Exception;
 use monolyth\adapter\sql\UpdateNone_Exception;
 use monolyth\adapter\sql\DeleteNone_Exception;
@@ -26,13 +26,13 @@ class Template_Mail_Model extends Model
         }
         try {
             if ($id) {
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_mail_template',
                     $data,
                     ['CONCAT(id, language)' => $id]
                 );
             } else {
-                $this->adapter->insert('monolyth_mail_template', $data);
+                self::adapter()->insert('monolyth_mail_template', $data);
             }
         } catch (InsertNone_Exception $e) {
             return 'insert';
@@ -45,7 +45,7 @@ class Template_Mail_Model extends Model
     public function delete()
     {
         try {
-            $this->adapter->delete(
+            self::adapter()->delete(
                 'monolyth_mail_template',
                 ['CONCAT(id, language)' => $this['id'].$this['language']]
             );

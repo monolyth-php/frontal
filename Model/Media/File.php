@@ -9,12 +9,20 @@ use monolyth\adapter\sql\UpdateNone_Exception;
 use monolyth\adapter\sql\DeleteNone_Exception;
 use ErrorException;
 
-class File_Media_Model extends core\Model implements User_Access
+class File_Media_Model extends core\Model
 {
+    use User_Access;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->media = new render\Media_Helper;
+    }
+
     public function create(array $file, $folder = null, $owner = null)
     {
         if (!isset($owner)) {
-            $owner = $this->user->id();
+            $owner = self::user()->id();
         }
         if (!$owner) {
             return 'owner';
@@ -22,7 +30,7 @@ class File_Media_Model extends core\Model implements User_Access
         $md5 = md5(file_get_contents($file['tmp_name']));
         $mime = mime_content_type($file['tmp_name']);
         try {
-            $this->adapter->insert(
+            self::adapter()->insert(
                 'monolyth_media',
                 [
                     'filename' => $file['tmp_name'],
@@ -34,7 +42,7 @@ class File_Media_Model extends core\Model implements User_Access
                     'folder' => $folder,
                 ]
             );
-            $id = $this->adapter->lastInsertId('monolyth_media_id_seq');
+            $id = self::adapter()->lastInsertId('monolyth_media_id_seq');
             $parts = str_split($id, 3);
             $name = array_pop($parts);
             if ($parts) {
@@ -49,12 +57,12 @@ class File_Media_Model extends core\Model implements User_Access
             $ext = substr($mime, strrpos($mime, '/') + 1);
             rename($file['tmp_name'], "$dir/$name.$ext");
             chmod("$dir/$name.$ext", 0644);
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_media',
                 ['filename' => "$dir/$name.$ext"],
                 compact('id')
             );
-            $this->load($this->adapter->row(
+            $this->load(self::adapter()->row(
                 'monolyth_media',
                 '*',
                 compact('id')
@@ -62,14 +70,14 @@ class File_Media_Model extends core\Model implements User_Access
             return null;
         } catch (InsertNone_Exception $e) {
             try {
-                $this->adapter->update(
+                self::adapter()->update(
                     'monolyth_media',
                     compact('folder'),
                     compact('md5')
                 );
             } catch (UpdateNone_Exception $e) {
             }
-            $this->load($this->adapter->row(
+            $this->load(self::adapter()->row(
                 'monolyth_media',
                 '*',
                 compact('md5')
@@ -81,8 +89,8 @@ class File_Media_Model extends core\Model implements User_Access
     public function move($id, $folder)
     {
         try {
-            $owner = $this->user->id();
-            $this->adapter->update(
+            $owner = self::user()->id();
+            self::adapter()->update(
                 'monolyth_media',
                 compact('folder'),
                 compact('id', 'owner')
@@ -96,7 +104,7 @@ class File_Media_Model extends core\Model implements User_Access
     public function delete()
     {
         try {
-            $this->adapter->delete('monolyth_media', ['id' => $this['id']]);
+            self::adapter()->delete('monolyth_media', ['id' => $this['id']]);
         } catch (DeleteNone_Exception $e) {
         }
         try {

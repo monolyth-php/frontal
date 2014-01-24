@@ -9,10 +9,15 @@ namespace monolyth\account;
 use monolyth\core\Model;
 use monolyth\Project_Access;
 use monolyth\Session_Access;
+use Adapter_Access;
 use monolyth\adapter;
 
-class Logout_Model extends Model implements Project_Access, Session_Access
+class Logout_Model extends Model
 {
+    use Project_Access;
+    use Session_Access;
+    use Adapter_Access;
+
     public function __invoke(&$redir = null)
     {
         unset($_COOKIE['monolyth_persist']);
@@ -30,7 +35,7 @@ class Logout_Model extends Model implements Project_Access, Session_Access
             true
         );
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_session',
                 ['userid' => null],
                 [
@@ -42,12 +47,16 @@ class Logout_Model extends Model implements Project_Access, Session_Access
             // Session update failed, but that only means the session is
             // invalid anyway.
         }
-        $this->session->reset();
-        $this->session->write(session_id(), true);
-        if (isset($this->session->cache)) {
+        self::session()->reset();
+        self::session()->write(session_id(), true);
+        if (isset(self::session()->cache)) {
             try {
-                $this->session->cache->delete(
-                    "session/{$this->project['site']}/".session_id(),
+                self::session()->cache->delete(
+                    sprintf(
+                        'session/%s/%s',
+                        self::project()['site'],
+                        session_id()
+                    ),
                     []
                 );
             } catch (adapter\nosql\KeyNotFound_Exception $e) {

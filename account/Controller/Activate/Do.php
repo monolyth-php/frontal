@@ -7,6 +7,7 @@
 
 namespace monolyth\account;
 use monolyth\HTTP301_Exception;
+use monolyth\Confirm_Form;
 
 class Do_Activate_Controller extends Activate_Controller
 {
@@ -17,15 +18,14 @@ class Do_Activate_Controller extends Activate_Controller
     protected function get(array $args)
     {
         extract($args);
-        $this->form->addSource(compact('id', 'hash'))->load();
-        if (!($error = call_user_func($this->activate, $this->form))) {
-            $this->message->add(
-                self::MESSAGE_SUCCESS,
-                $this->text('./success')
-            );
+        $form = new Confirm_Form;
+        $form->addSource(compact('id', 'hash'))->load();
+        $activate = new Activate_Model;
+        if (!($error = call_user_func($activate, $form))) {
+            self::message()->add('success', $this->text('./success'));
             return $this->view('page/activate/success');
         }
-        $this->message->add(self::MESSAGE_ERROR, $this->text("./error.$error"));
+        self::message()->add('error', $this->text("./error.$error"));
         throw new HTTP301_Exception($this->url(
             'monolyth/account/request_activate'
         ));

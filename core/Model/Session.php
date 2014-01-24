@@ -6,19 +6,21 @@
  * @package monolyth
  * @subpackage core
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2011, 2012
+ * @copyright MonoMelodies 2011, 2012, 2014
  */
 
 namespace monolyth\core;
 use monolyth\Project_Access;
-use monolyth\Cache_Access;
+use Adapter_Access;
 use monolyth\utils\Translatable;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
 use ErrorException;
 
-abstract class Session_Model implements Project_Access, Cache_Access
+abstract class Session_Model
 {
     use Translatable;
+    use Project_Access;
+    use Adapter_Access;
 
     /** A newly instantiated session. */
     const STATE_NEW = 'new';
@@ -98,20 +100,17 @@ abstract class Session_Model implements Project_Access, Cache_Access
     }
 
     /**
-     * "Constructor". Initialise a new or existing session.
+     * Constructor. Initialise a new or existing session.
      *
      * @return void
      */
-    public function init()
+    protected function __construct()
     {
         static $inited = false;
         if ($inited) {
             return;
         }
         $inited = true;
-        if (!isset($this->project)) {
-            return;
-        }
         /**
          * Some configurations have session.auto-start on (bah).
          * First close any possibly open session.
@@ -143,11 +142,11 @@ abstract class Session_Model implements Project_Access, Cache_Access
             [$this, 'destroy'],
             function($max_lifetime) { return 0; }
         );
-        session_name($this->project['site']);
+        session_name(self::project()['site']);
         session_set_cookie_params(
             0,
             '/',
-            $this->project['cookiedomain'],
+            self::project()['cookiedomain'],
             false,
             true
         );
@@ -206,23 +205,26 @@ abstract class Session_Model implements Project_Access, Cache_Access
 
     protected function getFromCache(&$q)
     {
-        try {
-            $q = json_decode(
-                $this->cache->get("session/{$this->id}/{$this->random}"),
-                true
-            );
-            if (isset($q['user_agent'], $q['dateactive'])) {
-                return true;
+        if ($cache = self::cache()) {
+            try {
+                $q = json_decode(
+                    $cache->get("session/{$this->id}/{$this->random}"),
+                    true
+                );
+                if (isset($q['user_agent'], $q['dateactive'])) {
+                    return true;
+                }
+            } catch (KeyNotFound_Exception $e) {
+            } catch (ErrorException $e) {
             }
-        } catch (KeyNotFound_Exception $e) {
-        } catch (ErrorException $e) {
         }
         return null;
     }
 
     protected function saveToCache($fields, $force = false)
     {
-        if ($this->cache->set(
+        if ($cache = self::cache()
+            and $cache->set(
                 "session/{$this->id}/{$this->random}",
                 json_encode([
                     '__savecount__' => $this->__savecount__,
@@ -509,7 +511,7 @@ EOT
         ) {
             return true;
         }
-        if (isset($_COOKIE[$this->project['site']])) {
+        if (isset($_COOKIE[self::project()['site']])) {
             $cached = false;
         }
         if (!isset($cached)) {

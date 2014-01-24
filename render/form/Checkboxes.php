@@ -15,7 +15,7 @@ class Checkboxes extends Element
             $options = [];
         }
         $updated_id = false;
-        $o = clone $this->_Hidden;
+        $o = new Hidden;
         $o->setParent($this->parent);
         $o->prepare("{$name}[0]");
         $this->choices[] = $o;
@@ -29,7 +29,7 @@ class Checkboxes extends Element
                 $updated_id = true;
             }
             $cname = "{$name}[$value]";
-            $o = clone $this->_Checkbox;
+            $o = new Checkbox;
             $o->setParent($this->parent);
             $o->prepare($cname, $options);
             $o->setLabel($text);

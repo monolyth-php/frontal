@@ -9,15 +9,23 @@ class Delete_Controller extends Staged_Controller implements Login_Required
 {
     protected static $stages = ['confirm', 'success'];
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Confirm_Delete_Form;
+    }
+
     protected function post(array $args)
     {
         if (!$this->form->errors()) {
             // Delete account:
-            if ($error = $this->delete->delete()) {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+            if ($error = (new User_Model)->delete()) {
+                self::message()->add(
+                    'error',
                     $this->text("./error.$error")
                 );
+            } else {
+                throw new HTTP301_Exception($this->url(''));
             }
         }
         return $this->get($args);

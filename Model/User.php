@@ -6,20 +6,25 @@
 
 namespace monolyth;
 use ErrorException;
+use Adapter_Access;
 
-class User_Model implements Session_Access, Message_Access, User_Constants
+class User_Model implements User_Constants
 {
-    use utils\Translatable, render\Url_Helper;
+    use utils\Translatable;
+    use render\Url_Helper;
+    use Session_Access;
+    use Message_Access;
+    use Adapter_Access;
 
     public function getArrayCopy()
     {
-        return $this->session->get('User');
+        return self::session()->get('User');
     }
 
     public function loggedIn()
     {
         try {
-            return (bool)$this->session->get('User')['id'];
+            return (bool)self::session()->get('User')['id'];
         } catch (ErrorException $e) {
             return false;
         }
@@ -28,7 +33,7 @@ class User_Model implements Session_Access, Message_Access, User_Constants
     public function get($field)
     {
         try {
-            return $this->session->get('User')[$field];
+            return self::session()->get('User')[$field];
         } catch (ErrorException $e) {
             return null;
         }
@@ -36,24 +41,35 @@ class User_Model implements Session_Access, Message_Access, User_Constants
 
     public function getNameById($id)
     {
-        return $this->adapter->field('monolyth_auth', 'name', compact('id'));
+        return self::adapter()->field('monolyth_auth', 'name', compact('id'));
     }
 
-    public function group()
+    public function groups()
     {
-        try {
-            return $this->session->get('Group');
-        } catch (ErrorException $e) {
-            return null;
+        $groups = self::session()->get('Groups');
+        if ($groups) {
+            return $groups;
         }
+        return [];
+    }
+
+    public function inGroup($group)
+    {
+        $groups = $this->groups();
+        foreach (func_get_args() as $group) {
+            if (in_array($group, $groups)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function __call($name, $arguments)
     {
         if ($arguments) {
-            $User = $this->session->get('User');
+            $User = self::session()->get('User');
             $User[$name] = array_shift($arguments);
-            $this->session->set(compact('User'));
+            self::session()->set(compact('User'));
         }
         return $this->get($name);
     }
@@ -65,25 +81,27 @@ class User_Model implements Session_Access, Message_Access, User_Constants
 
     public function login(core\Post_Form $form, $salted = false)
     {
-        if (!($error = call_user_func($this->login, $form, $salted))) {
+        if (!($error = call_user_func(
+            new account\Login_Model,
+            $form,
+            $salted
+        ))) {
             if ($this->status() & $this::STATUS_GENERATED_PASS) {
-                $message = $this->message;
-                $message->add(
-                    $message::INFO,
+                self::message()->add(
+                    'info',
                     $this->text(
                         'monolyth\account\pass/generated',
                         $this->url('monolyth/account/update_pass')
                     )
                 );                    
             }
-            $this->acl->flush();
         }
         return $error;
     }
 
     public function logout(&$redir = null)
     {
-        call_user_func_array($this->logout, [&$redir]);
+        call_user_func_array(new account\Logout_Model, [&$redir]);
     }
 
     public function active()

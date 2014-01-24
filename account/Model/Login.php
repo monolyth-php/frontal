@@ -9,17 +9,28 @@ namespace monolyth\account;
 use ErrorException;
 use monolyth\Project_Access;
 use monolyth\Session_Access;
-use monolyth\adapter;
+use monolyth\HTTP_Access;
+use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\UpdateNone_Exception;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
 
-class Login_Model implements adapter\Access, Project_Access, Session_Access
+class Login_Model
 {
+    use Project_Access;
+    use Adapter_Access;
+    use Session_Access;
+    use HTTP_Access;
+
+    public function __construct()
+    {
+        $this->pass = new Check_Pass_Model;
+    }
+
     public function __invoke(Login_Form $form, $salted = false)
     {
         try {
-            $u = $this->adapter->row(
+            $u = self::adapter()->row(
                 'monolyth_auth',
                 '*',
                 [[
@@ -28,7 +39,7 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
                 ]]
             );
         } catch (NoResults_Exception $e) {
-            $this->session->set('User', null);
+            self::session()->set('User', null);
             return 'nomatch';
         }
         if ($error = call_user_func(
@@ -38,7 +49,7 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
             $u['salt'],
             $salted
         )) {
-            $this->session->set('User', null);
+            self::session()->set('User', null);
             if ($error = $this->fail($form)) {
                 return $error;
             }
@@ -48,11 +59,11 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
         foreach ($u as $property => $data) {
             $User[$property] = $data;
         }
-        $this->session->set(compact('User'));
+        self::session()->set(compact('User'));
         $id = substr(session_id(), 0 ,32);
         $random = substr(session_id(), 32);
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_session',
                 ['userid' => null],
                 ['userid' => $u['id']]
@@ -61,15 +72,16 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
             // Not already logged in; that's fine.
         }
         try {
-            $this->adapter->update(
+            self::adapter()->update(
                 'monolyth_session',
                 [
                     'userid' => $u['id'],
-                    'data' => base64_encode(serialize($this->session->all())),
+                    'data' => base64_encode(serialize(self::session()->all())),
                 ],
                 ['id' => $id, 'randomid' => $random]
             );
         } catch (UpdateNone_Exception $e) {
+            var_dump($e->getMessage()); die();
             // Okay, this is a problem: we couldn't log ourselves in.
             return 'generic';
         }
@@ -84,36 +96,36 @@ class Login_Model implements adapter\Access, Project_Access, Session_Access
         if (isset($form['remember']) && $form['remember']->isChecked()) {
             setcookie(
                 'monolyth_persist',
-                md5($u['name'].$u['pass'].$u['salt'].$this->http->ip()
-                    .$this->http->userAgent()),
+                md5($u['name'].$u['pass'].$u['salt'].self::http()->ip()
+                    .self::http()->userAgent()),
                 time() + 60 * 60 * 24 * 365 * 10, // Valid for ten years.
                 '/',
                 preg_replace(
                     '@^(www\.|secure\.)@',
                     '',
-                    $this->http->server()
+                    self::http()->server()
                 ),
                 false,
                 true
             );
         }
         // Cache some basic ACL info:
-        $Group = [];
+        $Groups = [];
         try {
-            $q = $this->adapter->rows(
-                'monolyth_auth_group AS a
-                 JOIN monolyth_auth_link_auth_group l
-                 ON a.id = l.auth_group',
-                'auth_group',
-                ['l.auth' => $u['id']]
+            $q = self::adapter()->rows(
+                'monolyth_group AS g
+                 JOIN monolyth_auth_group ag
+                 ON g.id = ag.auth_group',
+                ['name', 'auth_group'],
+                ['ag.auth' => $u['id']]
             );
             foreach ($q as $row) {
-                $Group[] = $row['auth_group'];
+                $Groups[$row['auth_group']] = $row['name'];
             }
         } catch (NoResults_Exception $e) {
             // No problem; not all users belong to groups per se.
         }
-        $this->session->set(compact('Group'));
+        self::session()->set(compact('Groups'));
         return null;
     }
 

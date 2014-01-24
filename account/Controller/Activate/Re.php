@@ -9,10 +9,8 @@ namespace monolyth\account;
 use monolyth\Controller;
 use monolyth\Login_Required;
 use monolyth\User;
-use monolyth\model\Auth;
 use monolyth\render\Url_Helper;
 use monolyth\HTTP301_Exception;
-use monolyth\db;
 
 class Re_Activate_Controller extends Controller implements Login_Required
 {
@@ -24,9 +22,9 @@ class Re_Activate_Controller extends Controller implements Login_Required
     protected function get(array $args)
     {
         extract($args);
-        $user = $this->user;
+        $user = self::user();
         if (!($user->status() & $user::STATUS_EMAIL_UNCONFIRMED)) {
-            $this->message->add(self::MESSAGE_INFO, $this->text('./noneed'));
+            self::message()->add('info', $this->text('./noneed'));
             throw new HTTP301_Exception($this->url('monolyth/account'));
         }
 
@@ -43,7 +41,7 @@ class Re_Activate_Controller extends Controller implements Login_Required
     {
         extract($args);
         if (!isset($id, $hash)) {
-            if ($error = $this->activate->request($this->user->id())) {
+            if ($error = (new Activate_Model)->request(self::user()->id())) {
                 return $this->view('page/activate/re/resendfailed');
             }
             return $this->view('page/activate/re/resent');
