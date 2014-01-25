@@ -128,6 +128,11 @@ abstract class Monolyth
         }
     }
 
+    public static function setProject(Project $project)
+    {
+        static::$project = $project;
+    }
+
     /**
      * When done setting up, run MonoLyth.
      *
@@ -137,7 +142,7 @@ abstract class Monolyth
      */
     public static function run(Project $project, $theme = 'default')
     {
-        static::$project = $project;
+        self::setProject($project);
         try {
             $language = self::language();
             $router = call_user_func(
