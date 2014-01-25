@@ -911,7 +911,7 @@ $$
 DELIMITER ;
 -- }}}
 
--- {{{ v4.3.2
+-- {{{ v4.3.3
 DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth

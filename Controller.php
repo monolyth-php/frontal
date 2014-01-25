@@ -16,7 +16,6 @@ namespace monolyth;
  * @see monolyth\core\Controller
  */
 abstract class Controller extends core\Controller
-implements Message_Access, Session_Access
 {
 }
 

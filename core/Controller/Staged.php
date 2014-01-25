@@ -73,7 +73,7 @@ abstract class Staged_Controller extends Controller
         $ns = substr($class, 0, strrpos($class, '\\'));
         $name = substr($class, strrpos($class, '\\') + 1);
         $name = strtolower(str_replace('_', '/', $name));
-        return $this->view("$ns\\page/$name/$fn", ['form' => $this->form]);
+        return $this->view("$ns\\page/$name/$fn");
     }
 
     protected function post(array $args)
