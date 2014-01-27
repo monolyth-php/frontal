@@ -83,7 +83,7 @@ class Create_Model extends Model
                 'name' => $data['email'],
                 'pass' => $data['pass'],
             ])->load();
-            if ($error = $activate->request($id)
+            if ($error = (new Activate_Model)->request($id)
                 or $error = self::user()->login($form)
             ) {
                 self::adapter()->rollback();
