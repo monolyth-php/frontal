@@ -21,7 +21,7 @@ class Country_Finder extends core\I18n_Finder
                     implode('', $this->fields([], 'language', false))
                 ),
                 $this->fields(
-                    ['monolyth_country.*', 'l.title AS language_str'],
+                    ['monolyth_country.*', 'l.title AS language'],
                     ['title']
                 ),
                 $where,
