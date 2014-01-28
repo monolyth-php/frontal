@@ -26,7 +26,6 @@ use Adapter_Access;
 class Language_Model extends I18n_Model
 {
     use Adapter_Access;
-    use core\Singleton;
 
     protected $exception = 'monolyth\LanguageNotFound_Exception';
 

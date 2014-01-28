@@ -8,6 +8,7 @@ class Country_Finder implements Finder
 {
     use Adapter_Access;
     use Language_Access;
+    use core\Singleton;
 
     protected $table = 'monolyth_country c
                         JOIN monolyth_country_i18n ci USING(id)';

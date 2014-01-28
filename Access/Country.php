@@ -8,7 +8,7 @@ trait Country_Access
     {
         static $country;
         if (!isset($country)) {
-            $country = new Country_Model;
+            $country = Country_Model::instance();
         }
         return $country;
     }
@@ -17,7 +17,7 @@ trait Country_Access
     {
         static $countries;
         if (!isset($countries)) {
-            $countries = new Country_Finder;
+            $countries = Country_Finder::instance();
         }
         return $countries;
     }

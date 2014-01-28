@@ -13,6 +13,12 @@ use monolyth\HTTP301_Exception;
 
 class Request_Re_Activate_Controller extends Controller implements Login_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Activate_Form;
+    }
+
     /**
      * Activate a user. User should be logged in as the user whose
      * hash gets passed in the URI. If $hash isn't given, a new activation
