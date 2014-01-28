@@ -45,10 +45,11 @@ class File_Media_Model extends core\Model
             $id = self::adapter()->lastInsertId('monolyth_media_id_seq');
             $parts = str_split($id, 3);
             $name = array_pop($parts);
+            $config = Config::get('monolyth');
             if ($parts) {
-                $dir = $this->config->uploadPath.'/'.implode('/', $parts);
+                $dir = $config->uploadPath.'/'.implode('/', $parts);
             } else {
-                $dir = $this->config->uploadPath;
+                $dir = $config->uploadPath;
             }
             try {
                 mkdir($dir, 0777, true);
