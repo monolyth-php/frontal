@@ -11,6 +11,7 @@ class Country_Finder extends core\I18n_Finder
         $options += [
             'limit' => $size,
             'offset' => ($page - 1) * $size,
+            'order' => 'title ASC',
         ];
         try {
             return self::adapter()->pages(
@@ -21,7 +22,7 @@ class Country_Finder extends core\I18n_Finder
                 ),
                 $this->fields(
                     ['monolyth_country.*', 'l.title AS language_str'],
-                    ['*']
+                    ['title']
                 ),
                 $where,
                 $options
