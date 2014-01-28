@@ -11,7 +11,6 @@ use monolyth\core\Model;
 use monolyth\Confirm_Model;
 use monolyth\User_Access;
 use monolyth\Project_Access;
-use monolyth\Language_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\render\Url_Helper;
 use monolyth\render\Email;
@@ -22,7 +21,6 @@ class Activate_Model extends Model
     use Url_Helper;
     use User_Access;
     use Project_Access;
-    use Language_Access;
 
     public function __invoke(Form $form)
     {
