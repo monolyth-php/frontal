@@ -37,6 +37,7 @@
 
 namespace monolyth\utils;
 use ErrorException;
+use Project;
 
 final class Link
 {
