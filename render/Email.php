@@ -8,12 +8,12 @@
 namespace monolyth\render;
 use Adapter_Access;
 use monolyth\utils\HTML_Helper;
-use monolyth\Project_Access;
 use ErrorException;
 use Closure;
 use Mail;
 use Mail_mime;
 use monolyth\core\Singleton;
+use Project;
 
 class Email
 {
@@ -34,7 +34,7 @@ class Email
      * Constructor. It auto-includes variables from your CSS.
      * Note: callables aren't allowed here.
      */
-    public function __construct()
+    protected function __construct()
     {
         try {
             $vars = call_user_func(function() {
@@ -235,9 +235,10 @@ class Email
             $this->mail->$fn($content);
         }
         $body = $this->mail->get();
-        if (self::staticProject()['test']) {
-            if (isset(self::staticProject()['testmail'])) {
-                $to = self::staticProject()['testmail'];
+        $project = Project::instance();
+        if ($project['test']) {
+            if (isset($project['testmail'])) {
+                $to = $project['testmail'];
             } else {
                 $to = null;
             }
