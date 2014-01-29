@@ -14,6 +14,7 @@ use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\render\Url_Helper;
 use monolyth\render\Email;
+use monolyth\render\Email_Access;
 use Exception;
 
 class Activate_Model extends Model
@@ -21,6 +22,7 @@ class Activate_Model extends Model
     use Url_Helper;
     use User_Access;
     use Project_Access;
+    use Email_Access;
 
     public function __invoke(Form $form)
     {
@@ -48,7 +50,6 @@ class Activate_Model extends Model
             self::adapter()->commit();
             return null;
         } catch (Exception $e) {
-            var_dump($e->getMessage()); die();
             self::adapter()->rollback();
             return 'generic';
         }
@@ -111,7 +112,7 @@ class Activate_Model extends Model
                 ]
             );
         }
-        $email = new Email;
+        $email = self::email();
         $email->setSource("monolyth\\account\\$source")
               ->setVariables([
                   'name' => $auth['name'],
