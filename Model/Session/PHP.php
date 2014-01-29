@@ -8,12 +8,13 @@
  *
  * @package monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2010, 2011, 2012
+ * @copyright MonoMelodies 2010, 2011, 2012, 2014
  */
 
 namespace monolyth;
+use Project
 
-class PHP_Session_Model implements Project_Access
+class PHP_Session_Model
 {
     /**
      * The period after which a session should timeout.
