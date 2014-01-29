@@ -14,26 +14,26 @@ use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\render\Url_Helper;
 use monolyth\render\Email;
-use monolyth\render\Email_Access;
 use Exception;
 
 class Activate_Model extends Model
 {
     use Url_Helper;
-    use User_Access;
+    use User_Access {
+        User_Access::user as amuser;
+    }
     use Project_Access;
-    use Email_Access;
 
     public function __invoke(Form $form)
     {
         self::adapter()->beginTransaction();
-        if ($form['id']->value != self::user()->id()) {
+        if ($form['id']->value != self::amuser()->id()) {
             return 'mismatch';
         }
-        self::user()->status(self::adapter()->field(
+        self::amuser()->status(self::adapter()->field(
             'monolyth_auth',
             'status',
-            ['id' => self::user()->id()]
+            ['id' => self::amuser()->id()]
         ));
         try {
             $confirm = new Confirm_Model;
@@ -42,10 +42,10 @@ class Activate_Model extends Model
                 return $result;
             }
             self::adapter()->flush();
-            self::user()->status(self::adapter()->field(
+            self::amuser()->status(self::adapter()->field(
                 'monolyth_auth',
                 'status',
-                ['id' => self::user()->id()]
+                ['id' => self::amuser()->id()]
             ));
             self::adapter()->commit();
             return null;
@@ -62,7 +62,7 @@ class Activate_Model extends Model
         $hash = $confirm->getFreeHash($auth['id'].$auth['name']);
         $website = self::project()['url'];
         $siteurl = $this->url('', [], true);
-        $user = self::user();
+        $user = self::amuser();
         $uri = $this->url(
             $user->status() & $user::STATUS_REACTIVATE ?
                 'monolyth/account/do_re_activate' :
@@ -112,7 +112,7 @@ class Activate_Model extends Model
                 ]
             );
         }
-        $email = self::email();
+        $email = Email::instance();
         $email->setSource("monolyth\\account\\$source")
               ->setVariables([
                   'name' => $auth['name'],
