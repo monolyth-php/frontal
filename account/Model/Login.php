@@ -7,17 +7,16 @@
 
 namespace monolyth\account;
 use ErrorException;
-use monolyth\Project_Access;
 use monolyth\Session_Access;
 use monolyth\HTTP_Access;
 use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\UpdateNone_Exception;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
+use Project;
 
 class Login_Model
 {
-    use Project_Access;
     use Adapter_Access;
     use Session_Access;
     use HTTP_Access;
