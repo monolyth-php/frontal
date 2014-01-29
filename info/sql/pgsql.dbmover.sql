@@ -936,5 +936,15 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_insert_after();
+
+DROP TRIGGER IF EXISTS monolyth_auth_delete_after ON monolyth_auth;
+CREATE OR REPLACE FUNCTION monolyth_auth_delete_after() RETURNS "trigger" AS $$
+BEGIN
+    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
+    UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
+    RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_auth_delete_after AFTER DELETE ON monolyth_auth FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_delete_after();
 -- }}}
 
