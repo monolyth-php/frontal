@@ -128,11 +128,6 @@ abstract class Monolyth
         }
     }
 
-    public static function setProject(Project $project)
-    {
-        static::$project = $project;
-    }
-
     /**
      * When done setting up, run MonoLyth.
      *
@@ -142,7 +137,6 @@ abstract class Monolyth
      */
     public static function run(Project $project, $theme = 'default')
     {
-        self::setProject($project);
         try {
             $language = self::language();
             $router = call_user_func(
@@ -165,15 +159,6 @@ abstract class Monolyth
                     $language->set($match['language']);
                 } catch (LanguageNotFound_Exception $e) {
                 }
-            }
-            if ($match
-                && (array_key_exists(
-                    'monad\core\Controller',
-                    class_parents($match['controller'])
-                )
-            )) {
-                static::$project = new Monad_Project($theme);
-                static::$project['public'] = $project['public'];
             }
             if (!$match) {
                 throw new HTTP404_Exception;
