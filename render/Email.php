@@ -13,6 +13,7 @@ use ErrorException;
 use Closure;
 use Mail;
 use Mail_mime;
+use monolyth\core\Singleton;
 
 class Email
 {
@@ -20,6 +21,7 @@ class Email
     use HTML_Helper;
     use Adapter_Access;
     use Static_Helper;
+    use Singleton;
 
     const TYPE_HTML = 1;
     const TYPE_PLAIN = 2;
