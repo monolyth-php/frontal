@@ -1,6 +1,7 @@
 <?php
 
 namespace monolyth\render;
+use Project;
 
 trait Static_Helper
 {
