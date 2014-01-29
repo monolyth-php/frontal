@@ -2,6 +2,7 @@
 
 namespace monolyth\render;
 use ErrorException;
+use Project;
 
 /**
  * Render version of styles for older Internet Explorers (pre-9, which
@@ -44,7 +45,7 @@ class Oldie_Css extends Css
             $scripts = [];
             echo "<!--[if lt IE 9]>\n";
             preg_match_all('@href="(.*?)"@m', $out, $files);
-            $project = self::project()->export();
+            $project = Project::instance()->export();
             foreach ($files[1] as $file) {
                 $src = substr($file, strrpos($file, '/css') + 5);
                 if (substr($src, 0, 3) != 'mg.') {
