@@ -7,8 +7,8 @@ trait Singleton
     public static function instance()
     {
         static $instance;
-        if (!isset($instance)) {
-            $class = get_called_class();
+        $class = get_called_class();
+        if (!isset($instance) || get_class($instance) != $class) {
             $instance = new $class;
         }
         return $instance;
