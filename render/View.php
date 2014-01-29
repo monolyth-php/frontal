@@ -90,9 +90,6 @@ final class View
         if (!isset($args['self'])) {
             $args['self'] = $this;
         }
-        if (!isset($args['project'])) {
-            $args['project'] = Project::instance();
-        }
         if (!isset($args['form']) && isset($this->controller->form)) {
             $args['form'] = $this->controller->form;
         }
