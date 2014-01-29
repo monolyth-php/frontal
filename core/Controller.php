@@ -27,7 +27,6 @@ use monolyth\HTTP405_Exception;
 use monolyth\Redirect_Controller;
 use monolyth\Message_Access;
 use monolyth\User_Access;
-use monolyth\Project_Access;
 use monolyth\Session_Access;
 use monolyth\HTTP_Access;
 use monolyth\render\Viewable;
@@ -52,7 +51,6 @@ abstract class Controller
     use Url_Helper;
     use User_Access;
     use Message_Access;
-    use Project_Access;
     use HTTP_Access;
     use Session_Access;
     use Logger_Access;
@@ -149,7 +147,7 @@ abstract class Controller
 
         // Add default Monolyth requirements.
         $user = self::user();
-        $project = self::project();
+        $project = Project::instance();
         $redir = self::http()->getRedir();
         $http = self::http();
         $this->addRequirement(
@@ -290,7 +288,7 @@ abstract class Controller
                     $arguments['language'],
                     time() + 60 * 60 * 24 * 365,
                     '/',
-                    self::project()['cookiedomain']
+                    Project::instance()['cookiedomain']
                 );
             } catch (ErrorException $e) {
             }
