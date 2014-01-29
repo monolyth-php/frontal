@@ -147,7 +147,7 @@ abstract class Controller
 
         // Add default Monolyth requirements.
         $user = self::user();
-        $project = \Project::instance();
+        $this->project = $project = \Project::instance();
         $redir = self::http()->getRedir();
         $http = self::http();
         $this->addRequirement(
