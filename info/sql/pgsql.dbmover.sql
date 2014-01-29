@@ -536,7 +536,6 @@ END;
 $$
 DELIMITER ;
 
-
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_link_auth_group_after_insert AFTER INSERT ON monolyth_auth_link_auth_group
@@ -925,5 +924,17 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_delete();
+-- }}}
+
+-- {{{ v4.4.7
+DROP TRIGGER IF EXISTS monolyth_auth_insert_after ON monolyth_auth;
+CREATE OR REPLACE FUNCTION monolyth_auth_insert_after() RETURNS "trigger" AS $$
+BEGIN
+    INSERT INTO monolyth_auth_group VALUES (NEW.id, 2);
+    UPDATE monolyth_counters SET value = value + 1 WHERE name = 'users';
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_insert_after();
 -- }}}
 
