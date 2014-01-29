@@ -193,7 +193,7 @@ abstract class Monolyth
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
-            $c = new render\DatabaseDown_Controller(new DependencyContainer);
+            $c = new render\DatabaseDown_Controller;
             $c('GET', ['exceptionThrown' => $e]);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
