@@ -10,11 +10,11 @@ use monolyth\core\Form;
 use monolyth\core\Model;
 use monolyth\Confirm_Model;
 use monolyth\User_Access;
-use monolyth\Project_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\render\Url_Helper;
 use monolyth\render\Email;
 use Exception;
+use Project;
 
 class Activate_Model extends Model
 {
@@ -22,7 +22,6 @@ class Activate_Model extends Model
     use User_Access {
         User_Access::user as amuser;
     }
-    use Project_Access;
 
     public function __invoke(Form $form)
     {
@@ -60,7 +59,7 @@ class Activate_Model extends Model
         $auth = self::adapter()->row('monolyth_auth', '*', compact('id'));
         $confirm = new Confirm_Model;
         $hash = $confirm->getFreeHash($auth['id'].$auth['name']);
-        $website = self::project()['url'];
+        $website = Project::instance()['url'];
         $siteurl = $this->url('', [], true);
         $user = self::amuser();
         $uri = $this->url(
