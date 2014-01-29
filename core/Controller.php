@@ -147,7 +147,7 @@ abstract class Controller
 
         // Add default Monolyth requirements.
         $user = self::user();
-        $project = Project::instance();
+        $project = \Project::instance();
         $redir = self::http()->getRedir();
         $http = self::http();
         $this->addRequirement(
@@ -288,7 +288,7 @@ abstract class Controller
                     $arguments['language'],
                     time() + 60 * 60 * 24 * 365,
                     '/',
-                    Project::instance()['cookiedomain']
+                    \Project::instance()['cookiedomain']
                 );
             } catch (ErrorException $e) {
             }
