@@ -5,6 +5,7 @@
  */
 
 namespace monolyth;
+use Project;
 
 /**
  * Helper class to handle all sorts of HTTP stuff. Use this instead of directly
