@@ -11,17 +11,16 @@ use monolyth\Monolyth;
 use monolyth\Config;
 use monolyth\core;
 use monolyth\utils\Name_Helper;
-use monolyth\Project_Access;
 use monolyth\User_Access;
 use monolyth\Logger_Access;
 use monolyth\adapter\sql;
 use ErrorException;
+use Project;
 
 final class View
 {
     use Name_Helper;
     use User_Access;
-    use Project_Access;
     use Logger_Access;
 
     private $controller, $files = [], $parsers = [];
@@ -90,9 +89,6 @@ final class View
         }
         if (!isset($args['self'])) {
             $args['self'] = $this;
-        }
-        if (!isset($args['project'])) {
-            $args['project'] = self::project();
         }
         if (!isset($args['form']) && isset($this->controller->form)) {
             $args['form'] = $this->controller->form;
@@ -262,7 +258,7 @@ final class View
             $html
         );
         $config = Config::get('monolyth');
-        if (self::project()['test']
+        if (Project::instance()['test']
             || (isset($_SERVER['REMOTE_ADDR'])
                 && in_array($_SERVER['REMOTE_ADDR'], $config->debugIps)
                 || self::user()->name() == 'root'

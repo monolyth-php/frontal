@@ -36,14 +36,11 @@
  */
 
 namespace monolyth\utils;
-use monolyth;
-use monolyth\Project_Access;
 use ErrorException;
+use Project;
 
 final class Link
 {
-    use Project_Access;
-
     private static $language = null;
     private static $instance = null;
     private static $parsed = [];
@@ -211,7 +208,7 @@ final class Link
     public function fixPrefix($uri, $secure)
     {
         try {
-            $work = self::project()[$secure ? 'https' : 'http'];
+            $work = Project::instance()[$secure ? 'https' : 'http'];
         } catch (ErrorException $e) {
             // Not set, so ignore it.
             return $uri;

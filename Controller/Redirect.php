@@ -5,6 +5,7 @@
  */
 
 namespace monolyth;
+use Project;
 
 class Redirect_Controller extends core\Controller
 {
@@ -34,9 +35,9 @@ class Redirect_Controller extends core\Controller
         }
         $parts = parse_url($url);
         $key = 'protocol';
-        $scheme = self::project()['secure'] ?
-            self::project()['protocols'] :
-            self::project()['protocol'];
+        $scheme = Project::instance()['secure'] ?
+            Project::instance()['protocols'] :
+            Project::instance()['protocol'];
         $fallback = parse_url(
             "$scheme://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
         );

@@ -5,6 +5,7 @@
  */
 
 namespace monolyth;
+use Project;
 
 /**
  * Helper class to handle all sorts of HTTP stuff. Use this instead of directly
@@ -17,8 +18,6 @@ namespace monolyth;
  */
 class HTTP_Model
 {
-    use Project_Access;
-
     /**
      * Just a simple hash to store stuff internally.
      */
@@ -163,12 +162,12 @@ class HTTP_Model
             return false;
         }
         $match = [];
-        $protocol = self::project()['secure'] ? 'https' : 'http';
+        $protocol = Project::instance()['secure'] ? 'https' : 'http';
         foreach (array(
             "$protocol://{$_SERVER['SERVER_NAME']}",
-            self::project()['http'],
-            self::project()['https'] != self::project()['http'] ?
-                self::project()['https'] :
+            Project::instance()['http'],
+            Project::instance()['https'] != Project::instance()['http'] ?
+                Project::instance()['https'] :
                 '',
         ) as $url) {
             if (!strlen($url)) {
@@ -196,7 +195,7 @@ class HTTP_Model
      */
     public function getProtocol()
     {
-        return self::project()['protocol'.(self::project()['secure'] ? 's' : '')];
+        return Project::instance()['protocol'.(Project::instance()['secure'] ? 's' : '')];
     }
 
     /**
@@ -221,10 +220,10 @@ class HTTP_Model
             $_SERVER['REQUEST_URI']
         );
         $cache = str_replace('&', '&amp;', $cache);
-        $cache = $this->link->fixPrefix($cache, self::project()['secure']);
+        $cache = $this->link->fixPrefix($cache, Project::instance()['secure']);
         preg_match(
             "@(https?://)@",
-            self::project()[self::project()['secure'] ? 'https' : 'http'],
+            Project::instance()[Project::instance()['secure'] ? 'https' : 'http'],
             $match
         );
         $cache = "{$match[1]}{$_SERVER['SERVER_NAME']}$cache";
