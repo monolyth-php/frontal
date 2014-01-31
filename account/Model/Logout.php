@@ -7,14 +7,13 @@
 
 namespace monolyth\account;
 use monolyth\core\Model;
-use monolyth\Project_Access;
 use monolyth\Session_Access;
 use Adapter_Access;
 use monolyth\adapter;
+use Project;
 
 class Logout_Model extends Model
 {
-    use Project_Access;
     use Session_Access;
     use Adapter_Access;
 
@@ -54,7 +53,7 @@ class Logout_Model extends Model
                 self::session()->cache->delete(
                     sprintf(
                         'session/%s/%s',
-                        self::project()['site'],
+                        Project::instance()['site'],
                         session_id()
                     ),
                     []

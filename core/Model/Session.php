@@ -10,7 +10,6 @@
  */
 
 namespace monolyth\core;
-use monolyth\Project_Access;
 use Adapter_Access;
 use monolyth\utils\Translatable;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
@@ -19,7 +18,6 @@ use ErrorException;
 abstract class Session_Model
 {
     use Translatable;
-    use Project_Access;
     use Adapter_Access;
 
     /** A newly instantiated session. */
@@ -142,11 +140,11 @@ abstract class Session_Model
             [$this, 'destroy'],
             function($max_lifetime) { return 0; }
         );
-        session_name(self::project()['site']);
+        session_name(\Project::instance()['site']);
         session_set_cookie_params(
             0,
             '/',
-            self::project()['cookiedomain'],
+            \Project::instance()['cookiedomain'],
             false,
             true
         );
@@ -511,7 +509,7 @@ EOT
         ) {
             return true;
         }
-        if (isset($_COOKIE[self::project()['site']])) {
+        if (isset($_COOKIE[\Project::instance()['site']])) {
             $cached = false;
         }
         if (!isset($cached)) {

@@ -2,13 +2,12 @@
 
 namespace monolyth\render;
 use ErrorException;
-use monolyth\Project_Access;
 use monolyth\Language_Access;
 use monolyth\Country_Access;
+use Project;
 
 class Router
 {
-    use Project_Access;
     use Language_Access;
     use Country_Access;
 
@@ -24,15 +23,15 @@ class Router
     {
         $url = sprintf(
             '%s://%s',
-            self::project()['secure'] ?
-                self::project()['https'] :
-                self::project()['http'],
+            Project::instance()['secure'] ?
+                Project::instance()['https'] :
+                Project::instance()['http'],
             isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/'
         );
-        $this->setDefaultDomain(self::project()['http']);
-        self::project()->setLanguage($url, self::language());
+        $this->setDefaultDomain(Project::instance()['http']);
+        Project::instance()->setLanguage($url, self::language());
         if ($country = self::country()) {
-            self::project()->setCountry($url, $country);
+            Project::instance()->setCountry($url, $country);
         }
     }
 
@@ -194,16 +193,16 @@ class Router
      */
     public function match($url)
     {
-        if (self::project()['cli']) {
-            if (self::project()['secure']) {
-                $url = self::project()['https'].$url;
+        if (Project::instance()['cli']) {
+            if (Project::instance()['secure']) {
+                $url = Project::instance()['https'].$url;
             } else {
-                $url = self::project()['http'].$url;
+                $url = Project::instance()['http'].$url;
             }
         } else {
             $url = sprintf(
                 '%s://%s%s',
-                self::project()[self::project()['secure'] ?
+                Project::instance()[Project::instance()['secure'] ?
                     'protocols' :
                     'protocol'],
                 $_SERVER['SERVER_NAME'],
@@ -291,7 +290,7 @@ class Router
             $match[0]
         );
         $url = preg_replace('@(?<!:)/{2,}@', '/', $url);
-        $test = self::project()[self::project()['secure'] ? 'https' : 'http'];
+        $test = Project::instance()[Project::instance()['secure'] ? 'https' : 'http'];
         if (!$context && strpos($url, $test) !== false) {
             $url = preg_replace(
                 "@^https?://{$_SERVER['SERVER_NAME']}@",

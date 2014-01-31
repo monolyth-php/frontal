@@ -128,11 +128,6 @@ abstract class Monolyth
         }
     }
 
-    public static function setProject(Project $project)
-    {
-        static::$project = $project;
-    }
-
     /**
      * When done setting up, run MonoLyth.
      *
@@ -142,7 +137,6 @@ abstract class Monolyth
      */
     public static function run(Project $project, $theme = 'default')
     {
-        self::setProject($project);
         try {
             $language = self::language();
             $router = call_user_func(
@@ -166,15 +160,6 @@ abstract class Monolyth
                 } catch (LanguageNotFound_Exception $e) {
                 }
             }
-            if ($match
-                && (array_key_exists(
-                    'monad\core\Controller',
-                    class_parents($match['controller'])
-                )
-            )) {
-                static::$project = new Monad_Project($theme);
-                static::$project['public'] = $project['public'];
-            }
             if (!$match) {
                 throw new HTTP404_Exception;
             }
@@ -193,7 +178,8 @@ abstract class Monolyth
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
-            $c = new render\DatabaseDown_Controller(new DependencyContainer);
+            $c = new render\DatabaseDown_Controller;
+            $c->exceptionThrown = $e;
             $c('GET', ['exceptionThrown' => $e]);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
