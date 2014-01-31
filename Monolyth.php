@@ -179,6 +179,7 @@ abstract class Monolyth
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
             $c = new render\DatabaseDown_Controller;
+            $c->exceptionThrown = $e;
             $c('GET', ['exceptionThrown' => $e]);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
