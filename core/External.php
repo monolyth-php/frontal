@@ -7,6 +7,13 @@ abstract class External
 {
     use Static_Helper;
 
+    protected $project;
+
+    public function __construct($project)
+    {
+        $this->project = $project;
+    }
+
     protected $files = [];
 
     public function push($file)
