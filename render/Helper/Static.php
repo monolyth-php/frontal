@@ -98,7 +98,6 @@ trait Static_Helper
                     );
                 }
                 foreach ($commands as $command) {
-                    var_dump($command);
                     list($tmp, $pipes) = call_user_func(
                         function($w) use($command, $dspec, $target, $i) {
                             if ($command == 'write') {
