@@ -173,7 +173,7 @@ abstract class Monolyth
             $output = $function($uri);
         } catch (adapter\sql\Exception $e) {
             mail(
-                static::$project['notifymail'],
+                $project['notifymail'],
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
