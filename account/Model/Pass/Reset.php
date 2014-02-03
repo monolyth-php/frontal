@@ -14,7 +14,7 @@ use monolyth\render\Url_Helper;
 use monolyth\Config;
 use monolyth\Confirm_Model;
 use monolyth\Language_Access;
-use monolyth\render\Email_Access;
+use monolyth\render\Email;
 use Project;
 
 /**
@@ -26,7 +26,6 @@ class Reset_Pass_Model extends Model
     use Url_Helper;
     use User_Access;
     use Language_Access;
-    use Email_Access;
 
     public function __construct()
     {
@@ -106,7 +105,7 @@ class Reset_Pass_Model extends Model
                     ]
                 );
             }
-            $email = self::email();
+            $email = Email::instance();
             $email->setSource($mail)
                   ->setVariables([
                       'name' => $auth['name'],
