@@ -25,7 +25,6 @@ class Reset_Pass_Model extends Model
 {
     use Url_Helper;
     use User_Access;
-    use Language_Access;
 
     public function __construct()
     {
