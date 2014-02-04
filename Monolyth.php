@@ -12,7 +12,6 @@
 namespace monolyth;
 use ErrorException;
 use monolyth\core\Project;
-use monad\admin\Project as Monad_Project;
 
 /** Turn on all errors so we can catch exceptions. */
 error_reporting(E_ALL & ~E_STRICT);
@@ -128,11 +127,6 @@ abstract class Monolyth
         }
     }
 
-    public static function setProject(Project $project)
-    {
-        static::$project = $project;
-    }
-
     /**
      * When done setting up, run MonoLyth.
      *
@@ -142,7 +136,6 @@ abstract class Monolyth
      */
     public static function run(Project $project, $theme = 'default')
     {
-        self::setProject($project);
         try {
             $language = self::language();
             $router = call_user_func(
@@ -166,15 +159,6 @@ abstract class Monolyth
                 } catch (LanguageNotFound_Exception $e) {
                 }
             }
-            if ($match
-                && (array_key_exists(
-                    'monad\core\Controller',
-                    class_parents($match['controller'])
-                )
-            )) {
-                static::$project = new Monad_Project($theme);
-                static::$project['public'] = $project['public'];
-            }
             if (!$match) {
                 throw new HTTP404_Exception;
             }
@@ -189,11 +173,12 @@ abstract class Monolyth
             $output = $function($uri);
         } catch (adapter\sql\Exception $e) {
             mail(
-                static::$project['notifymail'],
+                $project['notifymail'],
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
-            $c = new render\DatabaseDown_Controller(new DependencyContainer);
+            $c = new render\DatabaseDown_Controller;
+            $c->exceptionThrown = $e;
             $c('GET', ['exceptionThrown' => $e]);
             unset($e);
         } catch (HTTP5xx_Exception $e) {
@@ -265,11 +250,6 @@ abstract class Monolyth
             );
         }
         session_write_close();
-    }
-
-    public function project()
-    {
-        return self::$project;
     }
 
     public function router()

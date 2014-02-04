@@ -2,11 +2,17 @@
 
 namespace monolyth\core;
 use monolyth\render\Static_Helper;
-use monolyth\Project_Access;
 
 abstract class External
 {
     use Static_Helper;
+
+    protected $project;
+
+    public function __construct($project)
+    {
+        $this->project = $project;
+    }
 
     protected $files = [];
 

@@ -7,7 +7,6 @@
 
 namespace monolyth\account;
 use monolyth\core\Model;
-use monolyth\Project_Access;
 use monolyth\User_Access;
 use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\InsertNone_Exception;
@@ -16,6 +15,7 @@ use monolyth\Config;
 use monolyth\Confirm_Model;
 use monolyth\Language_Access;
 use monolyth\render\Email;
+use Project;
 
 /**
  * Reset_Pass_Model, implementing core functionality and default invocation,
@@ -24,9 +24,7 @@ use monolyth\render\Email;
 class Reset_Pass_Model extends Model
 {
     use Url_Helper;
-    use Project_Access;
     use User_Access;
-    use Language_Access;
 
     public function __construct()
     {
@@ -56,7 +54,7 @@ class Reset_Pass_Model extends Model
 
     protected function confirm($auth, $mail, $hash, $pwrand)
     {
-        $siteurl = self::project()['url'];
+        $siteurl = Project::instance()['url'];
         if (!($url = $this->url(
             'monolyth/account/confirm_pass',
             ['id' => $auth['id'], 'hash' => $hash],
@@ -106,7 +104,7 @@ class Reset_Pass_Model extends Model
                     ]
                 );
             }
-            $email = new Email;
+            $email = Email::instance();
             $email->setSource($mail)
                   ->setVariables([
                       'name' => $auth['name'],
