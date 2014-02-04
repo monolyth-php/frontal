@@ -8,6 +8,7 @@ use monolyth\adapter\sql\InsertNone_Exception;
 use monolyth\adapter\sql\UpdateNone_Exception;
 use monolyth\adapter\sql\DeleteNone_Exception;
 use ErrorException;
+use Project;
 
 class File_Media_Model extends core\Model
 {
@@ -16,7 +17,7 @@ class File_Media_Model extends core\Model
     public function __construct()
     {
         parent::__construct();
-        $this->media = new render\Media_Helper;
+        $this->media = new render\Media_Helper(Project::instance());
     }
 
     public function create(array $file, $folder = null, $owner = null)
