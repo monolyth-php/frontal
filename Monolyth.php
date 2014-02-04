@@ -12,7 +12,6 @@
 namespace monolyth;
 use ErrorException;
 use monolyth\core\Project;
-use monad\admin\Project as Monad_Project;
 
 /** Turn on all errors so we can catch exceptions. */
 error_reporting(E_ALL & ~E_STRICT);
@@ -174,7 +173,7 @@ abstract class Monolyth
             $output = $function($uri);
         } catch (adapter\sql\Exception $e) {
             mail(
-                static::$project['notifymail'],
+                $project['notifymail'],
                 "Database down for {$project['site']}",
                 "Page: {$_SERVER['REQUEST_URI']}\n".$e->getMessage()
             );
@@ -251,11 +250,6 @@ abstract class Monolyth
             );
         }
         session_write_close();
-    }
-
-    public function project()
-    {
-        return self::$project;
     }
 
     public function router()
