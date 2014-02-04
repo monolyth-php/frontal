@@ -37,7 +37,8 @@ this.update = function(type, element, data) {
     if (typeof data == 'string') {
         data = [data];
     }
-    var e = b.template.siblings(), u;
+    var e = b.template.siblings('[data-binder-id]').detach();
+    var u;
     for (var name in b.model) {
         u = name;
         break;
@@ -46,7 +47,7 @@ this.update = function(type, element, data) {
         var s = b.template.clone(),
             c = e.filter('[data-binder-id=' + data[i][u] + ']');
         if (c.length) {
-            s = c.first();
+            s = c.first().detach();
         }
         s.removeAttr('data-binder-template');
         for (var prop in data[i]) {
@@ -73,11 +74,16 @@ this.update = function(type, element, data) {
             }
         }
         s.attr('data-binder-id', data[i][u]);
-        if (b.template.attr('data-binder-append')) {
+        if (b.template.attr('data-binder-append') != undefined) {
             b.template.after(s);
         } else {
             b.template.before(s);
         }
+    }
+    if (b.template.attr('data-binder-append') != undefined) {
+        b.template.after(e);
+    } else {
+        b.template.before(e);
     }
 
     this.init();
