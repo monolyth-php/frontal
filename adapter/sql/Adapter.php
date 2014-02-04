@@ -23,13 +23,26 @@ abstract class Adapter implements monolyth\adapter\Adapter
 {
     use Logger_Access;
 
-    protected $cache = [], $querytime = 0, $prepared = [],
-              $translevel = 0, $index;
+    protected $cache = [];
+    protected $querytime = 0;
+    protected $prepared = [];
+    protected $translevel = 0;
+    protected $index;
+    public $pdo;
 
     public function __construct($dsn, $user = null, $pass = null,
         array $options = [])
     {
+        $this->pdo = compact('dsn', 'user', 'pass', 'options');
+    }
+
+    protected function connect()
+    {
+        if (is_object($this->pdo)) {
+            return;
+        }
         try {
+            extract($this->pdo);
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             throw new ConnectionFailed_Exception($e->getMessage());
@@ -61,6 +74,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     public function beginTransaction()
     {
         if (!$this->translevel++) {
+            $this->connect();
             return $this->pdo->beginTransaction();
         }
     }
@@ -68,6 +82,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     public function commit()
     {
         if ($this->translevel-- == 1) {
+            $this->connect();
             return $this->pdo->commit();
         }
     }
@@ -75,6 +90,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     public function rollback()
     {
         if ($this->translevel-- == 1) {
+            $this->connect();
             return $this->pdo->rollback();
         }
     }
@@ -103,6 +119,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $q = $statements[$sql][$i]->fetchAll(PDO::FETCH_ASSOC);
             $sql = $statements[$sql][$i]->queryString;
         } else {
+            $this->connect();
             $q = $this->pdo->query($sql);
         }
         self::logger()->log($sql, $start);
@@ -176,6 +193,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
      */
     public function field($table, $field, $where = null, $options = null)
     {
+        $this->connect();
         $options['limit'] = 1;
         if (!isset($options['offset'])) {
             $options['offset'] = 0;
@@ -198,6 +216,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
      */
     public function row($table, $fields, $where = null, $options = [])
     {
+        $this->connect();
         $options['limit'] = 1;
         if (!isset($options['offset'])) {
             $options['offset'] = 0;
@@ -220,6 +239,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
      */
     public function rows($table, $fields, $where = null, $options = [])
     {
+        $this->connect();
         return $this->_get(
             [$table, $fields, $where, $options],
             'fetchAll'
@@ -241,6 +261,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     public function models($model, $table, $fields, array $where = [],
         array $options = []
     ) {
+        $this->connect();
         $rows = $this->rows($table, $fields, $where, $options);
         $model = is_string($model) ? new $model : $model;
         $return = [];
@@ -308,6 +329,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $this->options($options, $bind)
         );
         if (!isset($this->prepared[$sql])) {
+            $this->connect();
             $this->prepared[$sql] = $this->pdo->prepare($sql);
         }
         if (!$this->prepared[$sql]->execute($bind)) {
@@ -339,6 +361,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         array $options = []
     )
     {
+        $this->connect();
         $rows = $this->rows($table, $fields, $where, $options);
         $return = [];
         $idx = array_shift(array_keys($rows[0]));
@@ -378,6 +401,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
         } catch (PDOException $e) {
         }
         if (!isset($this->prepared[$sql])) {
+            $this->connect();
             $this->prepared[$sql] = $this->pdo->prepare($sql);
         }
         try {
@@ -427,6 +451,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             implode(', ', $this->values($fields, $bind))
         );
         $start = microtime(true);
+        $this->connect();
         $statement = $this->pdo->prepare($sql);
         try {
             $statement->execute($bind);
@@ -486,6 +511,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
             $this->options($options, $bind)
         );
         try {
+            $this->connect();
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
             self::logger()->log($sql, $start);
@@ -509,6 +535,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function upsert($table, array $fields)
     {
+        $this->connect();
         try {
             $this->delete($table, $fields);
         } catch (DeleteNone_Exception $e) {
@@ -540,6 +567,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
                 $this->where($where, $bind)
             );
             $start = microtime(true);
+            $this->connect();
             $statement = $this->pdo->prepare($sql);
             $statement->execute($bind);
             self::logger()->log($sql, $start);
@@ -564,6 +592,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function truncate($table)
     {
+        $this->connect();
         if (!($result = $this->exec(sprintf(
             "TRUNCATE TABLE %s",
             $table
@@ -578,6 +607,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function numRowsTotal(PDOStatement $result, &$bind)
     {
+        $this->connect();
         $sql = $result->queryString;
         $sql = preg_replace('/SELECT.*?FROM/si', 'SELECT COUNT(*) FROM', $sql);
         $sql = preg_replace('/(LIMIT|OFFSET)\s+\d+/si', '', $sql);
@@ -631,6 +661,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function where($array, array &$bind, $seperator = 'AND')
     {
+        $this->connect();
         if (!$array) {
             return '(1=1)';
         }
@@ -811,6 +842,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function __call($fn, $args)
     {
+        $this->connect();
         return call_user_func_array([$this->pdo, $fn], $args);
     }
 }
