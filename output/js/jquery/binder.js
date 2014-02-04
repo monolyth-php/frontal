@@ -43,6 +43,9 @@ this.update = function(type, element, data) {
         u = name;
         break;
     }
+    if (data.length) {
+        b.element.find('[data-binder-placeholder]').remove();
+    }
     for (var i = 0; i < data.length; i++) {
         var s = b.template.clone(),
             c = e.filter('[data-binder-id=' + data[i][u] + ']');
