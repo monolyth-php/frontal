@@ -3,7 +3,7 @@
 namespace monolyth;
 use ErrorException;
 
-class Comment_Form extends core\Post_Form implements User_Access
+class Comment_Form extends core\Post_Form
 {
     use render\Url_Helper;
     use User_Access;
