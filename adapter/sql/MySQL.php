@@ -53,6 +53,7 @@ class MySQL extends Adapter
 
     public function numRowsTotal(PDOStatement $result, &$bind)
     {
+        $this->connect();
         $statement = $this->pdo->prepare("SELECT FOUND_ROWS()");
         $statement->execute();
         return $statement->fetchColumn();

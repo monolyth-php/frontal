@@ -913,6 +913,7 @@ DELIMITER ;
 
 -- {{{ v4.3.3
 DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
+DROP TRIGGER IF EXISTS monolyth_auth_after_insert;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth
 FOR EACH ROW
@@ -924,6 +925,7 @@ $$
 DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
+DROP TRIGGER IF EXISTS monolyth_auth_after_delete;
 DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_delete AFTER DELETE ON monolyth_auth
 FOR EACH ROW
