@@ -19,7 +19,7 @@ class Confirm_Pass_Controller extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->form = new Confirm_Pass_Form;
+        $this->form = new Reset_Pass_Form;
     }
 
     protected function get(array $args)
