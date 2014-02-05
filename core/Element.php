@@ -318,6 +318,9 @@ abstract class Element
         $error = self::ERROR_MATCH;
         $this->options['data-notequals'] = $form[$name]->getName();
         return $this->addTest(function($value) use ($error, $form, $name) {
+            if (!isset($form[$name]->value)) {
+                return null;
+            }
             return $value != $form[$name]->value ? null : $error;
         });
     }

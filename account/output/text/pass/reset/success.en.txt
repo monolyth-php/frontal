@@ -1,1 +1,2 @@
-Your password has been set to the new value, and you may now login using it.
+You are now logged in using a temporary password.
+Please choose a new one.

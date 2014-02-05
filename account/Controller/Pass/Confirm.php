@@ -19,7 +19,7 @@ class Confirm_Pass_Controller extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->form = new Confirm_Pass_Form;
+        $this->form = new Reset_Pass_Form;
     }
 
     protected function get(array $args)
@@ -35,17 +35,23 @@ class Confirm_Pass_Controller extends Controller
         if (!$this->form->errors()) {
             extract($args);
             if (!($error = (new Confirm_Model)->process($hash, $id))) {
-                $pw = self::adapter()->field(
+                extract(self::adapter()->row(
                     'monolyth_auth',
-                    'pass',
+                    ['name', 'pass'],
                     compact('id')
-                );
-                (new Pass_Model)->update($pw, $id);
+                ));
+                (new Pass_Model)->update($pass, $id);
+                $form = new Login_Form;
+                $form['name']->value = $name;
+                $form['pass']->value = $pass;
+                (new Login_Model)->__invoke($form);
                 self::message()->add(
                     'success',
-                    $this->text('pass/reset/success', ['pass' => $pw])
+                    $this->text('pass/reset/success')
                 );
-                return $this->view('page/pass/display', ['pass' => $pw]);
+                throw new HTTP301_Exception($this->url(
+                    'monolyth/account/new_pass'
+                ));
             } elseif ($error == 'contains outdated elements') {
                 self::message()->add(
                     'error',
