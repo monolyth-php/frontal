@@ -83,6 +83,7 @@ class PgSQL extends Adapter
     public function describe($table)
     {
         static $tablefields = [], $statement = null;
+        $this->connect();
         if (isset($tablefields[$table])) {
             return $tablefields[$table];
         }
