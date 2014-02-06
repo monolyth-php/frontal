@@ -37,7 +37,11 @@ this.update = function(type, element, data) {
     if (typeof data == 'string') {
         data = [data];
     }
-    var e = b.template.siblings('[data-binder-id]').detach();
+    if (b.template.attr('data-binder-append') == undefined) {
+        var e = b.template.siblings('[data-binder-id]').detach();
+    } else {
+        var e = b.template.siblings('[data-binder-id]');
+    }
     var u;
     for (var name in b.model) {
         u = name;
@@ -83,9 +87,7 @@ this.update = function(type, element, data) {
             b.template.before(s);
         }
     }
-    if (b.template.attr('data-binder-append') != undefined) {
-        b.template.after(e);
-    } else {
+    if (b.template.attr('data-binder-append') == undefined) {
         b.template.before(e);
     }
 
