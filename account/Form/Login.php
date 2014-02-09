@@ -6,11 +6,12 @@
  * @package monolyth
  * @subpackage account
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2009, 2010, 2011, 2012, 2013
+ * @copyright MonoMelodies 2009, 2010, 2011, 2012, 2013, 2014
  */
 
 namespace monolyth\account;
 use monolyth\HTTP_Access;
+use monolyth\Language_Access;
 use monolyth\core\Post_Form;
 use monolyth\render\Url_Helper;
 use monolyth\utils\Translatable;
@@ -20,14 +21,17 @@ use monolyth\utils\Translatable;
  * and optionally a 'remember' checkbox input.
  */
 
-class Login_Form extends Post_Form implements HTTP_Access
+class Login_Form extends Post_Form
 {
-    use Translatable, Url_Helper;
+    use Translatable;
+    use Url_Helper;
+    use HTTP_Access;
 
     protected $attributes = ['data-history' => 0];
 
-    public function prepare()
+    public function __construct()
     {
+        parent::__construct();
         $this->class = 'nohistory';
         $this->addText('name', $this->text('./name'))
              ->isRequired()
@@ -39,7 +43,7 @@ class Login_Form extends Post_Form implements HTTP_Access
         $this->views['remember'] = 'monolyth\render\form\slice/rowsingle';
         $this->addButton(self::BUTTON_SUBMIT, $this->text('./submit'));
         parent::prepare();
-        $redir = $this->http->getRedir();
+        $redir = self::http()->getRedir();
         if ($redir == $this->url('monolyth/account/login')
             || $redir == $this->url('monolyth/account/login', [], true)
         ) {

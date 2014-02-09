@@ -6,7 +6,7 @@
  * @package monolyth
  * @subpackage core
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2012
+ * @copyright MonoMelodies 2012, 2014
  */
 
 namespace monolyth\core;
@@ -15,6 +15,8 @@ use ErrorException;
 
 abstract class I18n_Model
 {
+    use Singleton;
+
     protected $exception,
               $map = [],
               $order = [],
@@ -183,7 +185,7 @@ abstract class I18n_Model
         if ($this->status['current'] == $code) {
             return; // nothing's changed
         }
-        $this->status['current'] = $code;
+        $this->__set('current', $code);
     }
 
     public function fallbacks($code)

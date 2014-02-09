@@ -2,7 +2,15 @@
 
 namespace monolyth;
 
-interface Language_Access
+trait Language_Access
 {
+    public static function language()
+    {
+        static $language;
+        if (!isset($language)) {
+            $language = Language_Model::instance();
+        }
+        return $language;
+    }
 }
 

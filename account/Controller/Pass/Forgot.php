@@ -12,6 +12,12 @@ use monolyth\HTTP301_Exception;
 
 class Forgot_Pass_Controller extends Controller implements Nologin_Required
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Forgot_Pass_Form;
+    }
+
     protected function get(array $args)
     {
         return $this->view('page/pass/forgot');
@@ -20,14 +26,15 @@ class Forgot_Pass_Controller extends Controller implements Nologin_Required
     protected function post(array $args)
     {
         if (!$this->form->errors()) {
-            if ($error = call_user_func($this->reset, $this->form)) {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+            $reset = new Reset_Pass_Model;
+            if ($error = call_user_func($reset, $this->form)) {
+                self::message()->add(
+                    'error',
                     $this->text("pass/forgot/error.$error")
                 );
             } else {
-                $this->message->add(
-                    self::MESSAGE_SUCCESS,
+                self::message()->add(
+                    'success',
                     $this->text(
                         'pass/forgot/success',
                         $this->form['email']->value

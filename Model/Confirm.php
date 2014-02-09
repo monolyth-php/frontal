@@ -6,10 +6,10 @@
 
 namespace monolyth;
 
-
-class Confirm_Model extends core\Model implements User_Access
+class Confirm_Model extends core\Model
 {
     use render\Url_Helper;
+    use User_Access;
 
     public function getFreeHash($seed = null)
     {
@@ -23,7 +23,7 @@ class Confirm_Model extends core\Model implements User_Access
                     // Concetanate these; that should be unique enough.
                     $seed.rand(10000, 99999).time()
                 );
-                $this->adapter->field(
+                self::adapter()->field(
                     'monolyth_confirm',
                     1,
                     ['hash' => $hash]
@@ -38,18 +38,18 @@ class Confirm_Model extends core\Model implements User_Access
 
     public function process($hash, $id = null)
     {
-        if (!isset($id) && $this->user->id()) {
-            $id = $this->user->id();
+        if (!isset($id) && self::user()->id()) {
+            $id = self::user()->id();
         }
-        $this->adapter->beginTransaction();
+        self::adapter()->beginTransaction();
         try {
-            $o = $this->adapter->rows(
+            $o = self::adapter()->rows(
                 'monolyth_confirm',
                 '*',
                 ['owner' => $id, 'hash' => $hash]
             );
         } catch (adapter\sql\NoResults_Exception $e) {
-            $this->adapter->rollback();
+            self::adapter()->rollback();
             return 'unknown';
         }
         foreach ($o as $m) {
@@ -91,10 +91,10 @@ class Confirm_Model extends core\Model implements User_Access
             try {
                 switch ($fn) {
                     case 'delete':
-                        $this->adapter->delete($m['tablename'], $where);
+                        self::adapter()->delete($m['tablename'], $where);
                         break;
                     case 'update':
-                        $this->adapter->update(
+                        self::adapter()->update(
                             $m['tablename'],
                             $fields,
                             $where
@@ -105,41 +105,41 @@ class Confirm_Model extends core\Model implements User_Access
                 // 't Is been done already.
             } catch (adapter\sql\Exception $e) {
                 // Generic database error; assume everything's invalid.
-                $this->adapter->rollback();
+                self::adapter()->rollback();
                 return 'database';
             }
         }
-        $this->adapter->delete(
+        self::adapter()->delete(
             'monolyth_confirm',
             ['hash' => $hash, 'owner' => $id]
         );
-        $this->adapter->commit();
+        self::adapter()->commit();
         return null;
     }
 
     private function cancel($msg, $hash)
     {
-        $this->adapter->rollback();
-        $this->adapter->beginTransaction();
+        self::adapter()->rollback();
+        self::adapter()->beginTransaction();
         // Remove invalidated entry
         try {
-            $this->adapter->delete(
+            self::adapter()->delete(
                 'monolyth_confirm',
-                ['hash' => $hash, 'owner' => $this->user->id()]
+                ['hash' => $hash, 'owner' => self::user()->id()]
             );
         } catch (adapter\sql\DeleteNone_Exception $e) {
             // Catch this just in case.
         }
         // Cleanup as well
         try {
-            $this->adapter->delete(
+            self::adapter()->delete(
                 'monolyth_confirm',
-                ['datevalid' => ['<' => $this->adapter->now()]]
+                ['datevalid' => ['<' => self::adapter()->now()]]
             );
         } catch (adapter\sql\DeleteNone_Exception $e) {
             // That's okay, we're simply clean.
         }
-        $this->adapter->commit();
+        self::adapter()->commit();
         return $msg;
     }
 }

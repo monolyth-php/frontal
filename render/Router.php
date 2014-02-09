@@ -1,10 +1,16 @@
 <?php
 
-namespace monolyth;
+namespace monolyth\render;
 use ErrorException;
+use monolyth\Language_Access;
+use monolyth\Country_Access;
+use Project;
 
-class Advanced_Router implements core\Router
+class Router
 {
+    use Language_Access;
+    use Country_Access;
+
     protected $domain;
     protected $routes = [];
     protected $controllers = [];
@@ -13,24 +19,19 @@ class Advanced_Router implements core\Router
     protected $translations = [];
     public $language;
 
-    public function __construct(
-        core\Project $project,
-        Language_Model $language,
-        Country_Model $country = null
-    )
+    public function __construct()
     {
-        $this->project = $project;
-        $this->language = $language;
-        $this->country = $country;
         $url = sprintf(
             '%s://%s',
-            $project['secure'] ? $project['https'] : $project['http'],
+            Project::instance()['secure'] ?
+                Project::instance()['https'] :
+                Project::instance()['http'],
             isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/'
         );
-        $this->setDefaultDomain($this->project['http']);
-        $project->setLanguage($url, $language);
-        if ($country) {
-            $project->setCountry($url, $country);
+        $this->setDefaultDomain(Project::instance()['http']);
+        Project::instance()->setLanguage($url, self::language());
+        if ($country = self::country()) {
+            Project::instance()->setCountry($url, $country);
         }
     }
 
@@ -97,7 +98,7 @@ class Advanced_Router implements core\Router
                 $req
             ) {
                 $found = $once = false;
-                foreach ($this->language->available as $lang) {
+                foreach (self::language()->available as $lang) {
                     if ($lang->code == $this->translations['from']) {
                         continue;
                     }
@@ -192,16 +193,16 @@ class Advanced_Router implements core\Router
      */
     public function match($url)
     {
-        if ($this->project['cli']) {
-            if ($this->project['secure']) {
-                $url = $this->project['https'].$url;
+        if (Project::instance()['cli']) {
+            if (Project::instance()['secure']) {
+                $url = Project::instance()['https'].$url;
             } else {
-                $url = $this->project['http'].$url;
+                $url = Project::instance()['http'].$url;
             }
         } else {
             $url = sprintf(
                 '%s://%s%s',
-                $this->project[$this->project['secure'] ?
+                Project::instance()[Project::instance()['secure'] ?
                     'protocols' :
                     'protocol'],
                 $_SERVER['SERVER_NAME'],
@@ -289,7 +290,7 @@ class Advanced_Router implements core\Router
             $match[0]
         );
         $url = preg_replace('@(?<!:)/{2,}@', '/', $url);
-        $test = $this->project[$this->project['secure'] ? 'https' : 'http'];
+        $test = Project::instance()[Project::instance()['secure'] ? 'https' : 'http'];
         if (!$context && strpos($url, $test) !== false) {
             $url = preg_replace(
                 "@^https?://{$_SERVER['SERVER_NAME']}@",

@@ -32,15 +32,14 @@
  * @package monolyth
  * @subpackage utils
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 
 namespace monolyth\utils;
-use monolyth;
-use monolyth\Project_Access;
 use ErrorException;
+use Project;
 
-final class Link implements Project_Access
+final class Link
 {
     private static $language = null;
     private static $instance = null;
@@ -209,7 +208,7 @@ final class Link implements Project_Access
     public function fixPrefix($uri, $secure)
     {
         try {
-            $work = $this->project[$secure ? 'https' : 'http'];
+            $work = Project::instance()[$secure ? 'https' : 'http'];
         } catch (ErrorException $e) {
             // Not set, so ignore it.
             return $uri;

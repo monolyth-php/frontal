@@ -3,9 +3,8 @@
 namespace monolyth\adapter\nosql;
 use monolyth;
 use Memcached as Base;
-use monolyth\Project_Access;
 
-class Memcached implements Cache, Adapter, Project_Access
+class Memcached implements Cache, Adapter
 {
     private static $stats = [], $time = 0, $prefix;
 

@@ -12,8 +12,9 @@ class Confirm_Update_Email_Form extends Update_Email_Form
 {
     const ERROR_MISMATCH = 1;
 
-    public function prepare()
+    public function __construct()
     {
+        parent::__construct();
         $this->addText('new2', $this->text('./new2'))
              ->isRequired()
              ->matchesField($this, 'new');

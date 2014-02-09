@@ -4,15 +4,18 @@ namespace monolyth\admin;
 use monad\core\I18n_Form;
 use monad\admin\Language_Access;
 
-class Text_Form extends I18n_Form implements Language_Access
+class Text_Form extends I18n_Form
 {
+    use Language_Access;
+
     public static $IDENTIFIER = 'id';
 
-    public function prepare()
+    public function __construct()
     {
+        parent::__construct();
         $this->addText('id', $this->text('./id'))->disabled();
-        $language = $this->projectlanguage->available[0];
-        foreach ($this->projectlanguage->available as $lang) {
+        $language = self::projectlanguage()->available[0];
+        foreach (self::projectlanguage()->available as $lang) {
             $this->addTextarea("content[{$lang->id}]", $this->text('./content'))
                  ->setClass("language {$lang->code}");
         }

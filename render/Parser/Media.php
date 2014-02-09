@@ -2,12 +2,14 @@
 
 namespace monolyth\render;
 use monolyth\core\Parser;
-use monolyth\Project_Access;
-use monolyth\adapter;
+use Adapter_Access;
 use monolyth\adapter\sql\NoResults_Exception;
+use monolyth\Media_Model;
 
-class Media_Parser extends Parser implements Project_Access, adapter\Access
+class Media_Parser extends Parser
 {
+    use Adapter_Access;
+
     public function __invoke($html)
     {
         if (!preg_match_all(
@@ -28,7 +30,7 @@ class Media_Parser extends Parser implements Project_Access, adapter\Access
         }
         try {
             $imgs = [];
-            foreach ($this->adapter->rows(
+            foreach (self::adapter()->rows(
                 'monolyth_media',
                 '*',
                 [['id' => ['IN' => $ids], 'md5' => ['IN' => $ids]]]
@@ -44,6 +46,7 @@ class Media_Parser extends Parser implements Project_Access, adapter\Access
             return str_replace($replace, '', $html);
         }
         $new = $old = [];
+        $media = new Media_Model;
         foreach ($matches as $match) {
             $old[] = $match[0];
             if (!isset($imgs[$match[3]])) {
@@ -82,7 +85,7 @@ class Media_Parser extends Parser implements Project_Access, adapter\Access
                 "src={$match[2]}{media:{$match[3]}:{$match[4]}}{$match[2]}",
                 sprintf(
                     'src="%s"',
-                    $this->media->http(
+                    $media->media->http(
                         $imgs[$match[3]],
                         compact('width', 'height')
                     )

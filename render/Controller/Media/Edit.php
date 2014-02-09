@@ -2,12 +2,21 @@
 
 namespace monolyth\render;
 use monolyth\Controller;
-use monolyth\adapter;
+use monolyth\Config;
 use monolyth\adapter\sql\NoResults_Exception;
 use ErrorException;
+use Adapter_Access;
 
-class Edit_Media_Controller extends Controller implements adapter\Access
+class Edit_Media_Controller extends Controller
 {
+    use Adapter_Access;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->config = Config::get('monolyth');
+    }
+
     protected function get(array $args)
     {
         extract($args);
@@ -17,7 +26,7 @@ class Edit_Media_Controller extends Controller implements adapter\Access
             $imagefile = $args['imagefile'];
         } elseif ($id) {
             try {
-                $imagefile = $this->adapter->field(
+                $imagefile = self::adapter()->field(
                     'monolyth_media',
                     'filename',
                     compact('id')
@@ -51,12 +60,12 @@ class Edit_Media_Controller extends Controller implements adapter\Access
             $error = $_FILES['media']['error'];
             $file = $this->config->private_tmp_path.
                 '/'.md5(time().rand(0, 9999));
-            $Media = $this->session->get('Media');
+            $Media = self::session()->get('Media');
             if (!$Media) {
                 $Media = [];
             }
             $Media[$file] = $_FILES['media']['name'];
-            $this->session->set(compact('Media'));
+            self::session()->set(compact('Media'));
             move_uploaded_file($_FILES['media']['tmp_name'], $file);
         }
         $args['imagefile'] = $file;

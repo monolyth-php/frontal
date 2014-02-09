@@ -20,7 +20,7 @@ trait Viewable
      */
     public function view($file, array $args = [])
     {
-        $view = $this->container->satisfy(new View($file, $this));
+        $view = new View($file, $this);
         $tmp = [];
         foreach ($this as $key => $value) {
             if ($value instanceof Parser) {

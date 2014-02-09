@@ -1,12 +1,14 @@
 <?php
 
 namespace monolyth\utils;
-use monolyth\adapter;
-use monolyth\Project_Access;
+use Adapter_Access;
 use monolyth\adapter\sql\InsertNone_Exception;
+use Project;
 
-class Cookie_Model implements adapter\Access, Project_Access
+class Cookie_Model
 {
+    use Adapter_Access;
+
     public function store(array $settings)
     {
         $save = 0;
@@ -17,7 +19,7 @@ class Cookie_Model implements adapter\Access, Project_Access
             }
         }
         try {
-            $this->adapter->insert(
+            self::adapter()->insert(
                 'monolyth_cookie',
                 [
                     'id' => $_COOKIE['mocoid'],
@@ -31,14 +33,14 @@ class Cookie_Model implements adapter\Access, Project_Access
                 1,
                 time() + 60 * 60 * 24 * 3650,
                 '/',
-                $this->project['cookiedomain']
+                Project::instance()['cookiedomain']
             );
             setcookie(
                 'mocook',
                 $save,
                 time() + 60 * 60 * 24 * 3650,
                 '/',
-                $this->project['cookiedomain']
+                Project::instance()['cookiedomain']
             );
         } catch (InsertNone_Exception $e) {
             $this->generateId();
@@ -55,7 +57,7 @@ class Cookie_Model implements adapter\Access, Project_Access
             $value,
             time() + 60 * 60 * 24 * 3650,
             '/',
-            $this->project['cookiedomain']
+            Project::instance()['cookiedomain']
         );
         $_COOKIE['mocoid'] = $value;
     }

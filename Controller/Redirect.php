@@ -5,8 +5,9 @@
  */
 
 namespace monolyth;
+use Project;
 
-class Redirect_Controller extends core\Controller implements Project_Access
+class Redirect_Controller extends core\Controller
 {
     /**
      * Redirect to another location.
@@ -25,18 +26,18 @@ class Redirect_Controller extends core\Controller implements Project_Access
      {
         extract($args);
         if (!isset($url, $code)) {
-            throw new HTTP404_Exception();
+            throw new HTTP404_Exception;
         }
         static $_url = null;
         if (!$url) {
-            $url = isset($_url) ? $_url : $this->http->getSelf();
+            $url = isset($_url) ? $_url : self::http()->getSelf();
             $_url = null;
         }
         $parts = parse_url($url);
         $key = 'protocol';
-        $scheme = $this->project['secure'] ?
-            $this->project['protocols'] :
-            $this->project['protocol'];
+        $scheme = Project::instance()['secure'] ?
+            Project::instance()['protocols'] :
+            Project::instance()['protocol'];
         $fallback = parse_url(
             "$scheme://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
         );

@@ -13,7 +13,7 @@ class Template_Mail_Finder extends core\Finder
             'offset' => ($page - 1) * $size,
         ];
         try {
-            return $this->adapter->pages(
+            return self::adapter()->pages(
                 'monolyth_mail_template',
                 ['CONCAT(id, language) AS id', 'language', 'description'],
                 $where,
@@ -29,7 +29,8 @@ class Template_Mail_Finder extends core\Finder
         try {
             $where['CONCAT(id, language)'] = $where['id'];
             unset($where['id']);
-            return $this->model->load($this->adapter->row(
+            $model = new Template_Mail_Model;
+            return $model->load(self::adapter()->row(
                 'monolyth_mail_template',
                 '*',
                 $where

@@ -57,23 +57,27 @@
  *
  * @package monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2014
  */
 
 namespace monolyth;
 use ErrorException;
+use Adapter_Access;
 
 /**
  * Base Text model. If you prefer handling i18n via gettext, you can override
  * this in your custom project.
  *
- * @see monolyth\core\Reinstantiate
- * @see monolyth\adapter\Access
+ * @see Adapter_Access
  * @see monolyth\utils\Name_Helper
  */
-class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
+class Text_Model
 {
     use utils\Name_Helper;
+    use Language_Access {
+        Language_Access::language as _language;
+    }
+    use Adapter_Access;
 
     const STATUS_HTML = 1;
 
@@ -164,13 +168,7 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
         }
         $parts[] = $args;
         $parts[] = $callback;
-        $cache = null;
-        foreach ($this->adapters as $adapter) {
-            if ($adapter instanceof adapter\nosql\Cache) {
-                $cache = $adapter;
-                break;
-            }
-        }
+        $cache = self::cache();
         if (isset($cache)) {
             foreach ($ids as $id) {
                 try {
@@ -215,19 +213,13 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
             $where[0][] = [
                 'id' => ['IN' => $data[0]],
                 'language' => [
-                    'IN' => $this->language->fallbacks($language),
+                    'IN' => self::_language()->fallbacks($language),
                 ],
             ];
         }
-        $cache = null;
-        foreach ($this->adapter as $adapter) {
-            if ($adapter instanceof adapter\nosql\Cache) {
-                $cache = $adapter;
-                break;
-            }
-        }
+        $cache = self::cache();
         try {
-            foreach ($this->adapter->rows(
+            foreach (self::adapter()->rows(
                 'monolyth_text JOIN monolyth_text_i18n USING(id)',
                 ['id', 'content', 'language'],
                 $where
@@ -244,7 +236,7 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
         } catch (adapter\sql\NoResults_Exception $e) {
         }
         foreach ($matches as $data) {
-            $fallbacks = $this->language->fallbacks($data[1]);
+            $fallbacks = self::_language()->fallbacks($data[1]);
             $text = null;
             if (!is_array($data[0])) {
                 $data[0] = [$data[0]];
@@ -298,13 +290,13 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
     {
         if (!isset($language)) {
             try {
-                $language = $this->language->current->code;
+                $language = self::_language()->current->code;
             } catch (ErrorException $e) {
-                $language = $this->language->default->code;
+                $language = self::_language()->default->code;
             }
         } elseif (is_numeric($language)) {
             $language = call_user_func(
-                [$this->language, 'get'],
+                [self::_language(), 'get'],
                 $language
             )->code;
         }
@@ -319,7 +311,7 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
             $ids = [$ids];
         }
         $language = $this->language($language);
-        $fallbacks = $this->language->fallbacks($language);
+        $fallbacks = self::_language()->fallbacks($language);
         foreach ($fallbacks as $flang) {
             $flang = $this->language($flang);
             foreach ($ids as $id) {
@@ -352,13 +344,7 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        $cache = null;
-        foreach ($this->adapters as $adapter) {
-            if ($adapter instanceof adapter\nosql\Cache) {
-                $cache = $adapter;
-                break;
-            }
-        }
+        $cache = self::cache();
         if (isset($cache)) {
             foreach ($ids as $id) {
                 try {
@@ -375,12 +361,12 @@ class Text_Model implements core\Reinstantiate, adapter\Access, Language_Access
             }
         } catch (ErrorException $e) {
             try {
-                $this->adapter->field(
+                self::adapter()->field(
                     'monolyth_text_i18n',
                     'id',
                     [
                         'id' => ['IN' => $ids],
-                        'language' => $this->language->{$language}->id,
+                        'language' => self::_language()->{$language}->id,
                     ]
                 );
             } catch (adapter\sql\NoResults_Exception $e) {

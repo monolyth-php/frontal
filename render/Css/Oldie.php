@@ -2,6 +2,7 @@
 
 namespace monolyth\render;
 use ErrorException;
+use Project;
 
 /**
  * Render version of styles for older Internet Explorers (pre-9, which

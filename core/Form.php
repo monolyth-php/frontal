@@ -370,13 +370,11 @@ abstract class Form extends ArrayObject
     public function __call($method, $args)
     {
         if (preg_match("@^add([A-Z]\w+)$@", $method, $match)) {
-            $element = "_{$match[1]}";
-            if (!(isset($this->$element)
-                && $this->$element instanceof Element
-            )) {
+            $class = "\\monolyth\\render\\form\\{$match[1]}";
+            $element = new $class;
+            if (!($element instanceof Element)) {
                 throw new UnknownElement_Exception($match[1]);
             }
-            $element = clone $this->$element;
             $element->setParent($this);
             if (!isset($args[1])) {
                 $args[1] = null;

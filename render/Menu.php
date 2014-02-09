@@ -35,7 +35,7 @@ class Menu extends ArrayObject
             self::ITERATE => null,
             self::KEY => function($key) { return $key; },
             self::VALUE => function($value) {
-                return $this->item->build($value);
+                return (new Item_Menu)->build($value);
             },
         ];
         if (!isset($options[self::ITERATE])) {

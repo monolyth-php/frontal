@@ -11,9 +11,9 @@ implements core\Autolanguage_Controller
 {
     use core\Autolanguage;
 
-    protected function guessLanguage(Language_Model $languages = null)
+    protected function guessLanguage()
     {
-        return $this->_guessLanguage($this->language);
+        return $this->_guessLanguage($this->language());
     }
     
     protected function get(array $args)

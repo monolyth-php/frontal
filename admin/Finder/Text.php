@@ -9,7 +9,7 @@ class Text_Finder extends I18n_Finder
     public function all($size, $page, array $where = [], array $options = [])
     {
         try {
-            return $this->adapter->pages(
+            return self::adapter()->pages(
                 $this->table('monolyth_text', 'monolyth_text_i18n'),
                 $this->fields('monolyth_text.id', 'content'),
                 $where,
@@ -26,7 +26,8 @@ class Text_Finder extends I18n_Finder
     public function find(array $where)
     {
         try {
-            return $this->model->load($this->adapter->row(
+            $model = new Text_Model;
+            return $model->load(self::adapter()->row(
                 'monolyth_text',
                 '*',
                 $where
@@ -39,7 +40,7 @@ class Text_Finder extends I18n_Finder
     public function languageData(array $where)
     {
         try {
-            return $this->adapter->rows('monolyth_text_i18n', '*', $where);
+            return self::adapter()->rows('monolyth_text_i18n', '*', $where);
         } catch (NoResults_Exception $e) {
             return null;
         }

@@ -7,12 +7,21 @@
 
 namespace monolyth\account;
 use monolyth\Controller;
-use monolyth\adapter;
+use Adapter_Access;
 use monolyth\render\Url_Helper;
 use monolyth\HTTP301_Exception;
+use monolyth\Confirm_Model;
 
-class Confirm_Pass_Controller extends Controller implements adapter\Access
+class Confirm_Pass_Controller extends Controller
 {
+    use Adapter_Access;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new Reset_Pass_Form;
+    }
+
     protected function get(array $args)
     {
         extract($args);
@@ -25,26 +34,32 @@ class Confirm_Pass_Controller extends Controller implements adapter\Access
         $view = $this->get($args);
         if (!$this->form->errors()) {
             extract($args);
-            if (!($error = $this->confirm->process($hash, $id))) {
-                $pw = $this->adapter->field(
+            if (!($error = (new Confirm_Model)->process($hash, $id))) {
+                extract(self::adapter()->row(
                     'monolyth_auth',
-                    'pass',
+                    ['name', 'pass'],
                     compact('id')
+                ));
+                (new Pass_Model)->update($pass, $id);
+                $form = new Login_Form;
+                $form['name']->value = $name;
+                $form['pass']->value = $pass;
+                (new Login_Model)->__invoke($form);
+                self::message()->add(
+                    'success',
+                    $this->text('pass/reset/success')
                 );
-                $this->pass->update($pw, $id);
-                $this->message->add(
-                    self::MESSAGE_SUCCESS,
-                    $this->text('pass/reset/success', ['pass' => $pw])
-                );
-                return $this->view('page/pass/display', ['pass' => $pw]);
+                throw new HTTP301_Exception($this->url(
+                    'monolyth/account/new_pass'
+                ));
             } elseif ($error == 'contains outdated elements') {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+                self::message()->add(
+                    'error',
                     $this->text('pass/reset/error.date')
                 );
             } else {
-                $this->message->add(
-                    self::MESSAGE_ERROR,
+                self::message()->add(
+                    'error',
                     $this->text('pass/reset/error.generic')
                 );
             }

@@ -13,7 +13,7 @@ class Media_Finder extends core\Finder
             'offset' => ($page - 1) * $size,
         ];
         try {
-            return $this->adapter->pages(
+            return self::adapter()->pages(
                 'monolyth_media',
                 ['id', 'originalname'],
                 $where,
@@ -27,7 +27,7 @@ class Media_Finder extends core\Finder
     public function find(array $where)
     {
         try {
-            return $this->model->load($this->adapter->row(
+            return $this->model->load(self::adapter()->row(
                 'monolyth_media',
                 '*',
                 $where

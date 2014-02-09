@@ -5,8 +5,9 @@ use monad\core\Form;
 
 class Mail_Form extends Form
 {
-    public function prepare($id = null)
+    public function __construct($id = null)
     {
+        parent::__construct($id);
         $this->addText('sender', $this->text('./sender'))
              ->maxLength(255)
              ->isRequired();
@@ -15,7 +16,7 @@ class Mail_Form extends Form
              ->isRequired();
         $this->addTextarea('html', $this->text('./html'));
         $this->addTextarea('plain', $this->text('./plain'));
-        return parent::prepare($id);
+        return parent::prepare();
     }
 }
 
