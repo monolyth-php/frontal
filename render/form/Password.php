@@ -16,7 +16,6 @@ class Password extends Text
         } catch (ErrorException $e) {
             $salt = null;
         }
-        $user = $this->user;
         return $this->addTest(function($value) use($hashed, $salt) {
             if (!strlen(trim($value))) {
                 return null;
