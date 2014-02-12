@@ -26,7 +26,7 @@ class Paginator
     private $args = [];
     private $params = [];
 
-    public function init($url, array $args, Resultset $model, $params = null)
+    public function __construct($url, array $args, Resultset $model, $params = null)
     {
         $this->url = $url;
         $this->args = $args;
