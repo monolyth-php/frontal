@@ -50,6 +50,7 @@ class Email
         } catch (ErrorException $e) {
         }
         $this->parser = new Translate_Parser;
+        $this->project = Project::instance();
         /** @see PEAR::Mail */
         require_once 'Mail.php';
         /** @see PEAR::Mail_mime */
@@ -235,10 +236,9 @@ class Email
             $this->mail->$fn($content);
         }
         $body = $this->mail->get();
-        $project = Project::instance();
-        if ($project['test']) {
-            if (isset($project['testmail'])) {
-                $to = $project['testmail'];
+        if ($this->project['test']) {
+            if (isset($this->project['testmail'])) {
+                $to = $this->project['testmail'];
             } else {
                 $to = null;
             }
