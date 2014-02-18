@@ -15,6 +15,7 @@ class Edit_Media_Controller extends Controller
     {
         parent::__construct();
         $this->config = Config::get('monolyth');
+        $this->form = new Edit_Media_Form;
     }
 
     protected function get(array $args)
