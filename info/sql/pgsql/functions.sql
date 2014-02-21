@@ -102,10 +102,8 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
--- This function is supposed to be used as a template of sorts,
--- since MySQL won't allow dynamic SQL in functions or procedures.
--- DELIMITER |
--- CREATE FUNCTION fn_TABLE_unique_slug(str TEXT) RETURNS TEXT
+-- This function is supposed to be used as a template of sorts.
+-- CREATE FUNCTION fn_TABLE_unique_slug(str TEXT) RETURNS TEXT AS $$
 -- BEGIN
 --    @uniq = 0;
 --    @incr = 0;
@@ -120,15 +118,5 @@ $$ LANGUAGE 'plpgsql';
 --    UNTIL @uniq = 1 END REPEAT;
 --    RETURN str;
 -- END;
--- |
--- DELIMITER ;
-
-CREATE OR REPLACE FUNCTION fn_log_visit(uid INTEGER, sid TEXT) RETURNS INTEGER AS $$
-BEGIN
-    DELETE FROM monolyth_auth_visit WHERE datecreated < NOW() - '1 month'::interval
-        OR (owner = uid AND sessionid = sid);
-    INSERT INTO monolyth_auth_visit (owner, sessionid) VALUES (uid, sid);
-    RETURN 1;
-END;
-$$ LANGUAGE 'plpgsql';
+-- $$ LANGUAGE 'plpgsql';
 
