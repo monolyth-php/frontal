@@ -1,8 +1,8 @@
 
--- {{{ v4.1.2
+-- {{{ v4.5.0
 CREATE TABLE monolyth_auth (
     id serial PRIMARY KEY,
-    name varchar(16),
+    name varchar(32),
     pass varchar(255),
     salt varchar(255),
     email varchar(255),
@@ -12,9 +12,9 @@ CREATE TABLE monolyth_auth (
     ipmodified inet,
     dateactive timestamp with time zone,
     ipactive inet,
-    status bigint not null default 0,
-    feature bigint not null default 0,
-    media bigint
+    status integer not null default 0,
+    feature integer not null default 0,
+    media integer
 );
 CREATE UNIQUE INDEX monolyth_auth_name_key ON monolyth_auth(LOWER(name));
 CREATE UNIQUE INDEX monolyth_auth_email_key ON monolyth_auth(LOWER(email));
@@ -24,39 +24,19 @@ CREATE INDEX monolyth_auth_status_key ON monolyth_auth(status);
 CREATE INDEX monolyth_auth_feature_key ON monolyth_auth(feature);
 CREATE INDEX monolyth_auth_media_key ON monolyth_auth(media);
 
-CREATE TABLE monolyth_acl_resource (
+CREATE TABLE monolyth_group (
     id serial PRIMARY KEY,
-    parent integer REFERENCES monolyth_acl_resource(id) ON DELETE SET NULL,
+    parent integer REFERENCES monolyth_group(id) ON DELETE CASCADE,
     name varchar(255) NOT NULL,
-    pk varchar(255)
-);
-CREATE UNIQUE INDEX monolyth_acl_resource_parent_name_pk_key ON monolyth_acl_resource(parent, name, pk);
-
-CREATE TABLE monolyth_auth_group (
-    id serial PRIMARY KEY,
-    parent integer REFERENCES monolyth_auth_group(id) ON DELETE CASCADE,
-    name varchar(255) NOT NULL,
-    slug varchar(255) NOT NULL,
     owner integer NOT NULL,
     description text,
-    countmember integer NOT NULL DEFAULT 0
+    members integer NOT NULL DEFAULT 0
 );
-CREATE UNIQUE INDEX monolyth_auth_group_name_key ON monolyth_auth_group(name);
-CREATE UNIQUE INDEX monolyth_auth_group_slug_key ON monolyth_auth_group(slug);
+CREATE UNIQUE INDEX monolyth_auth_group_name_key ON monolyth_auth_group(LOWER(name));
 CREATE INDEX monolyth_auth_group_parent_key ON monolyth_auth_group(parent);
 CREATE INDEX monolyth_auth_group_owner_key ON monolyth_auth_group(owner);
 
-CREATE TABLE monolyth_acl (
-    id serial PRIMARY KEY,
-    acl_resource integer REFERENCES monolyth_acl_resource(id) ON DELETE CASCADE,
-    owner integer REFERENCES monolyth_auth(id) ON DELETE CASCADE,
-    auth_group integer REFERENCES monolyth_auth_group(id) ON DELETE CASCADE,
-    action integer NOT NULL default 0
-);
-CREATE INDEX monolyth_acl_action_key ON monolyth_acl(action);
-CREATE UNIQUE INDEX monolyth_acl_resource_owner_auth_group_key ON monolyth_acl(acl_resource, owner, auth_group);
-
-CREATE TABLE monolyth_auth_link_auth_group (
+CREATE TABLE monolyth_auth_group (
     auth integer NOT NULL REFERENCES monolyth_auth(id) ON DELETE CASCADE,
     auth_group integer NOT NULL REFERENCES monolyth_auth_group(id) ON DELETE CASCADE,
     PRIMARY KEY(auth, auth_group)
@@ -99,7 +79,7 @@ CREATE TABLE monolyth_counters (
     name varchar(32) PRIMARY KEY,
     value integer not null default 0
 );
-CREATE UNIQUE INDEX monolyth_counters_name_key ON monolyth_counters(name);
+CREATE UNIQUE INDEX monolyth_counters_name_key ON monolyth_counters(LOWER(name));
 
 CREATE TABLE monolyth_confirm (
     owner integer NOT NULL REFERENCES monolyth_auth(id) ON DELETE CASCADE,
@@ -145,789 +125,215 @@ CREATE INDEX monolyth_media_owner_key ON monolyth_media(owner);
 CREATE INDEX monolyth_media_folder_key ON monolyth_media(folder);
 ALTER TABLE monolyth_auth ADD FOREIGN KEY(media) REFERENCES monolyth_media(id) ON DELETE SET NULL;
 
--- The tables monolyth_comment(able), monolyth_vote(able) and
--- monolyth_like(able) store generic comments, votes and likes for random
--- objects. A table supporting one of these should define an 'on delete' trigger
--- to also delete the respective items from these tables, since we can't use
--- foreign keys for that.
--- Additionally, implementing tables should define a field comments, votes
--- and/or likes holding the correct id.
-
-CREATE TABLE monolyth_voteable (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    votes bigint UNSIGNED NOT NULL DEFAULT 0,
-    average float NOT NULL DEFAULT 0,
-    last bigint UNSIGNED DEFAULT NULL,
-    INDEX(votes), INDEX(average), INDEX(last)
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-
-CREATE TABLE monolyth_vote (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    reference bigint UNSIGNED NOT NULL,
-    owner bigint UNSIGNED NOT NULL,
-    vote smallint NOT NULL DEFAULT 0,
-    datecreated timestamp NOT NULL DEFAULT NOW(),
-    datemodified datetime DEFAULT NULL,
-    status bigint UNSIGNED NOT NULL DEFAULT 0,
-    UNIQUE INDEX(reference, owner), INDEX(datecreated), INDEX(datemodified), INDEX(vote),
-    CONSTRAINT FOREIGN KEY (reference) REFERENCES monolyth_voteable(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-ALTER TABLE monolyth_voteable ADD FOREIGN KEY(last) REFERENCES monolyth_vote(id) ON DELETE SET NULL;
-
-CREATE TABLE monolyth_likeable (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    likes bigint UNSIGNED NOT NULL,
-    last bigint UNSIGNED DEFAULT NULL,
-    INDEX(likes), INDEX(last)
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-
-CREATE TABLE monolyth_like (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    reference bigint UNSIGNED NOT NULL,
-    owner bigint UNSIGNED NOT NULL,
-    datecreated timestamp NOT NULL DEFAULT NOW(),
-    UNIQUE INDEX(reference, owner), INDEX(datecreated),
-    CONSTRAINT FOREIGN KEY (reference) REFERENCES monolyth_likeable(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-ALTER TABLE monolyth_likeable ADD FOREIGN KEY(last) REFERENCES monolyth_like(id) ON DELETE SET NULL;
-
-CREATE TABLE monolyth_commentable (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    comments bigint UNSIGNED NOT NULL DEFAULT 0,
-    last bigint UNSIGNED DEFAULT NULL,
-    INDEX(comments), INDEX(last)
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-
-CREATE TABLE monolyth_comment (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    hash varchar(32) NOT NULL,
-    reference bigint UNSIGNED NOT NULL,
-    replyto bigint UNSIGNED DEFAULT NULL,
-    commentindex bigint UNSIGNED,
-    owner bigint UNSIGNED DEFAULT NULL,
-    name varchar(255) DEFAULT NULL,
-    email varchar(255) DEFAULT NULL,
-    homepage varchar(255) DEFAULT NULL,
-    ip varchar(39) NOT NULL,
-    comment mediumtext NOT NULL,
-    datecreated timestamp NOT NULL DEFAULT NOW(),
-    datemodified datetime DEFAULT NULL,
-    status bigint UNSIGNED NOT NULL DEFAULT 0,
-    likes BIGINT UNSIGNED NOT NULL,
-    INDEX(hash), INDEX(reference), INDEX(commentindex), INDEX(owner), INDEX(ip),
-    INDEX(datecreated), INDEX(datemodified), INDEX(status), INDEX(replyto), UNIQUE INDEX(likes),
-    CONSTRAINT FOREIGN KEY(likes) REFERENCES monolyth_likeable(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (reference) REFERENCES monolyth_commentable(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (replyto) REFERENCES monolyth_comment(id) ON DELETE SET NULL,
-    CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE SET NULL
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
-ALTER TABLE monolyth_commentable ADD FOREIGN KEY(last) REFERENCES monolyth_comment(id) ON DELETE SET NULL;
-
 CREATE TABLE monolyth_language_all (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id serial PRIMARY KEY,
     code varchar(5) NOT NULL,
     lc_code varchar(10) NOT NULL,
     title varchar(64) NOT NULL,
-    fallback bigint UNSIGNED,
-    UNIQUE INDEX(code), UNIQUE INDEX(lc_code), UNIQUE INDEX(title),
-    INDEX(fallback),
-    CONSTRAINT FOREIGN KEY(fallback) REFERENCES monolyth_language_all(id) ON DELETE SET NULL
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    fallback integer REFERENCES monolyth_language_all(id) ON DELETE SET NULL
+);
+CREATE UNIQUE INDEX monolyth_language_all_code_key ON monolyth_language_all(LOWER(code));
+CREATE UNIQUE INDEX monolyth_language_all_lc_code_key ON monolyth_language_all(LOWER(lc_code));
 
 CREATE TABLE monolyth_language (
-    id bigint UNSIGNED NOT NULL PRIMARY KEY,
-    title varchar(64) NOT NULL,
-    sortorder integer UNSIGNED,
-    is_default boolean NOT NULL DEFAULT false,
-    INDEX(sortorder), INDEX(is_default),
-    CONSTRAINT FOREIGN KEY (id) REFERENCES monolyth_language_all(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (title) REFERENCES monolyth_language_all(title) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    id integer NOT NULL PRIMARY KEY REFERENCES monolyth_language_all(id) ON DELETE CASCADE,
+    title varchar(64) NOT NULL REFERENCES monolyth_language_all(title) ON DELETE CASCADE ON UPDATE CASCADE,
+    sortorder integer,
+    is_default boolean NOT NULL DEFAULT false
+);
+CREATE INDEX monolyth_language_sortorder_key ON monolyth_language(sortorder);
+CREATE INDEX monolyth_language_is_default_key ON monolyth_language(is_default);
 
 CREATE TABLE monolyth_country (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id serial PRIMARY KEY,
     code VARCHAR(2) NOT NULL,
-    status BIGINT UNSIGNED NOT NULL DEFAULT 1,
-    UNIQUE INDEX(code), INDEX(status)
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    status integer NOT NULL DEFAULT 1
+);
+CREATE UNIQUE INDEX monolyth_country_code_key ON monolyth_country(LOWER(code));
+CREATE INDEX monolyth_country_status_key ON monolyth_country(status);
 
 CREATE TABLE monolyth_country_i18n (
-    id BIGINT UNSIGNED NOT NULL,
-    language BIGINT UNSIGNED NOT NULL,
+    id integer NOT NULL REFERENCES monolyth_country(id) ON DELETE CASCADE,
+    language integer NOT NULL REFERENCES monolyth_language(id) ON DELETE CASCADE,
     title varchar(128) NOT NULL,
-    PRIMARY KEY(id, language),
-    CONSTRAINT FOREIGN KEY(id) REFERENCES monolyth_country(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY(language) REFERENCES monolyth_language(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    PRIMARY KEY(id, language)
+);
 
 CREATE TABLE monolyth_country_language (
-    country BIGINT UNSIGNED NOT NULL,
-    language BIGINT UNSIGNED NOT NULL,
-    CONSTRAINT FOREIGN KEY(country) REFERENCES monolyth_country(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY(language) REFERENCES monolyth_language(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    country integer NOT NULL REFERENCES monolyth_country(id) ON DELETE CASCADE,
+    language integer NOT NULL REFERENCES monolyth_language(id) ON DELETE CASCADE,
+    PRIMARY KEY(id, language)
+);
 
 CREATE TABLE monolyth_city (
-    id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    country BIGINT UNSIGNED NOT NULL,
-    language BIGINT UNSIGNED,
-    name VARCHAR(64),
-    INDEX(country), INDEX(language),
-    UNIQUE INDEX(country, language, name),
-    CONSTRAINT FOREIGN KEY(country) REFERENCES monolyth_country(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY(language) REFERENCES monolyth_language(id) ON DELETE SET NULL
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    id serial PRIMARY KEY,
+    country integer NOT NULL REFERENCES monolyth_country(id) ON DELETE CASCADE,
+    language integer REFERENCES monolyth_language(id) ON DELETE SET NULL,
+    name VARCHAR(64)
+);
+CREATE INDEX monolyth_city_country_key ON monolyth_city(country);
+CREATE INDEX monolyth_city_language_key ON monolyth_city(language);
+CREATE INDEX monolyth_city_country_language_name_key ON monolyth_city(country, language, name);
 
 CREATE TABLE monolyth_text (
     id varchar(64) NOT NULL PRIMARY KEY,
-    status BIGINT UNSIGNED NOT NULL DEFAULT 0
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    status integer NOT NULL DEFAULT 0
+);
 
 CREATE TABLE monolyth_text_i18n (
-    id varchar(64) NOT NULL,
-    language BIGINT UNSIGNED NOT NULL,
+    id varchar(64) NOT NULL REFERENCES monolyth_text(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    language integer NOT NULL REFERENCES monolyth_language(id) ON DELETE CASCADE,
     content mediumtext NOT NULL,
-    CONSTRAINT PRIMARY KEY (id, language),
-    CONSTRAINT FOREIGN KEY (id) REFERENCES monolyth_text(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY (language) REFERENCES monolyth_language(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    PRIMARY KEY(id, language)
+);
 
 CREATE TABLE monolyth_mail_template (
     id varchar(64) NOT NULL,
-    language bigint UNSIGNED NOT NULL,
+    language integer NOT NULL REFERENCES monolyth_language(id) ON DELETE CASCADE,
     description text,
     html text NOT NULL,
     plain text NOT NULL,
-    PRIMARY KEY(id, language),
-    INDEX(language),
-    CONSTRAINT FOREIGN KEY (language) REFERENCES monolyth_language(id) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    PRIMARY KEY(id, language)
+);
+CREATE INDEX monolyth_media_template_language_key ON monolyth_mail_template(language);
 
 CREATE TABLE monolyth_mail (
     id varchar(64) NOT NULL,
-    language bigint UNSIGNED NOT NULL,
-    template varchar(64) DEFAULT NULL,
-    templatelanguage bigint UNSIGNED NOT NULL,
+    language integer NOT NULL REFERENCES monolyth_language(id) ON DELETE CASCADE,
+    template varchar(64) DEFAULT NULL REFERENCES monolyth_mail_template(id) ON DELETE CASCADE,
+    templatelanguage integer NOT NULL REFERENCES monolyth_mail_template(language) ON DELETE CASCADE,
     description text,
     sender varchar(255) NOT NULL,
     subject varchar(255) NOT NULL,
     html text NOT NULL,
     plain text NOT NULL,
-    PRIMARY KEY(id, language),
-    INDEX(language), INDEX(template), INDEX(templatelanguage),
-    CONSTRAINT FOREIGN KEY (language) REFERENCES monolyth_language(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (template) REFERENCES monolyth_mail_template(id) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY (templatelanguage) REFERENCES monolyth_mail_template(language) ON DELETE CASCADE
-) ENGINE='InnoDB' DEFAULT CHARSET='UTF8';
+    PRIMARY KEY(id, language)
+);
+CREATE INDEX monolyth_mail_template_key ON monolyth_mail(template);
+CREATE INDEX monolyth_mail_templatelanguage_key ON monolyth_mail(templatelanguage);
 
 CREATE TABLE monolyth_cookie (
     id varchar(40) NOT NULL PRIMARY KEY,
-    ip varchar(39) NOT NULL,
+    ip inet NOT NULL,
     user_agent text NOT NULL,
-    settings BIGINT UNSIGNED NOT NULL DEFAULT 1,
-    datecreated timestamp NOT NULL default now()
+    settings integer NOT NULL DEFAULT 1,
+    datecreated timestamp with time zone NOT NULL default now()
 );
 
 CREATE TABLE monolyth_variable (
     name VARCHAR(32) NOT NULL,
     target ENUM('css', 'js'),
     value TEXT NOT NULL,
-    media BIGINT UNSIGNED,
-    PRIMARY KEY(name, target),
-    INDEX(media),
-    CONSTRAINT FOREIGN KEY(media) REFERENCES monolyth_media(id) ON DELETE SET NULL
+    media integer REFERENCES monolyth_media(id) ON DELETE SET NULL,
+    PRIMARY KEY(name, target)
 );
+CREATE INDEX monolyth_variable_media_key ON monolyth_variable(media);
 
-
-DROP FUNCTION IF EXISTS fn_generate_slug;
-DELIMITER $$
-CREATE FUNCTION fn_generate_slug (str TEXT) RETURNS text
+CREATE OR REPLACE FUNCTION fn_generate_slug (str TEXT) RETURNS text AS $$
 BEGIN
-    IF LENGTH(str) = 0 OR str IS NULL THEN
-        RETURN str;
-    END IF;
     -- Lowercase the entire thing.
-    SET str = LOWER(str);
-
+    str = LOWER(str);
     -- Quotes should be replaced by an empty string, since they're commonly
     -- either used for abbreviations, or for actual quoting (and in neither
     -- case do we need them in our slugs).
-    SET str = REPLACE(str, '\'', '');
-    SET str = REPLACE(str, '\"', '');
-
+    str = REPLACE(str, E'\'', '');
+    str = REPLACE(str, E'\"', '');
     -- Replace certain HTML entities with "simple" letters.
-    SET str = REPLACE(str, '&aacute;', 'a');
-    SET str = REPLACE(str, '&acirc;', 'a');
-    SET str = REPLACE(str, '&agrave;', 'a');
-    SET str = REPLACE(str, '&aring;', 'a');
-    SET str = REPLACE(str, '&atilde;', 'a');
-    SET str = REPLACE(str, '&auml;', 'a');
-    SET str = REPLACE(str, '&aelig', 'ae');
-    SET str = REPLACE(str, '&ccedil', 'c');
-    SET str = REPLACE(str, '&eacute;', 'e');
-    SET str = REPLACE(str, '&ecirc;', 'e');
-    SET str = REPLACE(str, '&egrave;', 'e');
-    SET str = REPLACE(str, '&euml;', 'e');
-    SET str = REPLACE(str, '&iacute;', 'i');
-    SET str = REPLACE(str, '&icirc;', 'i');
-    SET str = REPLACE(str, '&igrave;', 'i');
-    SET str = REPLACE(str, '&iuml;', 'i');
-    SET str = REPLACE(str, '&eth;', 'd');
-    SET str = REPLACE(str, '&ntilde;', 'n');
-    SET str = REPLACE(str, '&oacute;', 'o');
-    SET str = REPLACE(str, '&ocirc;', 'o');
-    SET str = REPLACE(str, '&ograve;', 'o');
-    SET str = REPLACE(str, '&oslash;', 'o');
-    SET str = REPLACE(str, '&otilde;', 'o');
-    SET str = REPLACE(str, '&ouml;', 'o');
-    SET str = REPLACE(str, '&times;', 'x');
-    SET str = REPLACE(str, '&uacute;', 'u');
-    SET str = REPLACE(str, '&ucirc;', 'u');
-    SET str = REPLACE(str, '&ugrave;', 'u');
-    SET str = REPLACE(str, '&uuml;', 'u');
-    SET str = REPLACE(str, '&yacute;', 'y');
-    SET str = REPLACE(str, '&yuml;', 'y');
-    SET str = REPLACE(str, '&thorn;', 'th');
-    SET str = REPLACE(str, '&szlig;', 'sz');
-    SET str = REPLACE(str, '&divide;', ':');
-
-    -- Retval is what we'll be returning eventually. Since MySQL knows REGEXP
-    -- but has no way of actually doing something similar to preg_replace, we're
-    -- going to have to loop through the entire string char by char.
-    SET @retval = '';
-
-    -- Replace all non-valid characters with '-'.
-    SET @i = 1;
-    REPEAT
-        SET @substr = SUBSTRING(str, @i, 1);
-        IF @substr REGEXP '^[a-z0-9-]$' THEN
-            SET @retval = CONCAT(@retval, @substr);
-        ELSE
-            SET @retval = CONCAT(@retval, '-');
-        END IF;
-        SET @i = @i + 1;
-    UNTIL @i > LENGTH(str) END REPEAT;
-
-    -- Replace subsequent dashes with a single one.
-    SET @repeat = 1;
-    REPEAT
-        SET @retval = REPLACE(@retval, '--', '-');
-        SET @repeat = @retval REGEXP '--';
-    UNTIL @repeat = 0  END REPEAT;
-
-    -- Do not begin or end with a dash.
-    IF SUBSTRING(@retval, 1, 1) = '-' THEN
-        SET @retval = SUBSTRING(@retval, 1);
-    END IF;
-    IF SUBSTRING(@retval, -1, 1) = '-' THEN
-        SET @retval = SUBSTRING(@retval, 1, LENGTH(@retval) - 1);
-    END IF;
-
-    RETURN @retval;
+    str = REPLACE(str, '&amp;', '+');
+    str = REPLACE(str, '&aacute;', 'a');
+    str = REPLACE(str, '&acirc;', 'a');
+    str = REPLACE(str, '&agrave;', 'a');
+    str = REPLACE(str, '&aring;', 'a');
+    str = REPLACE(str, '&atilde;', 'a');
+    str = REPLACE(str, '&auml;', 'a');
+    str = REPLACE(str, '&aelig', 'ae');
+    str = REPLACE(str, '&ccedil', 'c');
+    str = REPLACE(str, '&eacute;', 'e');
+    str = REPLACE(str, '&ecirc;', 'e');
+    str = REPLACE(str, '&egrave;', 'e');
+    str = REPLACE(str, '&euml;', 'e');
+    str = REPLACE(str, '&iacute;', 'i');
+    str = REPLACE(str, '&icirc;', 'i');
+    str = REPLACE(str, '&igrave;', 'i');
+    str = REPLACE(str, '&iuml;', 'i');
+    str = REPLACE(str, '&eth;', 'd');
+    str = REPLACE(str, '&ntilde;', 'n');
+    str = REPLACE(str, '&oacute;', 'o');
+    str = REPLACE(str, '&ocirc;', 'o');
+    str = REPLACE(str, '&ograve;', 'o');
+    str = REPLACE(str, '&oslash;', 'o');
+    str = REPLACE(str, '&otilde;', 'o');
+    str = REPLACE(str, '&ouml;', 'o');
+    str = REPLACE(str, '&times;', 'x');
+    str = REPLACE(str, '&uacute;', 'u');
+    str = REPLACE(str, '&ucirc;', 'u');
+    str = REPLACE(str, '&ugrave;', 'u');
+    str = REPLACE(str, '&uuml;', 'u');
+    str = REPLACE(str, '&yacute;', 'y');
+    str = REPLACE(str, '&yuml;', 'y');
+    str = REPLACE(str, '&thorn;', 'th');
+    str = REPLACE(str, '&szlig;', 'sz');
+    str = REPLACE(str, '&divide;', ':');
+    str = regexp_replace(str, '[^+a-z0-9-]+', '-', 'g');
+    str = regexp_replace(str, '-{2,}', '-', 'g');
+    str = regexp_replace(str, '-+?[+]-+?', '+', 'g');
+    str = regexp_replace(str, '^-|-$', '', 'g');
+    RETURN str;
 END;
-$$
-DELIMITER ;
+$$ LANGUAGE 'plpgsql';
 
-DROP FUNCTION IF EXISTS fn_increment_slug;
-DELIMITER $$
-CREATE FUNCTION fn_increment_slug(str TEXT, incr INTEGER) RETURNS TEXT
+CREATE OR REPLACE FUNCTION fn_increment_slug(str TEXT, incr INTEGER) RETURNS TEXT AS $$
 BEGIN
     IF incr > 1 THEN
-        SET str = REPLACE(str, CONCAT('-', incr - 1), '');
+        str = REPLACE(str, '-' || (incr - 1)::text, '');
     END IF;
-    IF LENGTH(CONCAT(str, '-', incr)) > 255 THEN
-        SET str = SUBSTR(str, 1, -LENGTH(CONCAT('-', str)));
+    IF LENGTH(str || '-' || incr::text) > 255 THEN
+        str = SUBSTRING(str FROM 1 FOR -LENGTH('-' || str));
     END IF;
-    RETURN CONCAT(str, '-', incr);
+    RETURN str || '-' || incr::text;
 END;
-$$
-DELIMITER ;
+$$ LANGUAGE 'plpgsql';
 
--- This function is supposed to be used as a template of sorts,
--- since MySQL won't allow dynamic SQL in functions or procedures.
--- DELIMITER |
--- CREATE FUNCTION fn_TABLE_unique_slug(str TEXT) RETURNS TEXT
+-- This function is supposed to be used as a template of sorts.
+-- CREATE FUNCTION fn_TABLE_unique_slug(str TEXT) RETURNS TEXT AS $$
 -- BEGIN
---    SET @uniq = 0;
---    SET @incr = 0;
+--    @uniq = 0;
+--    @incr = 0;
 --    REPEAT
 --        SELECT COALESCE(id, 0) FROM _TABLE_ WHERE _FIELD_ = @retval INTO @check;
 --        IF @check <> 0 THEN
---            SET @uniq = 1;
+--            @uniq = 1;
 --        ELSE
---            SET @incr = @incr + 1;
---            SET str = fn_increment_slug(str, @incr);
+--            @incr = @incr + 1;
+--            str = fn_increment_slug(str, @incr);
 --        END IF;
 --    UNTIL @uniq = 1 END REPEAT;
 --    RETURN str;
 -- END;
--- |
--- DELIMITER ;
+-- $$ LANGUAGE 'plpgsql';
 
-DROP FUNCTION IF EXISTS age;
-DELIMITER $$
-CREATE FUNCTION age(datefield DATE) RETURNS INT
+CREATE OR REPLACE FUNCTION fn_set_media(myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT, myfilesize INT, mymimetype TEXT) RETURNS INT AS $$
+DECLARE tmpid INT;
 BEGIN
-    SET @datenow = NOW();
-    SET @age = (YEAR(NOW()) - YEAR(datefield)) - (RIGHT(CURDATE(), 5) < RIGHT(datefield, 5));
-    RETURN @age;
-END;
-$$
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS random;
-DELIMITER $$
-CREATE FUNCTION random() RETURNS FLOAT
-BEGIN
-    RETURN RAND();
-END;
-$$
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS fn_set_voteable;
-DELIMITER $$
-CREATE FUNCTION fn_set_voteable() RETURNS INT
-BEGIN
-    INSERT INTO monolyth_voteable (votes) VALUES (0);
-    RETURN LAST_INSERT_ID();
-END;
-$$
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS fn_set_likeable;
-DELIMITER $$
-CREATE FUNCTION fn_set_likeable() RETURNS INT
-BEGIN
-    INSERT INTO monolyth_likeable (likes) VALUES (0);
-    RETURN LAST_INSERT_ID();
-END;
-$$
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS fn_set_commentable;
-DELIMITER $$
-CREATE FUNCTION fn_set_commentable() RETURNS INT
-BEGIN
-    INSERT INTO monolyth_commentable (comments) VALUES (0);
-    RETURN LAST_INSERT_ID();
-END;
-$$
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS fn_set_media;
-DELIMITER $$
-CREATE FUNCTION fn_set_media(
-    myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT,
-    myfilesize INT, mymimetype TEXT
-) RETURNS INT
-BEGIN
-    SELECT id FROM monolyth_media WHERE
-        md5 = mymd5 AND filesize = myfilesize AND mimetype = mymimetype INTO @tmpid;
-    IF @tmpid IS NULL THEN
-        INSERT INTO monolyth_media (owner, data, filename, md5, filesize, mimetype)
-            VALUES (myowner, mydata, myfilename, mymd5, myfilesize, mymimetype);
-        RETURN LAST_INSERT_ID();
-    ELSE
-        RETURN @tmpid;
+    tmpid := SELECT id FROM monolyth_media WHERE md5 = mymd5 AND filesize = myfilesize AND mimetype = mymimetype;
+    IF tmpid IS NULL THEN
+        INSERT INTO monolyth_media (owner, data, filename, md5, filesize, mimetype) VALUES (myowner, mydata, myfilename, mymd5, myfilesize, mymimetype);
+        tmpid := SELECT id FROM monolyth_media WHERE md5 = mymd5 AND filesize = myfilesize AND mimetype = mymimetype;
     END IF;
+    RETURN tmpid;
 END;
-$$
-DELIMITER ;
+$$ LANGUAGE 'plpgsql';
 
-DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
-DELIMITER $$
-CREATE TRIGGER monolyth_auth_link_auth_group_after_insert AFTER INSERT ON monolyth_auth_link_auth_group
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_auth_group SET countmember = countmember + 1
-        WHERE id = NEW.auth_group;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth
-FOR EACH ROW
-BEGIN
-    INSERT INTO monolyth_auth_link_auth_group VALUES (NEW.id, 2);
-    UPDATE monolyth_counters SET value = value + 1 WHERE name = 'users';
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
-DELIMITER $$
-CREATE TRIGGER monolyth_auth_link_auth_group_after_delete AFTER DELETE ON monolyth_auth_link_auth_group
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_auth_group SET countmember = countmember - 1
-        WHERE id = OLD.auth_group;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_auth_update_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_auth_update_before BEFORE UPDATE ON monolyth_auth
-FOR EACH ROW
-BEGIN
-    SET NEW.datemodified = NOW();
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_auth_delete_after AFTER DELETE ON monolyth_auth
-FOR EACH ROW
-BEGIN
-    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
-    UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
-    DELETE FROM monolyth_auth_link_auth_group WHERE auth = OLD.id;
-    DELETE FROM monolyth_acl WHERE owner = OLD.id;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_session_mysqlsucks;
-DELIMITER $$
-CREATE TRIGGER monolyth_session_mysqlsucks BEFORE INSERT ON monolyth_session
-FOR EACH ROW
-BEGIN
-    SET NEW.dateactive = NOW();
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_session_log;
-DELIMITER $$
-CREATE TRIGGER monolyth_session_log AFTER DELETE ON monolyth_session
-FOR EACH ROW
-BEGIN
-    INSERT INTO monolyth_session_log (userid, ip, user_agent, datecreated)
-        VALUES (OLD.userid, OLD.ip, OLD.user_agent, OLD.datecreated);
-    UPDATE monolyth_counters SET value = value - 1 WHERE name = 'people_online';
-    IF OLD.userid IS NOT NULL THEN
-        UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
-    END IF;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS update_people_online_insert;
-DELIMITER $$
-CREATE TRIGGER update_people_online_insert AFTER INSERT ON monolyth_session
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_counters SET value = value + 1 WHERE name = 'people_online';
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_session_update;
-DELIMITER $$
-CREATE TRIGGER monolyth_session_update BEFORE UPDATE ON monolyth_session
-FOR EACH ROW
-BEGIN
-    SET NEW.dateactive = NOW();
-    IF NEW.userid IS NOT NULL THEN
-        UPDATE monolyth_auth SET dateactive = NEW.dateactive WHERE id = NEW.userid;
-    END IF;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS update_people_online_update;
-DELIMITER $$
-CREATE TRIGGER update_people_online_update AFTER UPDATE ON monolyth_session
-FOR EACH ROW
-BEGIN
-    IF OLD.userid IS NULL AND NEW.userid IS NOT NULL THEN
-        UPDATE monolyth_counters SET value = value + 1 WHERE name = 'users_online';
-    END IF;
-    IF OLD.userid IS NOT NULL AND NEW.userid IS NULL THEN
-        UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
-    END IF;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_insert_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_insert_before BEFORE INSERT ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    SET NEW.commentindex = COALESCE((SELECT MAX(commentindex) FROM
-        monolyth_comment WHERE reference = NEW.reference), 0) + 1;
-    SET NEW.hash = md5(CONCAT(NEW.ip, NEW.reference, NEW.datecreated, NEW.comment));
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_insert_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_insert_after AFTER INSERT ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_commentable SET comments = comments + 1,
-        last = (SELECT id FROM monolyth_comment
-            WHERE reference = NEW.reference ORDER BY datecreated DESC LIMIT 1)
-        WHERE id = NEW.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_delete_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_delete_after AFTER DELETE ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_commentable SET comments = comments - 1,
-        last = (SELECT id FROM monolyth_comment
-            WHERE reference = OLD.reference ORDER BY datecreated DESC LIMIT 1)
-        WHERE id = OLD.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_update_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_update_before BEFORE UPDATE ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    IF OLD.comment <> NEW.comment THEN
-        SET NEW.datemodified = NOW();
-    END IF;
-    SET NEW.hash = md5(CONCAT(NEW.ip, NEW.reference, NEW.datecreated, NEW.comment));
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_vote_insert_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_vote_insert_after AFTER INSERT ON monolyth_vote
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_voteable SET last = (SELECT id FROM monolyth_vote
-            WHERE reference = NEW.reference ORDER BY datecreated DESC LIMIT 1),
-        average = (average * votes + NEW.vote) / (votes + 1),
-        votes = votes + 1
-        WHERE id = NEW.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_vote_delete_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_vote_delete_after AFTER DELETE ON monolyth_vote
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_voteable SET last = (SELECT id FROM monolyth_vote
-            WHERE reference = OLD.reference ORDER BY datecreated DESC LIMIT 1),
-        average = (average * votes - OLD.vote) / (votes - 1),
-        votes = votes - 1
-        WHERE id = OLD.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_vote_update_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_vote_update_after AFTER UPDATE ON monolyth_vote
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_voteable SET
-        average = (average * votes - OLD.vote + NEW.vote) / votes
-        WHERE id = NEW.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_insert_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_insert_before BEFORE INSERT ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    IF NEW.status & 1 = 0 THEN
-        SET NEW.commentindex = COALESCE((SELECT commentindex FROM
-            monolyth_comment WHERE reference = NEW.reference
-            ORDER BY commentindex DESC LIMIT 1), 0) + 1;
-    END IF;
-    SET NEW.hash = md5(CONCAT(NEW.commentindex, NEW.reference, NOW(),
-        NEW.comment));
-    SET NEW.likes = fn_set_likeable();
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_insert_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_insert_after AFTER INSERT ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_commentable SET comments = comments + 1,
-        last = (SELECT id FROM monolyth_comment
-            WHERE reference = NEW.reference ORDER BY datecreated DESC LIMIT 1)
-        WHERE id = NEW.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_delete_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_delete_after AFTER DELETE ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_commentable SET comments = comments - 1,
-        last = (SELECT id FROM monolyth_comment
-            WHERE reference = OLD.reference ORDER BY datecreated DESC LIMIT 1)
-        WHERE id = OLD.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_update_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_update_before BEFORE UPDATE ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    SET NEW.datemodified = NOW();
-    SET NEW.hash = md5(CONCAT(NEW.commentindex, NEW.reference, NEW.datemodified,
-        NEW.comment));
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_comment_update_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_comment_update_after AFTER UPDATE ON monolyth_comment
-FOR EACH ROW
-BEGIN
-    IF OLD.status <> NEW.status THEN
-        IF OLD.status & 3 = 0 AND NEW.status & 3 <> 0 THEN
-            UPDATE monolyth_commentable SET comments = comments -1
-                WHERE id = NEW.reference;
-        ELSEIF OLD.status & 3 <> 0 AND NEW.status & 3 = 0 THEN
-            UPDATE monolyth_commentable SET comments = comments + 1
-                WHERE id = NEW.reference;
-        END IF;
-    END IF;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_like_insert_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_like_insert_after AFTER INSERT ON monolyth_like
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_likeable SET likes = likes + 1, last = NEW.id WHERE id = NEW.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_like_delete_after;
-DELIMITER $$
-CREATE TRIGGER monolyth_like_delete_after AFTER DELETE ON monolyth_like
-FOR EACH ROW
-BEGIN
-    UPDATE monolyth_likeable SET likes = likes - 1 WHERE id = OLD.reference;
-END;
-$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS monolyth_language_insert_before;
-DELIMITER $$
-CREATE TRIGGER monolyth_language_insert_before BEFORE INSERT ON monolyth_language
-FOR EACH ROW
-BEGIN
-    SET NEW.title = (SELECT title FROM monolyth_language_all WHERE id = NEW.id);
-END;
-$$
-DELIMITER ;
-
-INSERT INTO monolyth_auth_group VALUES (
-    NULL, NULL, 'Anonymous', 'anonymous', 1,
-    'Just visitors - a fake group so rights may be assigned.', 0
-);
-INSERT INTO monolyth_auth_group VALUES (
-    NULL, NULL, 'Users', 'users', 1,
-    'Regular users, i.e. everyone listed in auth (except root).', 0
-);
-INSERT INTO monolyth_auth_group VALUES (
-    NULL, 2, 'Monad', 'monad', 1,
-    'Users with access to MonAd.', 0
-);
-INSERT INTO monolyth_auth_group VALUES (
-    NULL, 3, 'Administrators', 'administrators', 1,
-    'Users with administrative privileges for MonAd.', 0
-);
-
-INSERT INTO monolyth_auth VALUES (
-    1, 'root', CONCAT('md5:', md5('admin')), NULL,
-    'root@localhost', NOW(), NULL, NULL, NULL,
-    NULL, NULL, 0, 0, NULL
-);
-
-INSERT INTO monolyth_auth_link_auth_group VALUES (1, 3), (1, 4);
-
-INSERT INTO monolyth_acl_resource VALUES (NULL, NULL, '*', NULL);
-INSERT INTO monolyth_acl VALUES (NULL, 1, NULL, 4, 63);
-INSERT INTO monolyth_acl_resource VALUES (NULL, NULL, 'monad', NULL);
-INSERT INTO monolyth_acl VALUES (NULL, 2, NULL, 3, 63);
-
-INSERT INTO monolyth_counters VALUES
-    ('people_online', 0), ('users_online', 0), ('users', 0);
-
-INSERT INTO monolyth_language_all VALUES
-    (NULL, 'en', 'en_EN', 'English', NULL),
-    (NULL, 'nl', 'nl_NL', 'Nederlands', NULL),
-    (NULL, 'fr', 'fr_FR', 'Fran&ccedil;ais', NULL),
-    (NULL, 'de', 'de_DE', 'Deutsch', NULL),
-    (NULL, 'es', 'es_ES', 'Espanyol', NULL);
-INSERT INTO monolyth_language VALUES (1, 'English', 1, 1);
-
-ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
--- }}}
-
--- {{{ v4.3.0
-DROP TABLE monolyth_acl CASCADE;
-DROP TABLE monolyth_acl_resource CASCADE;
-ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
-ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
-ALTER TABLE monolyth_temp RENAME TO monolyth_group;
--- }}}
-
--- {{{ v4.3.2
-ALTER TABLE monolyth_group RENAME COLUMN countmember TO members;
-DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert ON monolyth_auth_group;
-DROP FUNCTION monolyth_auth_link_auth_group_after_insert();
-CREATE OR REPLACE FUNCTION monolyth_auth_group_after_insert() RETURNS "trigger" AS $$
+CREATE OR REPLACE FUNCTION monolyth_auth_group_after_insert()
+RETURNS "trigger" AS $$
 BEGIN
     UPDATE monolyth_group SET members = members + 1 WHERE id = NEW.auth_group;
     RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
-CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_insert();
--- }}}
+CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group
+FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_insert();
 
--- {{{ v4.3.3
-DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete ON monolyth_auth_group;
-DROP FUNCTION monolyth_auth_link_auth_group_after_delete();
-CREATE OR REPLACE FUNCTION monolyth_auth_group_after_delete() RETURNS "trigger" AS $$
-BEGIN
-    UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
-    RETURN OLD;
-END;
-$$ LANGUAGE 'plpgsql';
-CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_delete();
--- }}}
-
--- {{{ v4.4.7
-DROP TRIGGER IF EXISTS monolyth_auth_insert_after ON monolyth_auth;
 CREATE OR REPLACE FUNCTION monolyth_auth_insert_after() RETURNS "trigger" AS $$
 BEGIN
     INSERT INTO monolyth_auth_group VALUES (NEW.id, 2);
@@ -935,16 +341,106 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
-CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_insert_after();
+CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth
+FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_insert_after();
 
-DROP TRIGGER IF EXISTS monolyth_auth_delete_after ON monolyth_auth;
+CREATE OR REPLACE FUNCTION monolyth_auth_group_after_delete() RETURNS "trigger" AS $$
+BEGIN
+    UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
+    RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group
+FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_group_after_delete();
+
 CREATE OR REPLACE FUNCTION monolyth_auth_delete_after() RETURNS "trigger" AS $$
 BEGIN
-    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
+    INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name);
     UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
     RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER monolyth_auth_delete_after AFTER DELETE ON monolyth_auth FOR EACH ROW EXECUTE PROCEDURE monolyth_auth_delete_after();
+
+CREATE OR REPLACE FUNCTION monolyth_session_log() RETURNS "trigger" AS $$
+BEGIN
+    INSERT INTO monolyth_session_log (userid, ip, user_agent, datecreated) VALUES (OLD.userid, OLD.ip, OLD.user_agent, OLD.datecreated);
+    RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+CREATE TRIGGER monolyth_session_log AFTER DELETE ON monolyth_session
+FOR EACH ROW EXECUTE PROCEDURE monolyth_session_log();
+
+CREATE OR REPLACE FUNCTION monolyth_auth_update_before() RETURNS "trigger" AS $$
+BEGIN
+    NEW.datemodified := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION update_people_online() RETURNS "trigger" AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        UPDATE monolyth_counters SET value = value + 1 WHERE name = 'people_online';
+        RETURN NEW;
+    ELSIF TG_OP = 'DELETE' THEN
+        UPDATE monolyth_counters SET value = value - 1 WHERE name = 'people_online';
+        IF OLD.userid IS NOT NULL THEN
+            UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
+        END IF;
+        RETURN OLD;
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF OLD.userid IS NULL AND NEW.userid IS NOT NULL THEN
+            UPDATE monolyth_counters SET value = value + 1 WHERE name = 'users_online';
+        ELSIF OLD.userid IS NOT NULL AND NEW.userid IS NULL THEN
+            UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
+        END IF;
+        IF NEW.userid IS NOT NULL THEN
+            UPDATE monolyth_auth SET dateactive = NOW() WHERE id = NEW.userid;
+        END IF;
+        RETURN NEW;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS update_people_online ON monolyth_session;
+CREATE TRIGGER update_people_online AFTER INSERT OR UPDATE OR DELETE ON monolyth_session
+FOR EACH ROW EXECUTE PROCEDURE update_people_online();
+
+CREATE OR REPLACE FUNCTION monolyth_language_insert_before() RETURNS "trigger" AS $$
+BEGIN
+    NEW.title := (SELECT title FROM monolyth_language_all WHERE id = NEW.id);
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+DROP TRIGGER IF EXISTS monolyth_language_insert_before ON monolyth_language;
+CREATE TRIGGER monolyth_language_insert_before BEFORE INSERT ON monolyth_language
+FOR EACH ROW EXECUTE PROCEDURE monolyth_language_insert_before();
+
+INSERT INTO monolyth_group (parent, name, owner, description)
+    VALUES (NULL, 'Anonymous', 1, 'Just visitors - a fake group so rights may be assigned.')
+);
+INSERT INTO monolyth_group (parent, name, owner, description)
+    VALUES (NULL, 'Users', 1, 'Regular users, i.e. everyone listed in auth (except root).');
+INSERT INTO monolyth_group (parent, name, owner, description)
+    VALUES (2, 'Monad', 1, 'Users with access to MonAd.');
+INSERT INTO monolyth_group (parent, name, owner, description)
+    VALUES (3, 'Administrators', 'administrators', 1, 'Users with administrative privileges for MonAd.');
+
+INSERT INTO monolyth_auth VALUES (1, 'root', 'md5:' || md5('admin'), NULL, 'root@localhost', NOW(), NULL, NULL, NULL, NULL, NULL, 0, 0, NULL);
+
+INSERT INTO monolyth_auth_group VALUES (1, 3), (1, 4);
+
+INSERT INTO monolyth_counters VALUES ('people_online', 0), ('users_online', 0), ('users', 0);
+
+INSERT INTO monolyth_language_all (code, lc_code, title, fallback) VALUES
+    ('en', 'en_EN', 'English', NULL),
+    ('nl', 'nl_NL', 'Nederlands', NULL),
+    ('fr', 'fr_FR', 'Fran&ccedil;ais', NULL),
+    ('de', 'de_DE', 'Deutsch', NULL),
+    ('es', 'es_ES', 'Espanyol', NULL);
+INSERT INTO monolyth_language (id, sortorder, is_default) VALUES (1, 1, 1);
+
+ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
 -- }}}
 
