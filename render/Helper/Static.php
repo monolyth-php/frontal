@@ -6,6 +6,9 @@ trait Static_Helper
 {
     public function assemble(array $files)
     {
+        if (!$files) {
+            return;
+        }
         // Build a unified unique identifier for this file.
         // The 'UUID' consists of the total filesize of the files,
         // as well as an MD5 of the concatenated filenames.
@@ -32,10 +35,10 @@ trait Static_Helper
                 }
             }
         }
-        if (!$size) {
-            throw new EmptyStaticFile_Exception($file);
-        }
         $basename = md5(implode('', $files));
+        if (!$size) {
+            throw new EmptyStaticFile_Exception($basename);
+        }
         if ($project['secure']) {
             $basename = "s$basename";
         }

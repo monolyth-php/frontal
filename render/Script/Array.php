@@ -30,9 +30,13 @@ class Array_Script extends Script
     {
         $out = [];
         foreach ($this->files as $collection) {
-            $out[] = $this->httpimg($this->assemble($collection));
+            $external = $this->extractExternal($collection);
+            if ($local = $this->assemble($collection)) {
+                $out[] = $this->httpimg($local);
+            }
+            $out = array_merge($out, $external);
         }
-        return $out;
+        return $out ? $out : null;
     }
 }
 
