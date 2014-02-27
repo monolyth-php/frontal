@@ -2,7 +2,7 @@
 
 namespace monolyth;
 
-interface User_Constants
+interface User_Settings
 {
     const NAME_IS_EMAIL = false;
 

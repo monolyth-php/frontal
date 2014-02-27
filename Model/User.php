@@ -8,7 +8,7 @@ namespace monolyth;
 use ErrorException;
 use Adapter_Access;
 
-class User_Model implements User_Constants
+class User_Model implements User_Settings
 {
     use utils\Translatable;
     use render\Url_Helper;
