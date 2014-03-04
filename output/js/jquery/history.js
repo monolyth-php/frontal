@@ -88,6 +88,7 @@
         }
         var hd = $this.attr('data-history');
         if (hd === '0' ||
+            $this.parents('[data-history="0"]').length ||
             url.substring(0, 1) == '#' ||
             (!r1.test(test) && !r2.test(test))
         ) {
