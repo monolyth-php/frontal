@@ -38,7 +38,7 @@ trait Autolanguage
     protected function _guessLanguage(Language_Model $languages = null)
     {
         if (!isset($languages)) {
-            $languages = $this->language;
+            $languages = self::language();
         }
         $default = str_replace(
             '_',
