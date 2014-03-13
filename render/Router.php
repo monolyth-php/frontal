@@ -5,11 +5,13 @@ use ErrorException;
 use monolyth\Language_Access;
 use monolyth\Country_Access;
 use Project;
+use monolyth\core\Singleton;
 
 class Router
 {
     use Language_Access;
     use Country_Access;
+    use Singleton;
 
     protected $domain;
     protected $routes = [];
@@ -19,7 +21,7 @@ class Router
     protected $translations = [];
     public $language;
 
-    public function __construct()
+    protected function __construct()
     {
         $url = sprintf(
             '%s://%s',
@@ -201,11 +203,10 @@ class Router
             }
         } else {
             $url = sprintf(
-                '%s://%s%s',
+                '%s%s',
                 Project::instance()[Project::instance()['secure'] ?
-                    'protocols' :
-                    'protocol'],
-                $_SERVER['SERVER_NAME'],
+                    'https' :
+                    'http'],
                 $url
             );
         }
@@ -290,13 +291,10 @@ class Router
             $match[0]
         );
         $url = preg_replace('@(?<!:)/{2,}@', '/', $url);
-        $test = Project::instance()[Project::instance()['secure'] ? 'https' : 'http'];
+        $project = Project::instance();
+        $test = $project[$project['secure'] ? 'https' : 'http'];
         if (!$context && strpos($url, $test) !== false) {
-            $url = preg_replace(
-                "@^https?://{$_SERVER['SERVER_NAME']}@",
-                '',
-                $url
-            );
+            $url = preg_replace("@^$test@", '', $url);
         }
         return $url;
     }
