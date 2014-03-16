@@ -27,7 +27,7 @@ class Media_Finder extends core\Finder
     public function find(array $where)
     {
         try {
-            return $this->model->load(self::adapter()->row(
+            return (new Media_Model)->load(self::adapter()->row(
                 'monolyth_media',
                 '*',
                 $where
