@@ -146,6 +146,12 @@ abstract class Monolyth
             if (($strpos = strpos($uri, '?')) !== false) {
                 $uri = substr($uri, 0, $strpos);
             }
+            $uri = sprintf(
+                'http%s://%s%s',
+                !$project['test'] && $project['secure'] ? 's' : '',
+                $_SERVER['SERVER_NAME'],
+                $uri
+            );
             if ($match = $router->match($uri)) {
                 if (!isset($match['controller'])) {
                     die();

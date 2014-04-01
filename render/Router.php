@@ -195,20 +195,13 @@ class Router
      */
     public function match($url)
     {
-        if (Project::instance()['cli']) {
-            if (Project::instance()['secure']) {
-                $url = Project::instance()['https'].$url;
+        $project = Project::instance();
+        if (!preg_match("@^https?://@", $url)) {
+            if ($project['secure']) {
+                $url = $project['https'].$url;
             } else {
-                $url = Project::instance()['http'].$url;
+                $url = $project['http'].$url;
             }
-        } else {
-            $url = sprintf(
-                '%s%s',
-                Project::instance()[Project::instance()['secure'] ?
-                    'https' :
-                    'http'],
-                $url
-            );
         }
         foreach ($this->routes as $match => $controller) {
             if (preg_match("@^$match$@", $url, $matches)) {
