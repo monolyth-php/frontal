@@ -29,20 +29,21 @@ abstract class Adapter implements monolyth\adapter\Adapter
     protected $translevel = 0;
     protected $index;
     public $pdo;
+    private $settings;
 
     public function __construct($dsn, $user = null, $pass = null,
         array $options = [])
     {
-        $this->pdo = compact('dsn', 'user', 'pass', 'options');
+        $this->settings = compact('dsn', 'user', 'pass', 'options');
     }
 
     protected function connect()
     {
-        if (is_object($this->pdo)) {
+        if (isset($this->pdo)) {
             return;
         }
         try {
-            extract($this->pdo);
+            extract($this->settings);
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             throw new ConnectionFailed_Exception($e->getMessage());
