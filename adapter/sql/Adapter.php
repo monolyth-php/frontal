@@ -132,6 +132,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function flush()
     {
+        $this->connect();
         $this->cache = [];
     }
 
