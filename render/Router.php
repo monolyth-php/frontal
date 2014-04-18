@@ -114,7 +114,7 @@ class Router
                                     $newurl
                                 );
                             } catch (ErrorException $e) {
-                                return null;
+                                $newurl = $url;
                             }
                             $found = true;
                         }
