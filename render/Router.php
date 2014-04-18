@@ -106,14 +106,16 @@ class Router
                     }
                     $newurl = $url;
                     foreach ($this->translations['slugs'] as $match => $value) {
-                        if (preg_match("@/$match(/|^)@", $newurl, $matches)
-                            && isset($value[$lang->code])
-                        ) {
-                            $newurl = preg_replace(
-                                "@/$match(/|^)@",
-                                "/{$value[$lang->code]}\\1",
-                                $newurl
-                            );
+                        if (preg_match("@/$match(/|^)@", $newurl, $matches)) {
+                            try {
+                                $newurl = preg_replace(
+                                    "@/$match(/|^)@",
+                                    "/{$value[$lang->code]}\\1",
+                                    $newurl
+                                );
+                            } catch (ErrorException $e) {
+                                return null;
+                            }
                             $found = true;
                         }
                     }
