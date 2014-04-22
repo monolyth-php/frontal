@@ -22,5 +22,11 @@ class Option extends Element
             }
         }
     }
+
+    public function __toString()
+    {
+        unset($this->options['id'], $this->options['name']);
+        return parent::__toString();
+    }
 }
 
