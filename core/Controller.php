@@ -276,8 +276,14 @@ abstract class Controller
      */
     public function __invoke($method, array $arguments)
     {
-        // Before we do ANYTHING, check our requirements...
         $this->arguments = $arguments;
+        if (strtoupper($method) == 'OPTIONS') {
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: content-type, x-xsrf-token");
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+            die();
+        }
+        // Before we do ANYTHING, check our requirements...
         $this->checkRequirements();
         if (isset($arguments['language'])
             && self::language()->isAvailable($arguments['language'])
