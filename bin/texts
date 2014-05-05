@@ -10,7 +10,7 @@
 $dir = $BASE = realpath(__DIR__.'/../../..');
 set_include_path(implode(PATH_SEPARATOR, [
     "$dir",
-    "$dir/.libraries",
+    "$dir/vendor",
     '/usr/share/php5',
 ]));
 require_once 'monolyth/Monolyth.php';
