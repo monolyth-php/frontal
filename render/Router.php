@@ -290,7 +290,12 @@ class Router
         $url = preg_replace('@(?<!:)/{2,}@', '/', $url);
         $project = Project::instance();
         $test = $project[$project['secure'] ? 'https' : 'http'];
-        if (!$context && strpos($url, $test) !== false) {
+        if (!$context
+            && strpos($url, $test) !== false
+            && (!isset($_SERVER['SERVER_NAME'])
+                || strpos($url, "/{$_SERVER['SERVER_NAME']}") !== false
+            )
+        ) {
             $url = preg_replace("@^$test@", '', $url);
         }
         return $url;
