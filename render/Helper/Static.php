@@ -209,6 +209,7 @@ trait Static_Helper
         foreach ($files as $key => $file) {
             if (substr($file, 0, 7) == 'http://'
                 || substr($file, 0, 8) == 'https://'
+                || substr($file, 0, 2) == '//'
             ) {
                 $external[] = $file;
                 unset($files[$key]);

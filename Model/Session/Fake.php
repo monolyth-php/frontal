@@ -7,16 +7,17 @@
  *
  * @package monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2013
+ * @copyright MonoMelodies 2013, 2014
  * @see monolyth\core\Session_Model
  */
 
 namespace monolyth;
-use monolyth\core\Session_Model;
 use ErrorException;
 
-class Fake_Session_Model extends Session_Model
+class Fake_Session_Model extends core\Session_Model
 {
+    use core\Singleton;
+
     /**
      * "Constructor". Initialise a new or existing session.
      *
