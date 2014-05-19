@@ -28,7 +28,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     protected $prepared = [];
     protected $translevel = 0;
     protected $index;
-    public $pdo;
+    public $pdo = null;
     private $settings;
 
     public function __construct($dsn, $user = null, $pass = null,
@@ -39,8 +39,17 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     protected function connect()
     {
-        if (isset($this->pdo)) {
-            return;
+        static $checkConnection;
+        if (!is_null($this->pdo)) {
+            if (!isset($checkConnection)) {
+                $checkConnection = $this->pdo->prepare("SELECT 1");
+            }
+            try {
+                $checkConnection->execute([]);
+                return;
+            } catch (PDOException $e) {
+                $checkConnection = null;
+            }
         }
         try {
             extract($this->settings);
