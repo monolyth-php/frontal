@@ -39,17 +39,8 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     protected function connect()
     {
-        static $checkConnection;
         if (!is_null($this->pdo)) {
-            if (!isset($checkConnection)) {
-                $checkConnection = $this->pdo->prepare("SELECT 1");
-            }
-            try {
-                $checkConnection->execute([]);
-                return;
-            } catch (PDOException $e) {
-                $checkConnection = null;
-            }
+            return;
         }
         try {
             extract($this->settings);
@@ -58,6 +49,12 @@ abstract class Adapter implements monolyth\adapter\Adapter
             throw new ConnectionFailed_Exception($e->getMessage());
         }
         self::logger()->log('Initialised database connection');
+    }
+
+    public function reconnect()
+    {
+        $this->pdo = null;
+        $this->connect();
     }
 
     /**
