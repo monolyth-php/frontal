@@ -28,7 +28,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
     protected $prepared = [];
     protected $translevel = 0;
     protected $index;
-    public $pdo;
+    public $pdo = null;
     private $settings;
 
     public function __construct($dsn, $user = null, $pass = null,
@@ -39,7 +39,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     protected function connect()
     {
-        if (isset($this->pdo)) {
+        if (!is_null($this->pdo)) {
             return;
         }
         try {
@@ -49,6 +49,12 @@ abstract class Adapter implements monolyth\adapter\Adapter
             throw new ConnectionFailed_Exception($e->getMessage());
         }
         self::logger()->log('Initialised database connection');
+    }
+
+    public function reconnect()
+    {
+        $this->pdo = null;
+        $this->connect();
     }
 
     /**

@@ -143,6 +143,11 @@ abstract class Form extends ArrayObject
         return $this->action;
     }
 
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
     public function hasFiles()
     {
         foreach ($this as $key => $value) {
