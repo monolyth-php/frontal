@@ -38,6 +38,7 @@ class Country_Finder implements Finder
             } else {
                 $results = null;
             }
+            $language = $language->id;
         }
         if (isset($cache)) {
             $cache->set("countries/$language", $results);
