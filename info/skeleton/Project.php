@@ -1,6 +1,8 @@
 <?php
 
-class Project extends monolyth\core\Project
+use monolyth\core;
+
+class Project extends core\Project
 {
     public function __construct()
     {
