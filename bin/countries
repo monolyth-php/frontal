@@ -47,7 +47,8 @@ if ($a == 'mysql') {
     $options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET names UTF8';
 }
 $db = new PDO("$a:host=$h;dbname=$d", $u, $p, $options);
-$d = Dir("./../render/output/text/country");
+$here = realpath(__DIR__);
+$d = Dir("$here/../render/output/text/country");
 $texts = [];
 while (false !== ($entry = $d->read())) {
     if ($entry{0} == '.') continue;
@@ -55,7 +56,7 @@ while (false !== ($entry = $d->read())) {
     if (!isset($texts[$p[0]])) {
         $texts[$p[0]] = [];
     }
-    $texts[$p[0]][$p[1]] = file_get_contents("./../render/output/text/country/$entry");
+    $texts[$p[0]][$p[1]] = file_get_contents("$here/../render/output/text/country/$entry");
 }
 ksort($texts);
 foreach ($texts as $code => $names) {

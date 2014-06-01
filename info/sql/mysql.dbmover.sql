@@ -951,14 +951,17 @@ DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_set_city;
 DELIMITER $$
-CREATE FUNCTION fn_set_city(cityname TEXT, ctry INTEGER) RETURNS integer
+CREATE FUNCTION fn_set_city(cityname TEXT, ctry INTEGER, lang INTEGER) RETURNS integer
 BEGIN
+    IF cityname IS NULL THEN
+        RETURN NULL;
+    END IF;
     SET @found = 0;
-    SELECT id FROM monolyth_city WHERE LOWER(name) = LOWER(cityname) AND country = ctry INTO @found;
+    SELECT id FROM monolyth_city WHERE LOWER(name) = LOWER(cityname) AND country = ctry AND language = lang INTO @found;
     IF @found > 0 THEN
         RETURN @found;
     END IF;
-    INSERT INTO monolyth_city VALUES (NULL, cityname, ctry);
+    INSERT INTO monolyth_city VALUES (NULL, ctry, lang, cityname);
     RETURN LAST_INSERT_ID();
 END;
 $$
