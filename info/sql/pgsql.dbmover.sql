@@ -506,22 +506,15 @@ END;
 $$
 DELIMITER ;
 
-DROP FUNCTION IF EXISTS fn_set_commentable;
-DELIMITER $$
-CREATE FUNCTION fn_set_commentable() RETURNS INT
+CREATE OR REPLACE FUNCTION fn_set_commentable() RETURNS INT AS $$
 BEGIN
     INSERT INTO monolyth_commentable (comments) VALUES (0);
-    RETURN LAST_INSERT_ID();
+    RETURN CURRVAL('monolyth_commentable_id_seq');
 END;
-$$
-DELIMITER ;
+$$ LANGUAGE 'plpgsql';
 
-DROP FUNCTION IF EXISTS fn_set_media;
-DELIMITER $$
-CREATE FUNCTION fn_set_media(
-    myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT,
-    myfilesize INT, mymimetype TEXT
-) RETURNS INT
+CREATE OR REPLACE FUNCTION fn_set_media(myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT, myfilesize INT, mymimetype TEXT) RETURNS INT AS $$
+DECLARE tmpid INT;
 BEGIN
     SELECT id FROM monolyth_media WHERE
         md5 = mymd5 AND filesize = myfilesize AND mimetype = mymimetype INTO @tmpid;
