@@ -14,6 +14,7 @@ use Adapter_Access;
 use monolyth\utils\Translatable;
 use monolyth\adapter\nosql\KeyNotFound_Exception;
 use ErrorException;
+use monolyth\Config;
 
 abstract class Session_Model
 {
@@ -141,12 +142,13 @@ abstract class Session_Model
             function($max_lifetime) { return 0; }
         );
         session_name(\Project::instance()['site']);
+        $config = Config::get('monolyth');
         session_set_cookie_params(
             0,
             '/',
             \Project::instance()['cookiedomain'],
             false,
-            true
+            $config->cookie_http_only
         );
         $this->id();
     }

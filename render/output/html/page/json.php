@@ -9,7 +9,7 @@ switch ($code = isset($code) ? $code : '200') {
     case '500': $string = 'Internal Server Error'; break;
 }
 header($string ? "HTTP/1.1 $code $string" : '', true, $code);
-header("Content-type: application/javascript", true);
+header("Content-type: application/json", true);
 $flags = JSON_NUMERIC_CHECK;
 if (defined("JSON_PRETTY_PRINT")) {
     $flags |= JSON_PRETTY_PRINT;

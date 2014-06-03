@@ -2,9 +2,13 @@
 
 namespace monolyth\adapter\nosql;
 use ErrorException;
+use monolyth\User_Access;
+use monolyth\adapter;
 
 class CouchDB
 {
+    use User_Access;
+
     private $host = '127.0.0.1',
             $port = 5984,
             $db,
@@ -33,9 +37,9 @@ class CouchDB
     {
         $this->connect();
         $request = "$method $url HTTP/1.0\r\nHost: http://{$this->host}\r\n";
-        if ($this->user) {
+        if (self::user()) {
             $request .= "Authorization: Basic "
-                .base64_encode("{$this->user}:{$this->pass}")."\r\n";
+                .base64_encode("{self::user()}:{$this->pass}")."\r\n";
         }
         if ($post_data) {
             $post_data = json_encode($post_data);
@@ -66,7 +70,7 @@ class CouchDB
         $dsn = adapter\DB::parseDSN($dsn);
         $this->host = $dsn['hostspec'];
         $this->port = $dsn['port'];
-        $this->user = $dsn['username'];
+        self::user() = $dsn['username'];
         $this->pass = $dsn['password'];
         $this->db = $dsn['database'];
     }

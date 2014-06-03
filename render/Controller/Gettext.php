@@ -2,13 +2,12 @@
 
 namespace monolyth\render;
 use monolyth\core\Controller;
-use monolyth\Ajax_Required;
 
-class Gettext_Controller extends Controller implements Ajax_Required
+class Gettext_Controller extends Controller
 {
     protected function get(array $args)
     {
-        $this->template = null;
+        $this->template = false;
         $data = [];
         foreach ($_POST['ids'] as $id) {
             $data[] = [$id, $this->text($id)];

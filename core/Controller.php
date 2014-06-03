@@ -17,7 +17,6 @@ use monolyth\render\View;
 use monolyth\render\FileNotFound_Exception;
 use monolyth\DependencyContainer;
 use monolyth\account\Logout_Controller;
-use monolyth\Ajax_Required;
 use monolyth\HTTP301_Exception;
 use monolyth\HTTP400_Exception;
 use monolyth\HTTP403_Exception;
@@ -207,17 +206,6 @@ abstract class Controller
             }
         );
         $this->addRequirement(
-            'monolyth\Ajax_Required',
-            $http->isXMLHttpRequest(),
-            function() {
-                if (isset($this->parentUrl)) {
-                    throw new HTTP301_Exception($this->parentUrl);
-                } else {
-                    throw new HTTP400_Exception;
-                }
-            }
-        );
-        $this->addRequirement(
             'monolyth\Test_Required',
             $project['test'],
             function() {
@@ -276,8 +264,14 @@ abstract class Controller
      */
     public function __invoke($method, array $arguments)
     {
-        // Before we do ANYTHING, check our requirements...
         $this->arguments = $arguments;
+        if (strtoupper($method) == 'OPTIONS') {
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: content-type, x-xsrf-token");
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+            die();
+        }
+        // Before we do ANYTHING, check our requirements...
         $this->checkRequirements();
         if (isset($arguments['language'])
             && self::language()->isAvailable($arguments['language'])
@@ -294,7 +288,7 @@ abstract class Controller
             }
             $_COOKIE['language'] = $arguments['language'];
         }
-        if (!(isset($this->template) || $this instanceof Ajax_Required)) {
+        if (!isset($this->template)) {
             if (isset($_GET['html5history'])) {
                 $this->template = $this->view(
                     'monolyth\template/history',

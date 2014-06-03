@@ -5,7 +5,6 @@ use monolyth\Language_Access;
 
 trait Url_Helper
 {
-    use Router_Access;
     use Language_Access;
 
     /**
@@ -24,11 +23,12 @@ trait Url_Helper
         if (!isset($args['language'])) {
             $args['language'] = self::language()->current->code;
         }
-        if ($url = self::router()->generate($route, $args, $context)) {
+        $router = Router::instance();
+        if ($url = $router->generate($route, $args, $context)) {
             return $url;
         }
         unset($args['language']);
-        return self::router()->generate($route, $args, $context);
+        return $router->generate($route, $args, $context);
     }
 
     /**

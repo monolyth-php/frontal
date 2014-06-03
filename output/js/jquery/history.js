@@ -60,7 +60,18 @@
         if (!(window.history && window.history.pushState)) {
             return true;
         }
-        options = options || {};
+        options = $.extend(
+            {},
+            {scriptLoader: function(scripts) {
+                for (var i = 0; i < scripts.length; i++) {
+                    var s = document.createElement('script');
+                    s.async = true;
+                    s.src = scripts[i];
+                    document.getElementsByTagName('head')[0].appendChild(s)
+                }
+            }},
+            options || {}
+        );
         var $this = $(this),
             form = $this.prop('tagName') == 'FORM',
             url = $this.attr(form ? 'action' : 'href'),
@@ -77,6 +88,7 @@
         }
         var hd = $this.attr('data-history');
         if (hd === '0' ||
+            $this.parents('[data-history="0"]').length ||
             url.substring(0, 1) == '#' ||
             (!r1.test(test) && !r2.test(test))
         ) {
@@ -120,10 +132,7 @@
             contentElement.html(data.body);
             $('title').html(data.title);
             for (i in data) {
-                if (i == 'body' || i == 'status' || i == 'styles') {
-                    continue;
-                }
-                if (typeof options[i] != 'undefined') {
+                if (options[i] && typeof options[i] == 'function') {
                     options[i](data[i]);
                 }
             }
@@ -131,15 +140,10 @@
             $('body').trigger('ready.MonolythHistory');
             $('head link').remove();
             $('head').append(data.styles);
-            if (data.scripts) {
-                if (typeof data.scripts != 'string') {
-                    for (var i = 0; i < data.scripts.length; i++) {
-                        Deputy.load(data.scripts[i]);
-                    }
-                } else {
-                    Deputy.load(data.scripts);
-                }
+            if (typeof data.scripts == 'string') {
+                data.scripts = [data.scripts];
             }
+            options.scriptLoader(data.scripts);
         };
         window.addEventListener(
             'popstate',

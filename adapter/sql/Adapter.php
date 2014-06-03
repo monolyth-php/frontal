@@ -28,26 +28,33 @@ abstract class Adapter implements monolyth\adapter\Adapter
     protected $prepared = [];
     protected $translevel = 0;
     protected $index;
-    public $pdo;
+    public $pdo = null;
+    private $settings;
 
     public function __construct($dsn, $user = null, $pass = null,
         array $options = [])
     {
-        $this->pdo = compact('dsn', 'user', 'pass', 'options');
+        $this->settings = compact('dsn', 'user', 'pass', 'options');
     }
 
     protected function connect()
     {
-        if (is_object($this->pdo)) {
+        if (!is_null($this->pdo)) {
             return;
         }
         try {
-            extract($this->pdo);
+            extract($this->settings);
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             throw new ConnectionFailed_Exception($e->getMessage());
         }
         self::logger()->log('Initialised database connection');
+    }
+
+    public function reconnect()
+    {
+        $this->pdo = null;
+        $this->connect();
     }
 
     /**
@@ -131,6 +138,7 @@ abstract class Adapter implements monolyth\adapter\Adapter
 
     public function flush()
     {
+        $this->connect();
         $this->cache = [];
     }
 

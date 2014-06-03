@@ -80,8 +80,18 @@ class Login_Model
                 ['id' => $id, 'randomid' => $random]
             );
         } catch (UpdateNone_Exception $e) {
-            var_dump($e->getMessage()); die();
             // Okay, this is a problem: we couldn't log ourselves in.
+            // Most probable cause is that the session was in memcached,
+            // but had gotten deleted from the database.
+            setcookie(
+                \Project::instance()['site'],
+                '',
+                time() - 3600,
+                '/',
+                \Project::instance()['cookiedomain'],
+                false,
+                false
+            );
             return 'generic';
         }
         if (isset($this->cache)) {

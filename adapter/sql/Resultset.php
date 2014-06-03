@@ -22,7 +22,7 @@ class Resultset implements ArrayAccess, Iterator, Countable
             $offset = 0,
             $data = [],
             $iterator = null,
-            $count = 0,
+            $_count = 0,
             $index = 0;
 
     public function __construct(Adapter $db, PDOStatement $src,
@@ -43,7 +43,7 @@ class Resultset implements ArrayAccess, Iterator, Countable
                 }
             }
         }
-        $max = $this->count = count($this->data);
+        $max = $this->_count = count($this->data);
         if (!$max) {
             throw new NoResults_Exception($src->queryString, $bnd);
         }
@@ -105,7 +105,7 @@ class Resultset implements ArrayAccess, Iterator, Countable
 
     public function count()
     {
-        return $this->count;
+        return $this->_count;
     }
 
     public function countAll()

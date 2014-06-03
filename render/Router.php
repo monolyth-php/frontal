@@ -5,11 +5,13 @@ use ErrorException;
 use monolyth\Language_Access;
 use monolyth\Country_Access;
 use Project;
+use monolyth\core\Singleton;
 
 class Router
 {
     use Language_Access;
     use Country_Access;
+    use Singleton;
 
     protected $domain;
     protected $routes = [];
@@ -19,7 +21,7 @@ class Router
     protected $translations = [];
     public $language;
 
-    public function __construct()
+    protected function __construct()
     {
         $url = sprintf(
             '%s://%s',
@@ -105,11 +107,15 @@ class Router
                     $newurl = $url;
                     foreach ($this->translations['slugs'] as $match => $value) {
                         if (preg_match("@/$match(/|^)@", $newurl, $matches)) {
-                            $newurl = preg_replace(
-                                "@/$match(/|^)@",
-                                "/{$value[$lang->code]}\\1",
-                                $newurl
-                            );
+                            try {
+                                $newurl = preg_replace(
+                                    "@/$match(/|^)@",
+                                    "/{$value[$lang->code]}\\1",
+                                    $newurl
+                                );
+                            } catch (ErrorException $e) {
+                                $newurl = $url;
+                            }
                             $found = true;
                         }
                     }
@@ -193,21 +199,13 @@ class Router
      */
     public function match($url)
     {
-        if (Project::instance()['cli']) {
-            if (Project::instance()['secure']) {
-                $url = Project::instance()['https'].$url;
+        $project = Project::instance();
+        if (!preg_match("@^https?://@", $url)) {
+            if ($project['secure']) {
+                $url = $project['https'].$url;
             } else {
-                $url = Project::instance()['http'].$url;
+                $url = $project['http'].$url;
             }
-        } else {
-            $url = sprintf(
-                '%s://%s%s',
-                Project::instance()[Project::instance()['secure'] ?
-                    'protocols' :
-                    'protocol'],
-                $_SERVER['SERVER_NAME'],
-                $url
-            );
         }
         foreach ($this->routes as $match => $controller) {
             if (preg_match("@^$match$@", $url, $matches)) {
@@ -290,13 +288,15 @@ class Router
             $match[0]
         );
         $url = preg_replace('@(?<!:)/{2,}@', '/', $url);
-        $test = Project::instance()[Project::instance()['secure'] ? 'https' : 'http'];
-        if (!$context && strpos($url, $test) !== false) {
-            $url = preg_replace(
-                "@^https?://{$_SERVER['SERVER_NAME']}@",
-                '',
-                $url
-            );
+        $project = Project::instance();
+        $test = $project[$project['secure'] ? 'https' : 'http'];
+        if (!$context
+            && strpos($url, $test) !== false
+            && (!isset($_SERVER['SERVER_NAME'])
+                || strpos($url, "/{$_SERVER['SERVER_NAME']}") !== false
+            )
+        ) {
+            $url = preg_replace("@^$test@", '', $url);
         }
         return $url;
     }

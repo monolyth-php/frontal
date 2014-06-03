@@ -1,15 +1,21 @@
 <?php
 
 namespace monolyth\render;
+use Project;
 
 trait Static_Helper
 {
     public function assemble(array $files)
     {
+        if (!$files) {
+            return;
+        }
         // Build a unified unique identifier for this file.
         // The 'UUID' consists of the total filesize of the files,
         // as well as an MD5 of the concatenated filenames.
-        $project = $this->project->export();
+        $project = isset($this->project) ?
+            $this->project->export() :
+            Project::instance()->export();
         $size = 0;
         clearstatcache();
         foreach ($files as $file) {
@@ -32,10 +38,10 @@ trait Static_Helper
                 }
             }
         }
-        if (!$size) {
-            throw new EmptyStaticFile_Exception($file);
-        }
         $basename = md5(implode('', $files));
+        if (!$size) {
+            throw new EmptyStaticFile_Exception($basename);
+        }
         if ($project['secure']) {
             $basename = "s$basename";
         }
@@ -148,7 +154,7 @@ trait Static_Helper
     public function httpimg($file, $site = null, $secure = null)
     {
         $file = "$file";
-        $project = $this->project->export();
+        $project = Project::instance()->export();
         if (!isset($secure)) {
             $secure = $project['secure'];
         }
@@ -203,6 +209,7 @@ trait Static_Helper
         foreach ($files as $key => $file) {
             if (substr($file, 0, 7) == 'http://'
                 || substr($file, 0, 8) == 'https://'
+                || substr($file, 0, 2) == '//'
             ) {
                 $external[] = $file;
                 unset($files[$key]);

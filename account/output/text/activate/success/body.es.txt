@@ -1,0 +1,3 @@
+<p>
+    Tu cuenta ya est&aacute; activada.
+</p>

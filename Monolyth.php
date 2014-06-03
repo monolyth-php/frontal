@@ -55,7 +55,6 @@ require_once 'monolyth/core/Singleton.php';
 require_once 'monolyth/Logger.php';
 require_once 'monolyth/Access/Logger.php';
 require_once 'monolyth/Access/Language.php';
-require_once 'monolyth/render/Access/Router.php';
 
 /**
  * The Monolyth base-class.
@@ -71,7 +70,6 @@ require_once 'monolyth/render/Access/Router.php';
 abstract class Monolyth
 {
     private static $project;
-    private static $router;
 
     use Language_Access;
     use Logger_Access;
@@ -140,7 +138,7 @@ abstract class Monolyth
             $language = self::language();
             $router = call_user_func(
                 require_once 'config/routing.php',
-                self::router()
+                render\Router::instance()
             );
             $uri = isset($_GET['path']) ?
                 urldecode($_GET['path']) :
@@ -148,6 +146,12 @@ abstract class Monolyth
             if (($strpos = strpos($uri, '?')) !== false) {
                 $uri = substr($uri, 0, $strpos);
             }
+            $uri = sprintf(
+                'http%s://%s%s',
+                !$project['test'] && $project['secure'] ? 's' : '',
+                $_SERVER['SERVER_NAME'],
+                $uri
+            );
             if ($match = $router->match($uri)) {
                 if (!isset($match['controller'])) {
                     die();
@@ -250,14 +254,6 @@ abstract class Monolyth
             );
         }
         session_write_close();
-    }
-
-    public function router()
-    {
-        if (!isset(self::$router)) {
-            self::$router = new render\Router;
-        }
-        return self::$router;
     }
 }
 
