@@ -1,5 +1,6 @@
 
 -- {{{ v4.1.2
+
 CREATE TABLE monolyth_auth (
     id bigint UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(16),
@@ -337,9 +338,9 @@ CREATE TABLE monolyth_variable (
     CONSTRAINT FOREIGN KEY(media) REFERENCES monolyth_media(id) ON DELETE SET NULL
 );
 
+-- @emit Creating functions and triggers...
 
 DROP FUNCTION IF EXISTS fn_generate_slug;
-DELIMITER $$
 CREATE FUNCTION fn_generate_slug (str TEXT) RETURNS text
 BEGIN
     IF LENGTH(str) = 0 OR str IS NULL THEN
@@ -424,11 +425,8 @@ BEGIN
 
     RETURN @retval;
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_increment_slug;
-DELIMITER $$
 CREATE FUNCTION fn_increment_slug(str TEXT, incr INTEGER) RETURNS TEXT
 BEGIN
     IF incr > 1 THEN
@@ -439,12 +437,9 @@ BEGIN
     END IF;
     RETURN CONCAT(str, '-', incr);
 END;
-$$
-DELIMITER ;
 
 -- This function is supposed to be used as a template of sorts,
 -- since MySQL won't allow dynamic SQL in functions or procedures.
--- DELIMITER |
 -- CREATE FUNCTION fn_TABLE_unique_slug(str TEXT) RETURNS TEXT
 -- BEGIN
 --    SET @uniq = 0;
@@ -460,61 +455,43 @@ DELIMITER ;
 --    UNTIL @uniq = 1 END REPEAT;
 --    RETURN str;
 -- END;
--- |
--- DELIMITER ;
 
 DROP FUNCTION IF EXISTS age;
-DELIMITER $$
 CREATE FUNCTION age(datefield DATE) RETURNS INT
 BEGIN
     SET @datenow = NOW();
     SET @age = (YEAR(NOW()) - YEAR(datefield)) - (RIGHT(CURDATE(), 5) < RIGHT(datefield, 5));
     RETURN @age;
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS random;
-DELIMITER $$
 CREATE FUNCTION random() RETURNS FLOAT
 BEGIN
     RETURN RAND();
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_set_voteable;
-DELIMITER $$
 CREATE FUNCTION fn_set_voteable() RETURNS INT
 BEGIN
     INSERT INTO monolyth_voteable (votes) VALUES (0);
     RETURN LAST_INSERT_ID();
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_set_likeable;
-DELIMITER $$
 CREATE FUNCTION fn_set_likeable() RETURNS INT
 BEGIN
     INSERT INTO monolyth_likeable (likes) VALUES (0);
     RETURN LAST_INSERT_ID();
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_set_commentable;
-DELIMITER $$
 CREATE FUNCTION fn_set_commentable() RETURNS INT
 BEGIN
     INSERT INTO monolyth_commentable (comments) VALUES (0);
     RETURN LAST_INSERT_ID();
 END;
-$$
-DELIMITER ;
 
 DROP FUNCTION IF EXISTS fn_set_media;
-DELIMITER $$
 CREATE FUNCTION fn_set_media(
     myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT,
     myfilesize INT, mymimetype TEXT
@@ -530,54 +507,39 @@ BEGIN
         RETURN @tmpid;
     END IF;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_link_auth_group_after_insert AFTER INSERT ON monolyth_auth_link_auth_group
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_auth_group SET countmember = countmember + 1
         WHERE id = NEW.auth_group;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_insert_after AFTER INSERT ON monolyth_auth
 FOR EACH ROW
 BEGIN
     INSERT INTO monolyth_auth_link_auth_group VALUES (NEW.id, 2);
     UPDATE monolyth_counters SET value = value + 1 WHERE name = 'users';
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_link_auth_group_after_delete AFTER DELETE ON monolyth_auth_link_auth_group
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_auth_group SET countmember = countmember - 1
         WHERE id = OLD.auth_group;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_update_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_update_before BEFORE UPDATE ON monolyth_auth
 FOR EACH ROW
 BEGIN
     SET NEW.datemodified = NOW();
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_delete_after AFTER DELETE ON monolyth_auth
 FOR EACH ROW
 BEGIN
@@ -586,21 +548,15 @@ BEGIN
     DELETE FROM monolyth_auth_link_auth_group WHERE auth = OLD.id;
     DELETE FROM monolyth_acl WHERE owner = OLD.id;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_session_mysqlsucks;
-DELIMITER $$
 CREATE TRIGGER monolyth_session_mysqlsucks BEFORE INSERT ON monolyth_session
 FOR EACH ROW
 BEGIN
     SET NEW.dateactive = NOW();
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_session_log;
-DELIMITER $$
 CREATE TRIGGER monolyth_session_log AFTER DELETE ON monolyth_session
 FOR EACH ROW
 BEGIN
@@ -611,21 +567,15 @@ BEGIN
         UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
     END IF;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS update_people_online_insert;
-DELIMITER $$
 CREATE TRIGGER update_people_online_insert AFTER INSERT ON monolyth_session
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_counters SET value = value + 1 WHERE name = 'people_online';
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_session_update;
-DELIMITER $$
 CREATE TRIGGER monolyth_session_update BEFORE UPDATE ON monolyth_session
 FOR EACH ROW
 BEGIN
@@ -634,11 +584,8 @@ BEGIN
         UPDATE monolyth_auth SET dateactive = NEW.dateactive WHERE id = NEW.userid;
     END IF;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS update_people_online_update;
-DELIMITER $$
 CREATE TRIGGER update_people_online_update AFTER UPDATE ON monolyth_session
 FOR EACH ROW
 BEGIN
@@ -649,11 +596,8 @@ BEGIN
         UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users_online';
     END IF;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_insert_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_insert_before BEFORE INSERT ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -661,11 +605,8 @@ BEGIN
         monolyth_comment WHERE reference = NEW.reference), 0) + 1;
     SET NEW.hash = md5(CONCAT(NEW.ip, NEW.reference, NEW.datecreated, NEW.comment));
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_insert_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_insert_after AFTER INSERT ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -674,11 +615,8 @@ BEGIN
             WHERE reference = NEW.reference ORDER BY datecreated DESC LIMIT 1)
         WHERE id = NEW.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_delete_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_delete_after AFTER DELETE ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -687,11 +625,8 @@ BEGIN
             WHERE reference = OLD.reference ORDER BY datecreated DESC LIMIT 1)
         WHERE id = OLD.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_update_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_update_before BEFORE UPDATE ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -700,11 +635,8 @@ BEGIN
     END IF;
     SET NEW.hash = md5(CONCAT(NEW.ip, NEW.reference, NEW.datecreated, NEW.comment));
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_vote_insert_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_vote_insert_after AFTER INSERT ON monolyth_vote
 FOR EACH ROW
 BEGIN
@@ -714,11 +646,8 @@ BEGIN
         votes = votes + 1
         WHERE id = NEW.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_vote_delete_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_vote_delete_after AFTER DELETE ON monolyth_vote
 FOR EACH ROW
 BEGIN
@@ -728,11 +657,8 @@ BEGIN
         votes = votes - 1
         WHERE id = OLD.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_vote_update_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_vote_update_after AFTER UPDATE ON monolyth_vote
 FOR EACH ROW
 BEGIN
@@ -740,11 +666,8 @@ BEGIN
         average = (average * votes - OLD.vote + NEW.vote) / votes
         WHERE id = NEW.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_insert_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_insert_before BEFORE INSERT ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -757,11 +680,8 @@ BEGIN
         NEW.comment));
     SET NEW.likes = fn_set_likeable();
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_insert_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_insert_after AFTER INSERT ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -770,11 +690,8 @@ BEGIN
             WHERE reference = NEW.reference ORDER BY datecreated DESC LIMIT 1)
         WHERE id = NEW.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_delete_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_delete_after AFTER DELETE ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -783,23 +700,16 @@ BEGIN
             WHERE reference = OLD.reference ORDER BY datecreated DESC LIMIT 1)
         WHERE id = OLD.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_update_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_update_before BEFORE UPDATE ON monolyth_comment
 FOR EACH ROW
 BEGIN
     SET NEW.datemodified = NOW();
-    SET NEW.hash = md5(CONCAT(NEW.commentindex, NEW.reference, NEW.datemodified,
-        NEW.comment));
+    SET NEW.hash = md5(CONCAT(NEW.commentindex, NEW.reference, NEW.datemodified, NEW.comment));
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_comment_update_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_comment_update_after AFTER UPDATE ON monolyth_comment
 FOR EACH ROW
 BEGIN
@@ -813,38 +723,27 @@ BEGIN
         END IF;
     END IF;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_like_insert_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_like_insert_after AFTER INSERT ON monolyth_like
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_likeable SET likes = likes + 1, last = NEW.id WHERE id = NEW.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_like_delete_after;
-DELIMITER $$
 CREATE TRIGGER monolyth_like_delete_after AFTER DELETE ON monolyth_like
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_likeable SET likes = likes - 1 WHERE id = OLD.reference;
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_language_insert_before;
-DELIMITER $$
 CREATE TRIGGER monolyth_language_insert_before BEFORE INSERT ON monolyth_language
 FOR EACH ROW
 BEGIN
     SET NEW.title = (SELECT title FROM monolyth_language_all WHERE id = NEW.id);
 END;
-$$
-DELIMITER ;
 
 INSERT INTO monolyth_auth_group VALUES (
     NULL, NULL, 'Anonymous', 'anonymous', 1,
@@ -888,69 +787,63 @@ INSERT INTO monolyth_language_all VALUES
 INSERT INTO monolyth_language VALUES (1, 'English', 1, 1);
 
 ALTER TABLE monolyth_auth_group ADD CONSTRAINT FOREIGN KEY (owner) REFERENCES monolyth_auth(id) ON DELETE CASCADE;
+
 -- }}}
 
 -- {{{ v4.3.0
+
 DROP TABLE monolyth_acl;
 DROP TABLE monolyth_acl_resource;
 ALTER TABLE monolyth_auth_group RENAME TO monolyth_temp;
 ALTER TABLE monolyth_auth_link_auth_group RENAME TO monolyth_auth_group;
 ALTER TABLE monolyth_temp RENAME TO monolyth_group;
+
 -- }}}
 
 -- {{{ v4.3.2
+
 ALTER TABLE monolyth_group CHANGE COLUMN countmember members BIGINT NOT NULL DEFAULT 0;
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_insert;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_group_after_insert AFTER INSERT ON monolyth_auth_group
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_group SET members = members + 1 WHERE id = NEW.auth_group;
 END;
-$$
-DELIMITER ;
+
 -- }}}
 
 -- {{{ v4.3.3
+
 DROP TRIGGER IF EXISTS monolyth_auth_insert_after;
 DROP TRIGGER IF EXISTS monolyth_auth_after_insert;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_insert AFTER INSERT ON monolyth_auth
 FOR EACH ROW
 BEGIN
     SELECT id FROM monolyth_group WHERE name = 'Users' INTO @groupid;
     INSERT INTO monolyth_auth_group VALUES (NEW.id, @groupid);
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_delete_after;
 DROP TRIGGER IF EXISTS monolyth_auth_after_delete;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_after_delete AFTER DELETE ON monolyth_auth
 FOR EACH ROW
 BEGIN
     INSERT INTO monolyth_auth_deleted VALUES (OLD.id, OLD.name, NOW());
     UPDATE monolyth_counters SET value = value - 1 WHERE name = 'users';
 END;
-$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS monolyth_auth_link_auth_group_after_delete;
-DELIMITER $$
 CREATE TRIGGER monolyth_auth_group_after_delete AFTER DELETE ON monolyth_auth_group
 FOR EACH ROW
 BEGIN
     UPDATE monolyth_group SET members = members - 1 WHERE id = OLD.auth_group;
 END;
-$$
-DELIMITER ;
+
 -- }}}
 
 -- {{{ v4.5.2
 
 DROP FUNCTION IF EXISTS fn_set_city;
-DELIMITER $$
 CREATE FUNCTION fn_set_city(cityname TEXT, ctry INTEGER, lang INTEGER) RETURNS integer
 BEGIN
     IF cityname IS NULL THEN
@@ -964,8 +857,6 @@ BEGIN
     INSERT INTO monolyth_city VALUES (NULL, ctry, lang, cityname);
     RETURN LAST_INSERT_ID();
 END;
-$$
-DELIMITER ;
 
 -- }}}
 
