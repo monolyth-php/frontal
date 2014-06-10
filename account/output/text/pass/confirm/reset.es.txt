@@ -1,0 +1,1 @@
+Tu nueva contrase&ntilde;a es <code>%1$s</code>. Puedes acceder con esta contrase&ntilde;a, y seleccionar una nueva a continuaci&oacute;n (para la cual necesitas esta contrase&ntilde;a, &iexcl;as&iacute; que por favor an&oacute;tala!).
