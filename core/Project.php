@@ -166,9 +166,19 @@ abstract class Project extends ArrayObject
         return $this;
     }
 
-    public function export()
+    public function export(array $fields = null)
     {
-        $out = new ArrayObject((array)$this);
+        if ($fields) {
+            $out = [];
+            foreach ($fields as $field) {
+                try {
+                    $out[$field] = $this[$field];
+                } catch (ErrorException $e) {
+                }
+            }
+        } else {
+            $out = (array)$this;
+        }
         foreach ([
             'staticDomain',
             'staticSecureDomain',
@@ -177,8 +187,11 @@ abstract class Project extends ArrayObject
             'compacter',
             'cat',
             'variables',
+            'compacter',
         ] as $prop) {
-            $out->$prop = $this->$prop;
+            if (!$fields || in_array($prop, $fields)) {
+                $out[$prop] = $this->$prop;
+            }
         }
         return $out;
     }
