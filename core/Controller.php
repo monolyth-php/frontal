@@ -296,10 +296,7 @@ abstract class Controller
                 );
             } else {
                 try {
-                    $this->template = $this->view([
-                        '\template/body',
-                        'monolyth\template/page',
-                    ]);
+                    $this->template = $this->view('\template/page');
                 } catch (FileNotFound_Exception $e) {
                     $this->template = $this->view([
                         'monolyth\template/body',
