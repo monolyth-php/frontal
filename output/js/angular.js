@@ -104,13 +104,6 @@ $locationProvider.html5Mode(true);
 
 base.controller('MonolythController', ['$scope', '$route', 'monolyth.Message', function($scope, $route, Message) {
 
-$scope.template = {url: ''};
-/*
-$scope.$on('$routeChangeSuccess', function() {
-    $scope.template.url = $route.current.templateUrl;
-});
-*/
-
 $scope.Site = {
     language: {
         current: {
