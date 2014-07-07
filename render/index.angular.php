@@ -1,3 +1,4 @@
+<?php namespace monolyth ?>
 <!doctype html>
 <!--[if lt IE 7]><html ng-controller="MonolythController" class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="{{Site.language.current.code}}"><![endif]-->
 <!--[if IE 7]><html ng-controller="MonolythController" class="no-js lt-ie10 lt-ie9 lt-ie8" lang="{{Site.language.current.code}}"><![endif]-->
@@ -12,8 +13,17 @@
         <meta ng-if="Page.meta.description" name="description" content="{{Page.meta.description}}">
         <meta ng-if="Site.mobileOptimized" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <?=$Css?>
-        <link ng-repeat="favicon in Site.favicons" rel="icon" ng-type="image/{{favicon.type}}" ng-href="{{favicon.href}}">
-        <noscript monolyth-head="Page.head" ng-if="Page.head"></noscript>
+<?php if ($project['favicons']) foreach ($project['favicons'] as $favicon) { ?>
+        <link rel="icon" ng-type="image/<?=$favicon['type']?>" href="<?=$favicon['href']?>">
+<?php } ?>
+<?php
+
+try {
+    echo $view('\slice/head');
+} catch (render\FileNotFound_Exception $e) {
+}
+
+?>
     </head>
     <?php require_once $body ?>
 </html>
