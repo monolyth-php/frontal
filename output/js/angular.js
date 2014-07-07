@@ -17,6 +17,9 @@ return {
     },
     has: function() {
         return msgs.length;
+    },
+    clear: function() {
+        msgs = [];
     }
 };
 
