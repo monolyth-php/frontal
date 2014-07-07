@@ -4,18 +4,117 @@
 
 var base = angular.module('monolyth', ['ngRoute']);
 
+base.factory('monolyth.Message', [function() {
+
+var msgs = [];
+return {
+    add: function(msg) {
+        console.log(msg);
+        msgs.push(msg);
+    },
+    get: function() {
+        return msgs;
+    },
+    has: function() {
+        return msgs.length;
+    }
+};
+
+}]);
+
+base.run(['$http', 'monolyth.Message', function($http, Message) {
+
+delete $http.defaults.headers.common['X-Requested-With'];
+$http.defaults.withCredentials = true;
+$http.defaults.headers.post["Content-Type"] = 'application/x-www-form-urlencoded;charset=utf-8';
+//    $http.defaults.cache = $cacheFactory('ajaxCache');
+
+// http://victorblog.com/2012/12/20/make-angularjs-http-service-behave-like-jquery-ajax/
+function param(obj) {
+    var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+    for (name in obj) {
+        value = obj[name];
+        if (value instanceof Array) {
+            for (i = 0; i < value.length; ++i) {
+                subValue = value[i];
+                fullSubName = name + '[' + i + ']';
+                innerObj = {};
+                innerObj[fullSubName] = subValue;
+                query += param(innerObj) + '&';
+            }
+        } else if (value instanceof Object) {
+            for (subName in value) {
+                subValue = value[subName];
+                fullSubName = name + '[' + subName + ']';
+                innerObj = {};
+                innerObj[fullSubName] = subValue;
+                query += param(innerObj) + '&';
+            }
+        } else if (value !== undefined && value !== null) {
+            query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+        }
+    }
+    return query.length ? query.substr(0, query.length - 1) : query;
+};
+
+// Override $http service's default transformRequest
+$http.defaults.transformRequest = [function(data) {
+    return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+}];
+
+}]);
+
+base.factory('monolyth.$http', ['$http', function($http) {
+
+function transform(data) {
+    try {
+        newdata = $.parseJSON(data);
+        alert('yes');
+    } catch (e) {
+        console.log(data, e);
+        return data;
+    }
+    data = newdata;
+    if (angular.isObject(data) && '_messages' in data) {
+        data._messages.map(function(val) {
+            console.log(val);
+            Message.add(val);
+        });
+        delete data._messages;
+    }
+    return data;
+};
+
+return {
+    get: function(url, options) {
+        options = options || {};
+        options.transformResponse = [transform];
+        return $http.get(url, options);
+    },
+    post: function(url, data, options) {
+        options = options || {};
+        options.transformResponse = [transform];
+        return $http.post(url, data, options);
+    }
+};
+
+}]);
+
 base.config(['$locationProvider', function($locationProvider) {
 
 $locationProvider.html5Mode(true);
 
 }]);
 
-base.controller('MonolythController', ['$scope', '$route', function($scope, $route) {
+base.controller('MonolythController', ['$scope', '$route', 'monolyth.Message', function($scope, $route, Message) {
 
 $scope.template = {url: ''};
+/*
 $scope.$on('$routeChangeSuccess', function() {
     $scope.template.url = $route.current.templateUrl;
 });
+*/
+
 $scope.Site = {
     language: {
         current: {
@@ -24,7 +123,8 @@ $scope.Site = {
     },
     favicons: [],
     mobileOptimized: true,
-    title: 'Monolyth/Angular project'
+    title: 'Monolyth/Angular project',
+    Message: Message
 };
 $scope.Page = {
     meta: {
@@ -205,19 +305,22 @@ function utf8_decode(utftext) {
 
 });
 
-base.directive('monolythForm', ['monolyth.Base64', '$http', '$compile', function(Base64, $http, $compile) {
+base.directive('monolythForm', ['$http', '$compile', function($http, $compile) {
 
 return {
     replace: true,
     link: function(scope, element, attrs) {
-        var url = '/monolyth/form/' + scope.Site.language.current.code + '/' + Base64.encode(attrs.monolythForm) + '/';
+        var url = '/monolyth/form/' + scope.Site.language.current.code + '/' + attrs.monolythForm.replace('\\', '-') + '/';
         if (attrs.monolythFormView) {
             url += '?view=' + attrs.monolythFormView;
         }
-        $http.get(url).success(function(data) {
-            var form = Base64.decode(data.form);
+        $http.get(url).success(function(form) {
             if (attrs.ngModel) {
                 form = form.replace(/name="(\w+?)"/g, 'name="$1" ng-model="' + attrs.ngModel + '.$1"');
+            }
+            if (attrs.ngSubmit) {
+                form = form.replace(/<form/, '<form ng-submit="' + attrs.ngSubmit + '"');
+                form = form.replace(/(action|method)=".*?"/g, '');
             }
             form = angular.element(form);
             var select = form.find('selected');
@@ -240,9 +343,7 @@ return {
                     $this.attr('ng-options', 'o.v as o.d for o in ' + opts);
                 });
             }
-            if (attrs.monolythFormSubmit) {
-                form.attr('ng-submit', attrs.monolythFormSubmit);
-            }
+            console.log(scope);
             if (attrs.monolythFormModify) {
                 (scope[attrs.monolythFormModify])(form);
             }
