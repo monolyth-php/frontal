@@ -153,6 +153,11 @@ abstract class Project extends ArrayObject
          * but of course this might change in the future :)
          */
         $this['notifymail'] = 'someone@example.com';
+        /**
+         * Optionally fill this with an array of favicons. Each entry should be
+         * a hash with the keys "type" (e.g. 'png') and "href" (full url).
+         */
+        $this['favicons'] = [];
     }
 
     public function merge($input)
