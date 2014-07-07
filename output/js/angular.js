@@ -9,7 +9,6 @@ base.factory('monolyth.Message', [function() {
 var msgs = [];
 return {
     add: function(msg) {
-        console.log(msg);
         msgs.push(msg);
     },
     get: function() {
@@ -127,7 +126,7 @@ $scope.Page = {
     title: '[...loading...]',
     head: '',
     stylesheets: [],
-    body: '/html/template/body.html'
+    loading: false
 };
 
 }]);
@@ -296,56 +295,6 @@ function utf8_decode(utftext) {
 })();
 
 });
-
-base.directive('monolythForm', ['$http', '$compile', function($http, $compile) {
-
-return {
-    replace: true,
-    link: function(scope, element, attrs) {
-        var url = '/monolyth/form/' + scope.Site.language.current.code + '/' + attrs.monolythForm.replace('\\', '-') + '/';
-        if (attrs.monolythFormView) {
-            url += '?view=' + attrs.monolythFormView;
-        }
-        $http.get(url).success(function(form) {
-            if (attrs.ngModel) {
-                form = form.replace(/name="(\w+?)"/g, 'name="$1" ng-model="' + attrs.ngModel + '.$1"');
-            }
-            if (attrs.ngSubmit) {
-                form = form.replace(/<form/, '<form ng-submit="' + attrs.ngSubmit + '"');
-                form = form.replace(/(action|method)=".*?"/g, '');
-            }
-            form = angular.element(form);
-            var select = form.find('selected');
-            if (select.length) {
-                select.each(function() {
-                    var $this = $(this);
-                    var opts = '[';
-                    $this.find('option').each(function(i, e) {
-                        var $e = $(e);
-                        if (!i) {
-                            return;
-                        }
-                        if (i > 1) {
-                            opts += ',';
-                        }
-                        opts += JSON.stringify({v: $e.val(), d: $e.html()});
-                        $e.remove();
-                    });
-                    opts += ']';
-                    $this.attr('ng-options', 'o.v as o.d for o in ' + opts);
-                });
-            }
-            console.log(scope);
-            if (attrs.monolythFormModify) {
-                (scope[attrs.monolythFormModify])(form);
-            }
-            $compile(form.contents())(scope);
-            element.replaceWith(form);
-        });
-    }
-};
-
-}]);
 
 })();
 
