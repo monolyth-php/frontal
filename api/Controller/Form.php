@@ -11,24 +11,20 @@ class Form_Controller extends Controller
     protected function get(array $args)
     {
         extract($args);
-        $name = base64_decode($name);
+        $name = str_replace('-', '\\', $name);
         if (class_exists($name)) {
             $form = new $name;
             $parse = true;
             return $this->view(
-                'monolyth\render\page/json',
-                ['data' => ['form' => base64_encode($this->view(
-                    [
-                        isset($_GET['view']) ?
-                            $_GET['view'] :
-                            'monolyth\render\form\slice/table',
-                        'monolyth\render\form\slice/form',
-                    ],
-                    compact('form', 'parse')
-                )->__invoke())]]
+                [
+                    isset($_GET['view']) ?
+                        $_GET['view'] :
+                        'monolyth\render\form\slice/table',
+                    'monolyth\render\form\slice/form',
+                ],
+                compact('form', 'parse')
             );
         }
-        die('meh');
         throw new HTTP404_Exception;
     }
 }
