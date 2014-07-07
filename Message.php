@@ -50,6 +50,7 @@
 
 namespace monolyth;
 use StdClass;
+use ErrorException;
 
 class Message
 {
@@ -89,10 +90,13 @@ class Message
     {
         $types = func_get_args();
         if (!$types) {
-            foreach (self::$messages as $messages) {
-                if (count($messages)) {
-                    return true;
+            try {
+                foreach (self::$messages as $messages) {
+                    if (count($messages)) {
+                        return true;
+                    }
                 }
+            } catch (ErrorException $e) {
             }
             return false;
         }
