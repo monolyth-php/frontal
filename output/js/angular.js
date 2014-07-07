@@ -27,7 +27,6 @@ base.run(['$http', 'monolyth.Message', function($http, Message) {
 delete $http.defaults.headers.common['X-Requested-With'];
 $http.defaults.withCredentials = true;
 $http.defaults.headers.post["Content-Type"] = 'application/x-www-form-urlencoded;charset=utf-8';
-//    $http.defaults.cache = $cacheFactory('ajaxCache');
 
 // http://victorblog.com/2012/12/20/make-angularjs-http-service-behave-like-jquery-ajax/
 function param(obj) {
@@ -64,20 +63,17 @@ $http.defaults.transformRequest = [function(data) {
 
 }]);
 
-base.factory('monolyth.$http', ['$http', function($http) {
+base.factory('monolyth.$http', ['$http', 'monolyth.Message', function($http, Message) {
 
 function transform(data) {
     try {
-        newdata = $.parseJSON(data);
-        alert('yes');
+        newdata = angular.fromJson(data);
     } catch (e) {
-        console.log(data, e);
         return data;
     }
     data = newdata;
     if (angular.isObject(data) && '_messages' in data) {
         data._messages.map(function(val) {
-            console.log(val);
             Message.add(val);
         });
         delete data._messages;
