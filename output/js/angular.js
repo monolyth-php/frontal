@@ -104,8 +104,9 @@ $locationProvider.html5Mode(true);
 
 }]);
 
-base.controller('MonolythController', ['$scope', '$route', 'monolyth.Message', function($scope, $route, Message) {
+base.controller('MonolythController', ['$scope', '$route', 'monolyth.Message', 'monolyth.User', function($scope, $route, Message, User) {
 
+$scope.User = User;
 $scope.Site = {
     language: {
         current: {
@@ -301,6 +302,21 @@ function utf8_decode(utftext) {
 })();
 
 });
+
+base.factory('monolyth.User', [function() {
+
+return {
+    is: function() {
+        var args = [];
+        for (var i = 0; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
+        console.log(args);
+        return true;
+    }
+};
+
+}]);
 
 })();
 
