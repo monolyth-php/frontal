@@ -4,7 +4,7 @@
 <!--[if IE 7]><html ng-controller="MonolythController" class="no-js lt-ie10 lt-ie9 lt-ie8" lang="{{Site.language.current.code}}"><![endif]-->
 <!--[if IE 8]><html ng-controller="MonolythController" class="no-js lt-ie10 lt-ie9" lang="{{Site.language.current.code}}"><![endif]-->
 <!--[if IE 9]><html ng-controller="MonolythController" class="no-js lt-ie10" lang="{{Site.language.current.code}}"><![endif]-->
-<!--[if gt IE 9]><!--><html ng-controller="MonolythController" class="no-js" lang="{{Site.language.current.code}}"><!--<![endif]-->
+<!--[if gt IE 9]><!--><html ng-controller="MonolythController" ng-app="<?=$project['angular']?>" class="no-js" lang="{{Site.language.current.code}}"><!--<![endif]-->
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title ng-bind-template="{{Page.title + Page.separator + Site.title}}">[...loading...]</title>
