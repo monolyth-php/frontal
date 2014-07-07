@@ -128,6 +128,12 @@ $scope.Page = {
     stylesheets: [],
     loading: false
 };
+$scope.$on('$routeChangeStart', function() {
+    $scope.Page.loading = true;
+});
+$scope.$on('$routeChangeSuccess', function() {
+    $scope.Page.loading = false;
+});
 
 }]);
 
