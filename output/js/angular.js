@@ -303,18 +303,43 @@ function utf8_decode(utftext) {
 
 });
 
-base.factory('monolyth.User', [function() {
+base.factory('monolyth.Session', ['$http', function($http) {
 
 return {
-    is: function() {
-        var args = [];
-        for (var i = 0; i < arguments.length; i++) {
-            args.push(arguments[i]);
-        }
-        console.log(args);
-        return true;
+    read: function() {
+        return $http.get('/monolyth/session/').success(function(user) {
+            for (var key in user) {
+                User[key] = user[key];
+            }
+        });
     }
 };
+
+}]);
+
+base.factory('monolyth.User', ['monolyth.Session', function(Session) {
+
+var User = {
+    is: function() {
+        for (var i = 0; i < arguments.length; i++) {
+            if (User.roles.indexOf(arguments[i]) == -1) {
+                return false;
+            }
+        }
+        return true;
+    },
+    roles: [],
+    authenticate: function(credentials) {
+    }
+};
+Session.read().success(function(session) {
+    if ('User' in session) {
+        for (var key in session.User) {
+            User[key] = session.User[key];
+        }
+    }
+});
+return User;
 
 }]);
 
