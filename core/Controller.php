@@ -20,6 +20,7 @@ use monolyth\account\Logout_Controller;
 use monolyth\HTTP301_Exception;
 use monolyth\HTTP400_Exception;
 use monolyth\HTTP403_Exception;
+use monolyth\HTTP401_Exception;
 use monolyth\HTTP404_Exception;
 use monolyth\render\HTTP404_Controller;
 use monolyth\HTTP405_Exception;
@@ -157,6 +158,13 @@ abstract class Controller
                     $this->url('monolyth/account/login')
                    .'?redir='.urlencode($redir)
                 );
+            }
+        );
+        $this->addRequirement(
+            'monolyth\Ajax_Login_Required',
+            $user->loggedIn(),
+            function() use($project, $redir) {
+                throw new HTTP401_Exception;
             }
         );
         $this->addRequirement(
