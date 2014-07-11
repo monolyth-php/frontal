@@ -14,12 +14,6 @@ $flags = JSON_NUMERIC_CHECK;
 if (defined("JSON_PRETTY_PRINT")) {
     $flags |= JSON_PRETTY_PRINT;
 }
-if (is_array($data) && $message->has()) {
-    $data['_messages'] = [];
-    foreach ($message->get() as $msg) {
-        $data['_messages'][] = $msg;
-    }
-}
 $out = json_encode($data, $flags);
 if (!defined("JSON_PRETTY_PRINT")) {
     $h = new utils\JSON_Helper();
