@@ -10,6 +10,10 @@ switch ($code = isset($code) ? $code : '200') {
 }
 header($string ? "HTTP/1.1 $code $string" : '', true, $code);
 header("Content-type: application/json", true);
+header("Access-Control-Allow-Origin: {$project['http']}");
+header("Access-Control-Allow-Headers: X-Requested-With");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 $flags = JSON_NUMERIC_CHECK;
 if (defined("JSON_PRETTY_PRINT")) {
     $flags |= JSON_PRETTY_PRINT;
