@@ -11,12 +11,6 @@ class Login_Controller extends account\Login_Controller
 {
     protected $template = false;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->translate = new Ajax_Translate_Parser;
-    }
-
     protected function post(array $args)
     {
         try {
