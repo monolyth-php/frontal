@@ -89,10 +89,7 @@ class User_Model implements User_Settings
             if ($this->status() & $this::STATUS_GENERATED_PASS) {
                 self::message()->add(
                     'info',
-                    $this->text(
-                        'monolyth\account\pass/generated',
-                        $this->url('monolyth/account/update_pass')
-                    )
+                    'monolyth\account\pass/generated'
                 );                    
             }
         }
