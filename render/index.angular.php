@@ -12,7 +12,7 @@
         <meta ng-if="Page.meta.keywords" name="keywords" content="{{Page.meta.keywords.join(', ')}}">
         <meta ng-if="Page.meta.description" name="description" content="{{Page.meta.description}}">
         <meta ng-if="Site.mobileOptimized" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <?=$Css?>
+        <link rel="stylesheet" href="<?=$httpimg('/css/project.css')?>">
 <?php if ($project['favicons']) foreach ($project['favicons'] as $favicon) { ?>
         <link rel="icon" ng-type="image/<?=$favicon['type']?>" href="<?=$favicon['href']?>">
 <?php } ?>
