@@ -154,7 +154,7 @@ final class View
         $file = $this->toFilename(
             $file,
             $this->controller,
-            "%s/output/$type/%s.$ext"
+            "%s/%s.$ext"
         );
         try {
             file_get_contents($file, true);
