@@ -29,8 +29,8 @@ abstract class Form extends ArrayObject
     public $model,
            $id,
            $views = [
-                'textarea' => 'monolyth\render\form\slice/rowvertical',
-                'texthtml' => 'monolyth\render\form\slice/rowvertical',
+                'textarea' => 'monolyth\render\form\rowvertical',
+                'texthtml' => 'monolyth\render\form\rowvertical',
            ];
 
     public function __construct($id = null)
@@ -354,7 +354,7 @@ abstract class Form extends ArrayObject
     public function getView(Element $e, $default = null)
     {
         if (!isset($default)) {
-            $default = 'monolyth\render\form\slice/row';
+            $default = 'monolyth\render\form\row';
         }
         if (isset($this->views[$e->getName()])) {
             return $this->views[$e->getName()];
