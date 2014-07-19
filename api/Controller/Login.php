@@ -21,7 +21,7 @@ class Login_Controller extends account\Login_Controller
             // This we definitely don't want for ajaxy API controllers.
         }
         return $this->view(
-            'monolyth\render\page/json',
+            'monolyth\render\json',
             ['data' => self::user()->loggedIn()]
         );
     }

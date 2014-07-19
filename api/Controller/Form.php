@@ -19,8 +19,8 @@ class Form_Controller extends Controller
                 [
                     isset($_GET['view']) ?
                         $_GET['view'] :
-                        'monolyth\render\form\slice/table',
-                    'monolyth\render\form\slice/form',
+                        'monolyth\render\form\table',
+                    'monolyth\render\form\form',
                 ],
                 compact('form', 'parse')
             );

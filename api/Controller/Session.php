@@ -22,13 +22,13 @@ class Session_Controller extends Controller
         if (isset($session['Groups'])) {
             unset($session['Groups']);
         }
-        return $this->view('monolyth\render\page/json', ['data' => $session]);
+        return $this->view('monolyth\render\json', ['data' => $session]);
     }
 
     protected function post(array $args)
     {
         self::session()->stop();
-        return $this->view('monolyth\render\page/json', ['data' => 1]);
+        return $this->view('monolyth\render\json', ['data' => 1]);
     }
 }
 
