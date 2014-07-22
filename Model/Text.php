@@ -30,11 +30,11 @@
  *
  * // assuming current language is Dutch:
  * echo Text::get('samplestring');
- * // Sample output (should be in ./output/text/samplestring.nl.txt):
+ * // Sample output (should be in ./samplestring.nl.txt):
  * // Een string om te vertalen.
  * $name = 'Marijn';
  * echo Text::get('greeting', $name);
- * // Sample output (should be in ./output/text/greeting.nl.txt), and
+ * // Sample output (should be in ./greeting.nl.txt), and
  * // assuming its contents are "Hoi, %1$s.":
  * // Hoi, Marijn.
  *
@@ -269,7 +269,7 @@ class Text_Model
     {
         $language = $this->language($language);
         $orig = explode('\\', $id);
-        $parts = ['output', 'text', array_pop($orig)];
+        $parts = [array_pop($orig)];
         $parts = array_merge($orig, $parts);
         $fileid = implode(DIRECTORY_SEPARATOR, $parts);
         if ($fileid{0} == DIRECTORY_SEPARATOR) {
