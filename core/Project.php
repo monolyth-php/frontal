@@ -114,6 +114,8 @@ abstract class Project extends ArrayObject
          */
         $this['protocols'] = 'http';
         $this['cli'] = substr(PHP_SAPI, 0, 3) == 'cli';
+        /** Permitted origins for CORS calls. */
+        $this['origins'] = [];
         if (!$this['cli'] && isset($_SERVER['SERVER_NAME'])) {
             if (!isset($this['site'])) {
                 $this['site'] = preg_replace(
