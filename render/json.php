@@ -8,20 +8,18 @@ switch ($code = isset($code) ? $code : '200') {
     case '404': $string = 'Not Found'; break;
     case '500': $string = 'Internal Server Error'; break;
 }
+mail('marijn@sensimedia.nl', 'debug', print_r($_SERVER, true).print_r($project, true));
 header($string ? "HTTP/1.1 $code $string" : '', true, $code);
 header("Content-type: application/json", true);
-header("Access-Control-Allow-Origin: {$project['http']}");
+if (isset($_SERVER['HTTP_ORIGIN'])
+    && in_array($_SERVER['HTTP_ORIGIN'], $project['origins'])
+) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+} else {
+    header("Access-Control-Allow-Origin: {$project['http']}");
+}
 header("Access-Control-Allow-Headers: X-Requested-With");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-$flags = JSON_NUMERIC_CHECK;
-if (defined("JSON_PRETTY_PRINT")) {
-    $flags |= JSON_PRETTY_PRINT;
-}
-$out = json_encode($data, $flags);
-if (!defined("JSON_PRETTY_PRINT")) {
-    $h = new utils\JSON_Helper();
-    $out = $h($out)->format();
-}
-echo $out;
+echo json_encode($data, JSON_NUMERIC_CHECK);
 
