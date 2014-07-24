@@ -44,7 +44,7 @@ abstract class Model extends ArrayObject
      * Constructor. When instantiated with data directly using PDO, this
      * flags if the model was or was not initially filled with data.
      */
-    public function __construct()
+    public function __construct($adapter = '_current')
     {
         $class = get_class($this);
         $this->_orig = [];
@@ -52,6 +52,7 @@ abstract class Model extends ArrayObject
         if ($this->_orig != $this->_after) {
             $this->_new = false;
         }
+        $this->adapter = self::adapter($adapter);
     }
 
     /**
