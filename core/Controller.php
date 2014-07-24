@@ -325,30 +325,8 @@ abstract class Controller
                     and $errors = $this->form->errors($this->form->validate())
                 ) {
                     // Automatically add error messages based on form errors.
-                    $test = [get_class($this->form), get_class($this)];
-                    $self = $this;
-                    $text = new Text_Model($this);
-                    $fn = function($field, $err) use ($test, $text) {
-                        $opts = [];
-                        foreach ($test as $option) {
-                            $try = strtolower(str_replace(
-                                '_',
-                                DIRECTORY_SEPARATOR,
-                                $this->merge($field, $option)
-                            ));
-                            if ($text->exists($try)) {
-                                $label = $text->get($try);
-                            } else {
-                                $label = $field;
-                            }
-                            $opts[] = "$try/error.$err";
-                            $try = substr($try, 0, strrpos($try, '/'));
-                            $opts[] = "$try/error.$err";
-                        }
-                        return $text->get($opts, $label);
-                    };
                     foreach ($errors as $field => $err) {
-                        self::message()->add('error', $fn($field, $err));
+                        self::message()->add('error', "$err.$field");
                     }
                 }
             case 'GET':
