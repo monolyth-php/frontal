@@ -25,11 +25,11 @@ class Activate_Model extends Model
 
     public function __invoke(Form $form)
     {
-        self::adapter()->beginTransaction();
+        $this->adapter->beginTransaction();
         if ($form['id']->value != self::amuser()->id()) {
             return 'mismatch';
         }
-        self::amuser()->status(self::adapter()->field(
+        self::amuser()->status($this->adapter->field(
             'monolyth_auth',
             'status',
             ['id' => self::amuser()->id()]
@@ -37,26 +37,26 @@ class Activate_Model extends Model
         try {
             $confirm = new Confirm_Model;
             if ($result = $confirm->process($form['hash']->value)) {
-                self::adapter()->rollBack();
+                $this->adapter->rollBack();
                 return $result;
             }
-            self::adapter()->flush();
-            self::amuser()->status(self::adapter()->field(
+            $this->adapter->flush();
+            self::amuser()->status($this->adapter->field(
                 'monolyth_auth',
                 'status',
                 ['id' => self::amuser()->id()]
             ));
-            self::adapter()->commit();
+            $this->adapter->commit();
             return null;
         } catch (Exception $e) {
-            self::adapter()->rollback();
+            $this->adapter->rollback();
             return 'generic';
         }
     }
 
     public function request($id)
     {
-        $auth = self::adapter()->row('monolyth_auth', '*', compact('id'));
+        $auth = $this->adapter->row('monolyth_auth', '*', compact('id'));
         $confirm = new Confirm_Model;
         $hash = $confirm->getFreeHash($auth['id'].$auth['name']);
         $website = Project::instance()['url'];
@@ -70,7 +70,7 @@ class Activate_Model extends Model
             true
         );
         try {
-            $tmp = self::adapter()->row(
+            $tmp = $this->adapter->row(
                 'monolyth_confirm',
                 'hash',
                 [
@@ -78,7 +78,7 @@ class Activate_Model extends Model
                     'tablename' => 'monolyth_auth',
                 ]
             );
-            self::adapter()->delete(
+            $this->adapter->delete(
                 'monolyth_confirm',
                 [
                     'owner' => $auth['id'],
@@ -90,7 +90,7 @@ class Activate_Model extends Model
         $source = $user->status() & $user::STATUS_REACTIVATE ?
             'reactivate' :
             'activate';
-        $db = self::adapter();
+        $db = $this->adapter;
         foreach ([
             '&~' => $user::STATUS_ACTIVATE | $user::STATUS_REACTIVATE |
                 $user::STATUS_EMAIL_UNCONFIRMED,
