@@ -3,9 +3,7 @@
 namespace monolyth\api;
 use monolyth\account;
 use monolyth\HTTP301_Exception;
-use monolyth\HTTP404_Exception;
 use monolyth\render\FileNotFound_Exception;
-use monolyth\render\Ajax_Translate_Parser;
 
 class Login_Controller extends account\Login_Controller
 {
