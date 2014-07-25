@@ -22,6 +22,7 @@ class Session_Controller extends Controller
         if (isset($session['Groups'])) {
             unset($session['Groups']);
         }
+        $session['_id'] = session_id();
         return $this->view('monolyth\render\json', ['data' => $session]);
     }
 
