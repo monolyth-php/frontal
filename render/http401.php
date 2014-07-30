@@ -10,8 +10,5 @@
  */
 
 namespace monolyth\render;
-
-?>
-<h1><?=$text('/title')?></h1>
-<p><?=$text('./explain')?></p>
+die();
 
