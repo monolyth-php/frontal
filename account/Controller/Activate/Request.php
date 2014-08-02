@@ -34,10 +34,7 @@ class Request_Activate_Controller extends Activate_Controller
             if ($error = $this->activate->request(self::user()->id())) {
                 return $this->view('page/activate/resendfailed');
             }
-            self::message()->add(
-                'success',
-                $this->text('./success', self::user()->email())
-            );
+            self::message()->add('success', './success');
             return $this->view('page/activate/resent');
         }
     }
