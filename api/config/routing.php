@@ -8,6 +8,10 @@ return function($m) use($project) {
     $m->connect('/monolyth/session/', 'monolyth\api\Session');
     $m->connect('/monolyth/account/login/', 'monolyth\api\Login');
     $m->connect('/monolyth/account/activate/', 'monolyth\api\Activate');
+    $m->connect(
+        '/monolyth/account/activate/request/',
+        'monolyth\api\Request_Activate'
+    );
     return $m;
 };
 
