@@ -11,7 +11,7 @@
  */
 namespace monolyth;
 use ErrorException;
-use monolyth\core\Project;
+use Project;
 
 /** Turn on all errors so we can catch exceptions. */
 error_reporting(E_ALL & ~E_STRICT);
@@ -132,7 +132,7 @@ abstract class Monolyth
      * This dispatches control of your site to a controller.
      * For CLI-scripts, this usually isn't called.
      */
-    public static function run(Project $project, $theme = 'default')
+    public static function run(core\Project $project, $theme = 'default')
     {
         try {
             $language = self::language();
@@ -275,4 +275,16 @@ spl_autoload_register(['monolyth\Monolyth', '__autoload']);
 
 /** Alias base class manually. */
 class_alias('monolyth\Monolyth', 'Monolyth');
+
+/**
+ * IE lt 10 doesn't properly support CORS with authentication. The corsath
+ * GET parameter exists to work around this:
+ */
+if (isset($_GET['corsauth'])) {
+    try {
+        list($id, $session, $checksum) = explode(',', $_GET['corsauth']);
+        $_COOKIE[Project::instance()['site']] = $session;
+    } catch (ErrorException $e) {
+    }
+}
 

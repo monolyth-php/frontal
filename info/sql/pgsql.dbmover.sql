@@ -312,6 +312,13 @@ $$ LANGUAGE 'plpgsql';
 -- END;
 -- $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION fn_set_commentable() RETURNS INT AS $$
+BEGIN
+    INSERT INTO monolyth_commentable (comments) VALUES (0);
+    RETURN CURRVAL('monolyth_commentable_id_seq');
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION fn_set_media(myowner INT, mydata BLOB, myfilename TEXT, mymd5 TEXT, myfilesize INT, mymimetype TEXT) RETURNS INT AS $$
 DECLARE tmpid INT;
 BEGIN

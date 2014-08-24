@@ -44,7 +44,7 @@ class Confirm_Pass_Controller extends Controller
                 $form = new Login_Form;
                 $form['name']->value = $name;
                 $form['pass']->value = $pass;
-                (new Login_Model)->__invoke($form);
+                self::user()->login($form);
                 self::message()->add(
                     'success',
                     $this->text('pass/reset/success')
