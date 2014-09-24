@@ -1,12 +1,14 @@
 <?php
 
 namespace monolyth\api;
-use monolyth\account;
+use monolyth\account\Do_Activate_Controller;
 use monolyth\HTTP301_Exception;
+use monolyth\Ajax_Login_Required;
 use monolyth\render\FileNotFound_Exception;
 use ErrorException;
 
-class Activate_Controller extends account\Do_Activate_Controller
+class Activate_Controller extends Do_Activate_Controller
+implements Ajax_Login_Required
 {
     protected $template = false;
 
@@ -23,7 +25,7 @@ class Activate_Controller extends account\Do_Activate_Controller
         }
         return $this->view(
             'monolyth\render\json',
-            ['data' => self::user()->active()]
+            ['data' => self::user()->active() ? 1 : 0]
         );
     }
 }
