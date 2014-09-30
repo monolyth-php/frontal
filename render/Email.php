@@ -192,9 +192,12 @@ class Email
                     }
                     $fn = 'setTXTbody';
                     foreach ($variables as &$variable) {
+                        if (!is_scalar($variable)) {
+                            continue;
+                        }
+                        $variable = (string)$variable;
                         $variable = $this->purify($variable);
                         $variable = $this->stripSmart($variable);
-                        $variable = (string)$variable;
                     }
                     break;
             }
@@ -205,6 +208,9 @@ class Email
                 foreach ($variables as $name => $value) {
                     if ($value instanceof Closure) {
                         $value = $value();
+                    }
+                    if (!is_scalar($value)) {
+                        continue;
                     }
                     $content = str_replace('{$'.$name.'}', $value, $content);
                     $this->headers['Subject'] = str_replace(
