@@ -18,7 +18,7 @@ class Update_Email_Form extends Post_Form
     public function __construct()
     {
         parent::__construct();
-        $this->addEmail('new', $this->text('./new'))
+        $this->addEmail('email', $this->text('./email'))
              ->isRequired()
              ->isNotEqualTo(self::user()->email());
         $this->addPassword('pass', $this->text('./pass'))
