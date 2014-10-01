@@ -6,8 +6,10 @@ use monolyth\Login_Required;
 use monolyth\HTTP400_Exception;
 use monolyth\HTTP500_Exception;
 
-class Tmp_Media_Controller extends Controller implements Login_Required
+class Tmp_Media_Controller extends Controller
 {
+    protected $template = false;
+
     protected function get(array $args)
     {
         if (!isset($_GET['f'])) {
@@ -19,9 +21,8 @@ class Tmp_Media_Controller extends Controller implements Login_Required
         } catch (ErrorException $e) {
             throw new HTTP500_Exception;
         }
-        $this->template = null;
         return $this->view(
-            'page/media/tmp',
+            'media/tmp',
             ['imagefile' => $_GET['f']] + $args + compact('i')
         );
     }
