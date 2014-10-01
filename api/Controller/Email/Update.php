@@ -14,6 +14,8 @@ use monolyth\HTTP500_Exception;
 
 class Update_Email_Controller extends Controller implements Ajax_Login_Required
 {
+    protected $template = false;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,7 +24,6 @@ class Update_Email_Controller extends Controller implements Ajax_Login_Required
 
     protected function post(array $args)
     {
-        die('ok');
         if (!$this->form->errors()) {
             $account = new User_Model;
             if (!($error = $account->email($this->form))) {
