@@ -13,6 +13,8 @@ use monolyth\adapter\sql\NoResults_Exception;
 use monolyth\adapter\sql\InsertNone_Exception;
 use monolyth\Confirm_Model;
 use monolyth\render\Email;
+use monolyth\account\Pass_Model;
+use monolyth\account\Login_Form;
 use monolyth\account\Forgot_Pass_Form;
 use Project;
 
@@ -31,6 +33,7 @@ class Reset_Pass_Model extends Model
         if (!($auth = $this->auth($form))) {
             return 'unknown';
         }
+        $this['id'] = $auth['id'];
         self::adapter()->beginTransaction();
         $confirm = new Confirm_Model;
         if ($error = $this->confirm(
@@ -126,6 +129,24 @@ class Reset_Pass_Model extends Model
             $pwrand .= substr($chars, rand(0, strlen($chars) - 1), 1);
         }
         return $pwrand;
+    }
+
+    public function process($id, $hash)
+    {
+        if ($error = (new Confirm_Model)->process($hash, $id)) {
+            return $error;
+        }
+        extract(self::adapter()->row(
+            'monolyth_auth',
+            ['name', 'pass'],
+            compact('id')
+        ));
+        (new Pass_Model)->update($pass, $id);
+        $form = new Login_Form;
+        $form['name']->value = $name;
+        $form['pass']->value = $pass;
+        self::user()->login($form);
+        return null;
     }
 }
 
