@@ -50,11 +50,16 @@ class User_Model extends Base_Model
     public function email(Post_Form $form)
     {
         $check = new Check_Pass_Model;
+        extract(self::adapter()->row(
+            'monolyth_auth',
+            ['pass', 'salt'],
+            ['id' => self::user()->id()]
+        ));
         if (call_user_func(
             $check,
             $form['pass']->value,
-            self::user()->pass(),
-            self::user()->salt()
+            $pass,
+            $salt
         ) != null) {
             return 'password';
         }
