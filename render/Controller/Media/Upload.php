@@ -6,6 +6,7 @@ use monolyth\Ajax_Login_Required;
 use monolyth\HTTP400_Exception;
 use monolyth\HTTP500_Exception;
 use monolyth\Config;
+use ErrorException;
 
 class Upload_Media_Controller extends Controller
 {
@@ -18,6 +19,11 @@ class Upload_Media_Controller extends Controller
             $_FILES['file']['tmp_name'],
             strrpos($_FILES['file']['tmp_name'], '/') + 1
         );
+        try {
+            $i = getimagesize($_FILES['file']['tmp_name']);
+        } catch (ErrorException $e) {
+            $i = [null, null];
+        }
         // Todo: cleanup old files in this directory, anything older than
         // 24 hours can be considered obsolete by now...
         move_uploaded_file(
@@ -26,7 +32,11 @@ class Upload_Media_Controller extends Controller
         );
         return $this->view(
             'monolyth\render\json',
-            ['data' => ['file' => "{$config->uploadPath}/$name"]]
+            ['data' => [
+                'file' => "{$config->uploadPath}/$name",
+                'width' => $i[0],
+                'height' => $i[1],
+            ]]
         );
     }
 }
