@@ -160,6 +160,10 @@ abstract class Project extends ArrayObject
          * a hash with the keys "type" (e.g. 'png') and "href" (full url).
          */
         $this['favicons'] = [];
+        /**
+         * Current server time, for use with Javascript-based applications.
+         */
+        $this['time'] = time();
     }
 
     public function merge($input)
