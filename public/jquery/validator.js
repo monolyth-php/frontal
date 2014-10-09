@@ -1,1 +1,1 @@
-../../../3rdparty/validator.js
+../../vendor/validator.js

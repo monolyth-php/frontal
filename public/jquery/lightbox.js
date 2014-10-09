@@ -1,1 +1,1 @@
-../../../3rdparty/lightbox.jquery.js
+../../vendor/lightbox.jquery.js

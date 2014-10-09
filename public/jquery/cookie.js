@@ -1,1 +1,1 @@
-../../../3rdparty/jquery.cookie.js
+../../vendor/jquery.cookie.js

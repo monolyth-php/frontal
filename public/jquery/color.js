@@ -1,1 +1,1 @@
-../../../3rdparty/jquery.color.js
+../../vendor/jquery.color.js

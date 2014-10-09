@@ -1,1 +1,1 @@
-../../../3rdparty/rangeinput.js
+../../vendor/rangeinput.js
