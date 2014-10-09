@@ -9,7 +9,7 @@ $desc = [
     1 => ['pipe', 'w'],
 ];
 $p = proc_open($bin, $desc, $pipes);
-fwrite($pipes[0], file_get_contents('monolyth/output/js/head.js', true));
+fwrite($pipes[0], file_get_contents('monolyth/render/head.js', true));
 fclose($pipes[0]);
 $script = stream_get_contents($pipes[1]);
 fclose($pipes[1]);
