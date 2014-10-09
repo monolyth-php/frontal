@@ -3,7 +3,7 @@
 namespace monolyth\render;
 use StdClass;
 
-$bin = realpath(__DIR__.'/../../../../bin/').'/compact';
+$bin = realpath(__DIR__.'/../bin/').'/compact';
 $desc = [
     0 => ['pipe', 'r'],
     1 => ['pipe', 'w'],
