@@ -70,7 +70,8 @@ class Message
         )) {
             self::session()->set('Messages', []);
         }
-        self::$messages = self::session()->get('Messages');
+        self::$messages = self::session()->get('Messages') or
+            self::$messages = [];
         $inited = true;
     }
 
