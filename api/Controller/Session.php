@@ -23,6 +23,8 @@ class Session_Controller extends Controller
             unset($session['Groups']);
         }
         $session['_id'] = session_id();
+        // These are already pass in $session by now:
+        self::message()->get();
         return $this->view('monolyth\render\json', ['data' => $session]);
     }
 
