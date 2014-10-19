@@ -1,14 +1,6 @@
 <?php
 
 namespace monolyth\render;
-$string = '';
-switch ($code = isset($code) ? $code : '200') {
-    case '200': $string = 'OK'; break;
-    case '401': $string = 'Unauthorized'; break;
-    case '404': $string = 'Not Found'; break;
-    case '500': $string = 'Internal Server Error'; break;
-}
-header($string ? "HTTP/1.1 $code $string" : '', true, $code);
 header("Content-type: application/json", true);
 if (isset($_SERVER['HTTP_ORIGIN'])
     && in_array($_SERVER['HTTP_ORIGIN'], $project['origins'])
