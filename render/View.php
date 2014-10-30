@@ -265,15 +265,10 @@ final class View
             )
         ) {
             self::logger()->log('End [finished outputting]');
-            $debug = "<script>\n";
-            $stats = self::logger()->export();
-            foreach ($stats as $line) {
-                $debug .= sprintf(
-                    "console.log(%s);\n",
-                    json_encode($line)
-                );
-            }
-            $debug .= "</script>\n";
+            $debug = sprintf(
+                "<script>console.log(%s)</script>\n",
+                json_encode(self::logger()->export())
+            );
             $html = str_replace(
                 '</body>',
                 "$debug</body>",
