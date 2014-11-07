@@ -39,10 +39,10 @@ class Update_Pass_Controller extends Controller implements Ajax_Login_Required
                 );
             }
         } else {
-            foreach ($errors as $error) {
+            foreach ($errors as $field => $error) {
                 self::message()->add(
                     'error',
-                    "monolyth\\account\\pass/update/error.$error"
+                    "monolyth\\account\\pass/update/error.$field.$error"
                 );
             }
         }
