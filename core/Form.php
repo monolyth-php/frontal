@@ -40,6 +40,7 @@ abstract class Form extends ArrayObject
         }
         $this->attributes += [
             'id' => $this->getId(),
+            'name' => $this->getId(),
             'method' => &$this->method,
             'action' => &$this->action,
         ];
