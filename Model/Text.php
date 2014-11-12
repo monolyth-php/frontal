@@ -178,7 +178,7 @@ class Text_Model
                 } catch (adapter\nosql\KeyNotFound_Exception $e) {
                 }
             }
-            if (isset($str)) {
+            if (isset($str) && strlen($str)) {
                 return vsprintf($str, $args);
             }
         }
