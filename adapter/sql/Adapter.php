@@ -687,6 +687,14 @@ abstract class Adapter implements monolyth\adapter\Adapter
                 $keys = array_keys($value);
                 $mod = array_shift($keys);
                 switch (strtoupper($mod)) {
+                    case 'BETWEEN':
+                        $vals = array_shift($value);
+                        $array[$key] = sprintf(
+                            "($key BETWEEN %s AND %s)",
+                            $this->quote(array_shift($vals)),
+                            $this->quote(array_shift($vals))
+                        );
+                        break;
                     case 'IN':
                     case 'NOT IN':
                         $array[$key] = $this->in(
