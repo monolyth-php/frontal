@@ -58,7 +58,6 @@ class Login_Model
         foreach ($u as $property => $data) {
             $User[$property] = $data;
         }
-        self::session()->set(compact('User'));
         $id = substr(session_id(), 0 ,32);
         $random = substr(session_id(), 32);
         try {
@@ -135,6 +134,13 @@ class Login_Model
             // No problem; not all users belong to groups per se.
         }
         self::session()->set(compact('Groups'));
+        $User['roles'] = ['authenticated'];
+        foreach ($Groups as $group) {
+            $group = preg_replace('@ies$@', 'y', $group);
+            $group = preg_replace('@s$@', '', $group);
+            $User['roles'][] = strtolower($group);
+        }
+        self::session()->set(compact('User'));
         return null;
     }
 

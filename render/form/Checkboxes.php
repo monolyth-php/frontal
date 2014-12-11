@@ -19,6 +19,7 @@ class Checkboxes extends Element
         $o->setParent($this->parent);
         $o->prepare("{$name}[0]");
         $this->choices[] = $o;
+        $poptions = $options;
         foreach ($choices as $value => $text) {
             if (!strlen($value)) {
                 continue;
@@ -27,6 +28,11 @@ class Checkboxes extends Element
             if (!$updated_id) {
                 $this->id = "{$this->id}-$value";
                 $updated_id = true;
+            }
+            if (isset($poptions['ng-model'])) {
+                $options['ng-model'] = is_numeric($value) ?
+                    $poptions['ng-model']."[$value]" :
+                    $poptions['ng-model'].".$value";
             }
             $cname = "{$name}[$value]";
             $o = new Checkbox;

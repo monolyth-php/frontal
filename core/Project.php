@@ -114,6 +114,8 @@ abstract class Project extends ArrayObject
          */
         $this['protocols'] = 'http';
         $this['cli'] = substr(PHP_SAPI, 0, 3) == 'cli';
+        /** Permitted origins for CORS calls. */
+        $this['origins'] = [];
         if (!$this['cli'] && isset($_SERVER['SERVER_NAME'])) {
             if (!isset($this['site'])) {
                 $this['site'] = preg_replace(
@@ -153,6 +155,15 @@ abstract class Project extends ArrayObject
          * but of course this might change in the future :)
          */
         $this['notifymail'] = 'someone@example.com';
+        /**
+         * Optionally fill this with an array of favicons. Each entry should be
+         * a hash with the keys "type" (e.g. 'png') and "href" (full url).
+         */
+        $this['favicons'] = [];
+        /**
+         * Current server time, for use with Javascript-based applications.
+         */
+        $this['time'] = time();
     }
 
     public function merge($input)
@@ -166,9 +177,19 @@ abstract class Project extends ArrayObject
         return $this;
     }
 
-    public function export()
+    public function export(array $fields = null)
     {
-        $out = new ArrayObject((array)$this);
+        if ($fields) {
+            $out = [];
+            foreach ($fields as $field) {
+                try {
+                    $out[$field] = $this[$field];
+                } catch (ErrorException $e) {
+                }
+            }
+        } else {
+            $out = (array)$this;
+        }
         foreach ([
             'staticDomain',
             'staticSecureDomain',
@@ -177,8 +198,11 @@ abstract class Project extends ArrayObject
             'compacter',
             'cat',
             'variables',
+            'compacter',
         ] as $prop) {
-            $out->$prop = $this->$prop;
+            if (!$fields || in_array($prop, $fields)) {
+                $out[$prop] = $this->$prop;
+            }
         }
         return $out;
     }
