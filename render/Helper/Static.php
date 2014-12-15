@@ -78,9 +78,11 @@ trait Static_Helper
                 }
             }
             fclose($pipes[0]);
-            if ($project['test']
-                && isset($_GET['debug'])
-                && $_GET['debug'] == 'nocompact'
+            if (($project['test']
+                    && isset($_GET['debug'])
+                    && $_GET['debug'] == 'nocompact'
+                )
+                or !isset($project->compacter)
             ) {
                 file_put_contents($target, $pipes[1]);
             } else {
