@@ -112,11 +112,13 @@ class Activate_Model extends Model
             );
         }
         $email = Email::instance();
+        if (!($data = $user->getArrayCopy())) {
+            $data = [];
+        }
+        $data['url'] = $uri;
+        $data += $_POST;
         $email->setSource("monolyth\\account\\$source")
-              ->setVariables([
-                  'name' => $auth['name'],
-                  'url' => $uri,
-              ])
+              ->setVariables($data)
               ->headers(['Reply-to' => "noreply@$website"])
               ->send($auth['email']);
         return null;
