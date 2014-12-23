@@ -22,10 +22,16 @@ class Do_Activate_Controller extends Activate_Controller
         $form->addSource(compact('id', 'hash'))->load();
         $activate = new Activate_Model;
         if (!($error = call_user_func($activate, $form))) {
-            self::message()->add('success', './success');
+            self::message()->add(
+                'success',
+                'monolyth\account\activate/success'
+            );
             return $this->view('page/activate/success');
         }
-        self::message()->add('error', "./error.$error");
+        self::message()->add(
+            'error',
+            "monolyth\\account\\activate/error.$error"
+        );
         throw new HTTP301_Exception($this->url(
             'monolyth/account/request_activate'
         ));
