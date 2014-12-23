@@ -15,7 +15,10 @@ class Request_Activate_Controller extends account\Request_Activate_Controller
         if ($error = $this->activate->request(self::user()->id())) {
             return $this->view('monolyth\render\json', ['data' => false]);
         }
-        self::message()->add('success', './success');
+        self::message()->add(
+            'success',
+            'monolyth\account\activate/request/success'
+        );
         return $this->view('monolyth\render\json', ['data' => true]);
     }
 }
