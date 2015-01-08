@@ -30,6 +30,8 @@ class Email
     private $variables = [];
     private $content = [];
 
+    public $adapter;
+
     /**
      * Constructor. It auto-includes variables from your CSS.
      * Note: callables aren't allowed here.
@@ -51,6 +53,7 @@ class Email
         }
         $this->parser = new Translate_Parser;
         $this->project = Project::instance();
+        $this->adapter = self::adapter();
         /** @see PEAR::Mail */
         require_once 'Mail.php';
         /** @see PEAR::Mail_mime */
@@ -123,7 +126,7 @@ class Email
     public function setSource($mail)
     {
         try {
-            $data = self::adapter()->row(
+            $data = $this->adapter->row(
                 "monolyth_mail m
                  LEFT JOIN monolyth_mail_template t ON t.id = m.template
                     AND t.language = m.language",
