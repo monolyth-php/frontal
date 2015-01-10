@@ -7,7 +7,7 @@ $title = $text('./title');
 <article>
     <h1><?=$title?></h1>
     <?=$view(
-        ['monolyth\render\form\slice/simple', 'monolyth\render\form\slice/form'],
+        ['monolyth\render\form\simple', 'monolyth\render\form\form'],
         compact('form')
     )?>
 </article>

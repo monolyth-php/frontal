@@ -28,7 +28,7 @@ trait HTML_Helper
 
         // Autoloading won't work for HTMLPurifier.
         require_once 'HTMLPurifier.auto.php';
-        require_once 'monolyth/3rdparty/HTMLPurifier/Filter/Flash.php';
+        require_once 'monolyth/vendor/HTMLPurifier/Filter/Flash.php';
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Filter.YouTube', true);
 

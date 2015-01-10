@@ -23,7 +23,7 @@ class Confirm_Model extends core\Model
                     // Concetanate these; that should be unique enough.
                     $seed.rand(10000, 99999).time()
                 );
-                self::adapter()->field(
+                $this->adapter->field(
                     'monolyth_confirm',
                     1,
                     ['hash' => $hash]
@@ -41,15 +41,15 @@ class Confirm_Model extends core\Model
         if (!isset($id) && self::user()->id()) {
             $id = self::user()->id();
         }
-        self::adapter()->beginTransaction();
+        $this->adapter->beginTransaction();
         try {
-            $o = self::adapter()->rows(
+            $o = $this->adapter->rows(
                 'monolyth_confirm',
                 '*',
                 ['owner' => $id, 'hash' => $hash]
             );
         } catch (adapter\sql\NoResults_Exception $e) {
-            self::adapter()->rollback();
+            $this->adapter->rollback();
             return 'unknown';
         }
         foreach ($o as $m) {
@@ -91,10 +91,10 @@ class Confirm_Model extends core\Model
             try {
                 switch ($fn) {
                     case 'delete':
-                        self::adapter()->delete($m['tablename'], $where);
+                        $this->adapter->delete($m['tablename'], $where);
                         break;
                     case 'update':
-                        self::adapter()->update(
+                        $this->adapter->update(
                             $m['tablename'],
                             $fields,
                             $where
@@ -105,25 +105,25 @@ class Confirm_Model extends core\Model
                 // 't Is been done already.
             } catch (adapter\sql\Exception $e) {
                 // Generic database error; assume everything's invalid.
-                self::adapter()->rollback();
+                $this->adapter->rollback();
                 return 'database';
             }
         }
-        self::adapter()->delete(
+        $this->adapter->delete(
             'monolyth_confirm',
             ['hash' => $hash, 'owner' => $id]
         );
-        self::adapter()->commit();
+        $this->adapter->commit();
         return null;
     }
 
     private function cancel($msg, $hash)
     {
-        self::adapter()->rollback();
-        self::adapter()->beginTransaction();
+        $this->adapter->rollback();
+        $this->adapter->beginTransaction();
         // Remove invalidated entry
         try {
-            self::adapter()->delete(
+            $this->adapter->delete(
                 'monolyth_confirm',
                 ['hash' => $hash, 'owner' => self::user()->id()]
             );
@@ -132,14 +132,14 @@ class Confirm_Model extends core\Model
         }
         // Cleanup as well
         try {
-            self::adapter()->delete(
+            $this->adapter->delete(
                 'monolyth_confirm',
-                ['datevalid' => ['<' => self::adapter()->now()]]
+                ['datevalid' => ['<' => $this->adapter->now()]]
             );
         } catch (adapter\sql\DeleteNone_Exception $e) {
             // That's okay, we're simply clean.
         }
-        self::adapter()->commit();
+        $this->adapter->commit();
         return $msg;
     }
 }

@@ -10,7 +10,7 @@ $title = $text('./title');
 
 echo $text('./explain');
 echo $view(
-    ['monolyth\render\form\slice/simple', 'monolyth\render\form\slice/form'],
+    ['monolyth\render\form\simple', 'monolyth\render\form\form'],
     compact('form')
 );
 

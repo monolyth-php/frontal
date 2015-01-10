@@ -22,7 +22,7 @@ class Update_Pass_Form extends Post_Form
         $this->addPassword('new', $this->text('./new'))
              ->isRequired()
              ->differsFromField($this, 'old');
-        $this->addPassword('new2', $this->text('./new2'))
+        $this->addPassword('confirm', $this->text('./confirm'))
              ->isRequired()
              ->matchesField($this, 'new');
         $this->addButton(self::BUTTON_SUBMIT, $this->text('./submit'));

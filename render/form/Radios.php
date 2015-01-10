@@ -95,5 +95,14 @@ class Radios extends Element
         }
         return $this;
     }
+
+    public function setOption($name, $value)
+    {
+        $this->options[$name] = $value;
+        foreach ($this->choices as $choice) {
+            $choice->setOption($name, $value);
+        }
+        return $this;
+    }
 }
 

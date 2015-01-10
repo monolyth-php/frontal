@@ -14,8 +14,9 @@ trait Static_Helper
         // The 'UUID' consists of the total filesize of the files,
         // as well as an MD5 of the concatenated filenames.
         $project = isset($this->project) ?
-            $this->project->export() :
-            Project::instance()->export();
+            $this->project :
+            Project::instance();
+        $export = $project->export();
         $size = 0;
         clearstatcache();
         foreach ($files as $file) {
@@ -53,7 +54,7 @@ trait Static_Helper
             $sync = true;
             $dspec = [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'a']];
             $outs = [proc_open(
-                $project->cat,
+                $export['cat'],
                 $dspec,
                 $pipes
             )];
@@ -87,7 +88,7 @@ trait Static_Helper
                 file_put_contents($target, $pipes[1]);
             } else {
                 $i = 0;
-                $commands = [sprintf($project->compacter, $ext), 'write'];
+                $commands = [sprintf($export['compacter'], $ext), 'write'];
                 if ($ext == 'css') {
                     $vars = str_replace(
                         '%s',
@@ -162,12 +163,14 @@ trait Static_Helper
         }
         // If not set: just passthru.
         if (!$secure
-            && !($project->staticServers && $project->staticDomain)
+            && !($project['staticServers'] && $project['staticDomain'])
         ) {
             return $file;
         }
         if ($secure
-            && !($project->staticSecureServers && $project->staticSecureDomain)
+            && !($project['staticSecureServers']
+                && $project['staticSecureDomain']
+            )
         ) {
             return $file;
         }
@@ -185,18 +188,18 @@ trait Static_Helper
         }
         
         $nr = $i % count($secure ?
-            $project->staticSecureServers :
-            $project->staticServers
+            $project['staticSecureServers'] :
+            $project['staticServers']
         );
         $domain = $secure ?
-            $project->staticSecureDomain :
-            $project->staticDomain;
+            $project['staticSecureDomain'] :
+            $project['staticDomain'];
         return sprintf(
             '%s://%s.%s%s%s',
             $secure ? $project['protocols'] : $project['protocol'],
             $secure ?
-                $project->staticSecureServers[$nr] :
-                $project->staticServers[$nr],
+                $project['staticSecureServers'][$nr] :
+                $project['staticServers'][$nr],
             $domain,
             $secure ?
                 '' :

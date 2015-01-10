@@ -40,7 +40,7 @@ class Login_Form extends Post_Form
              ->isRequired()
              ->setPlaceholder($this->text('./pass'));
         $this->addCheckbox('remember', $this->text('./remember'));
-        $this->views['remember'] = 'monolyth\render\form\slice/rowsingle';
+        $this->views['remember'] = 'monolyth\render\form\rowsingle';
         $this->addButton(self::BUTTON_SUBMIT, $this->text('./submit'));
         parent::prepare();
         $redir = self::http()->getRedir();

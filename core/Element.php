@@ -370,7 +370,7 @@ abstract class Element
         try {
             $class = get_class($this);
             $namespace = substr($class, 0, strrpos($class, '\\'));
-            $view = new View("$namespace\\slice/{$this->type}");
+            $view = new View("$namespace\\{$this->type}");
             $view->data(['o' => $this]);
             return $view();
         } catch (E $e) {
