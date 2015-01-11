@@ -1,15 +1,12 @@
 <?php
 
-namespace monolyth\core;
+namespace monolyth;
 use ArrayObject;
 use InvalidArgumentException;
 use ErrorException;
-use monolyth\render\FileNotFound_Exception;
 
 abstract class Project extends ArrayObject
 {
-    use Singleton;
-
     /**
      * The static (secure) domain you want to use (e.g. staticexample.com).
      */
