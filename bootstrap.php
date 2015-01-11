@@ -24,10 +24,11 @@ spl_autoload_register(function($class) {
         }
     }
     $file = sprintf(
-        '%s%s%s%s.php',
+        '%s%s%s%s%s.php',
         implode('-', $modules),
         $modules ? DIRECTORY_SEPARATOR : '',
         implode(DIRECTORY_SEPARATOR, $namespaces),
+        $namespaces ? DIRECTORY_SEPARATOR : '',
         $class
     );
     // Use fopen so it supports include_path:
@@ -37,5 +38,4 @@ spl_autoload_register(function($class) {
         include $file;
     }
 });
-
 
