@@ -2,6 +2,25 @@
 
 namespace monolyth\api;
 
+if (!isset($router)) {
+    $router = new Router;
+}
+if ($router instanceof Router) {
+    $router->group('monolyth.api', function($router) {
+        $router->under('/~/monolyth', function($router) {
+            $router->state(
+                'monolyth.view',
+                "/(?'language'[a-z]{2})/(?'viewname'.*?)\.html",
+                function($language, $viewname) {
+                    return new View\View($language, $viewname);
+                }
+            );
+            $router->state('monolyth.session', '/session/', function() {
+                return new Session\View;
+            });
+        });
+    });
+}
 return function($m) use($project) {
     $m->connect('/~/monolyth/view/(%s:language)/(%a:viewname).html', 'monolyth\api\View');
     $m->connect('/~/monolyth/form/(%s:language)/(%a:name)/', 'monolyth\api\Form');
