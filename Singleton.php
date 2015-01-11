@@ -1,6 +1,6 @@
 <?php
 
-namespace monolyth\core;
+namespace monolyth;
 
 trait Singleton
 {
