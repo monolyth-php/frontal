@@ -1,6 +1,7 @@
 <?php
 
 namespace monolyth;
+use ErrorException;
 
 /**
  * Register the Monolyth autoloader.
