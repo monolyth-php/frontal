@@ -4,8 +4,14 @@ namespace monolyth;
 use ErrorException;
 
 /**
- * Register the Monolyth autoloader.
+ * Require the Monolyth autoloader, since otherwise we don't know where to
+ * find stuff.
  *
+ * @see Monolyth\Autoload
+ */
+require_once realpath(__DIR__).'/Autoload.php';
+
+/**
  * All lowercase namespaces are considered a "submodule", which allows
  * us to place submodules in their own repository but still fall under the
  * global namespace of their "parent" module. For example:
@@ -40,18 +46,23 @@ spl_autoload_register(function($class) {
                 $class
         );
         // Use fopen so it supports include_path:
-        $fp = @fopen($file, 'r', true);
-        if ($fp) {
-            fclose($fp);
-            include $file;
-            return;
+        try {
+            $fp = @fopen($file, 'r', true);
+            if ($fp) {
+                fclose($fp);
+                include $file;
+                return;
+            }
+        } catch (ErrorException $e) {
         }
     }
 });
 
 /** Turn on all errors so we can catch exceptions. */
 error_reporting(E_ALL & ~E_STRICT);
-/** Define the generic error handler. */
+
+/**
+ * Define the generic error handler. All errors in  */
 set_error_handler(
     function($errno, $errstr, $errfile, $errline, $errcontext) {
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
