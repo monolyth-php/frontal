@@ -1,12 +1,11 @@
 <?php
 
 namespace monolyth\Form;
-use monolyth\render\View;
 use monolyth\Utils\Translatable;
 use monolyth\Utils\Helper\Name;
 use ErrorException;
 use Exception as E;
-use monolyth\Form\Label;
+use Improse\Render\Html;
 
 abstract class Element
 {
@@ -370,9 +369,14 @@ abstract class Element
         try {
             $class = get_class($this);
             $namespace = substr($class, 0, strrpos($class, '\\'));
-            $view = new View("$namespace\\{$this->type}");
-            $view->data(['o' => $this]);
-            return $view();
+            $view = new Html(sprintf(
+                '%s/%s.php',
+                str_replace('\\', DIRECTORY_SEPARATOR, $namespace),
+                $this->type
+            ));
+            ob_start();
+            $view(['o' => $this]);
+            return ob_get_clean();
         } catch (E $e) {
             return get_class($e)."\n".$e->getMessage()."\n";
         }
