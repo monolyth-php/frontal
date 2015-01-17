@@ -1,6 +1,6 @@
 <?php
 
-namespace monolyth\render\form;
+namespace monolyth\Form;
 
 class Button
 {

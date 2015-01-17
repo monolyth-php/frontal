@@ -1,7 +1,6 @@
 <?php
 
-namespace monolyth\render\form;
-use monolyth\core\Element;
+namespace monolyth\Form;
 
 class Textarea extends Element
 {
