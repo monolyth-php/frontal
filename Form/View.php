@@ -17,7 +17,10 @@ class View
     public function __invoke()
     {
         $html = new Html($_GET['view'].'.php');
+        $form = new Html('monolyth/Form/form.php');
+        ob_start();
         $html(['form' => $this->form]);
+        $form(['form' => $this->form, 'content' => ob_get_clean()]);
     }
 }
 
