@@ -1,9 +1,9 @@
 <?php
 
-namespace monolyth\utils;
+namespace monolyth\Utils\Helper;
 use InvalidArgumentException;
 
-trait Name_Helper
+trait Name
 {
     public function sanitize($from)
     {
