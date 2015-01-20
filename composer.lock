@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b09bdad8a420d44b1fc9fea3157a06c2",
+    "hash": "cba0c7ef4a1b263e18e4b544f42e4461",
     "packages": [
         {
             "name": "monomelodies/disclosure",
@@ -49,11 +49,17 @@
         },
         {
             "name": "monomelodies/formulaic",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/formulaic",
-                "reference": "79c790c279166a838ec2ef06b586c08f46fa6028"
+                "url": "https://github.com/monomelodies/formulaic.git",
+                "reference": "05a93bd5ddf48273bdc2bf2b0b364b3149f58e60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/05a93bd5ddf48273bdc2bf2b0b364b3149f58e60",
+                "reference": "05a93bd5ddf48273bdc2bf2b0b364b3149f58e60",
+                "shasum": ""
             },
             "require-dev": {
                 "phpunit/phpunit": "4.0.*"
@@ -64,6 +70,7 @@
                     "Formulaic\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -74,7 +81,7 @@
                 }
             ],
             "description": "Object oriented PHP5 form tools",
-            "time": "2015-01-20 16:20:07"
+            "time": "2015-01-20 21:48:35"
         },
         {
             "name": "monomelodies/improse",
