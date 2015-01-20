@@ -1,6 +1,6 @@
 <?php
 
-namespace monolyth;
+namespace Monolyth;
 
 class View
 {
