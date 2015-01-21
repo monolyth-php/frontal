@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cba0c7ef4a1b263e18e4b544f42e4461",
+    "hash": "6abe46908e8c7ec04c99a9411e2df982",
     "packages": [
         {
             "name": "monomelodies/disclosure",
@@ -49,16 +49,16 @@
         },
         {
             "name": "monomelodies/formulaic",
-            "version": "dev-master",
+            "version": "0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/formulaic.git",
-                "reference": "05a93bd5ddf48273bdc2bf2b0b364b3149f58e60"
+                "reference": "565f76e5ed2001f8409c4785849aceb7d724ec75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/05a93bd5ddf48273bdc2bf2b0b364b3149f58e60",
-                "reference": "05a93bd5ddf48273bdc2bf2b0b364b3149f58e60",
+                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/565f76e5ed2001f8409c4785849aceb7d724ec75",
+                "reference": "565f76e5ed2001f8409c4785849aceb7d724ec75",
                 "shasum": ""
             },
             "require-dev": {
@@ -81,7 +81,14 @@
                 }
             ],
             "description": "Object oriented PHP5 form tools",
-            "time": "2015-01-20 21:48:35"
+            "keywords": [
+                "HTML5",
+                "form",
+                "oo",
+                "php",
+                "validation"
+            ],
+            "time": "2015-01-21 17:03:38"
         },
         {
             "name": "monomelodies/improse",
@@ -793,8 +800,7 @@
     "stability-flags": {
         "monomelodies/reroute": 20,
         "monomelodies/improse": 20,
-        "monomelodies/disclosure": 20,
-        "monomelodies/formulaic": 20
+        "monomelodies/disclosure": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
