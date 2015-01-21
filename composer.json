@@ -7,10 +7,6 @@
         {
             "type": "vcs",
             "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/improse"
-        },
-        {
-            "type": "vcs",
-            "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/formulaic"
         }
     ],
     "authors": [
