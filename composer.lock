@@ -49,16 +49,16 @@
         },
         {
             "name": "monomelodies/formulaic",
-            "version": "0.0.5",
+            "version": "0.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/formulaic.git",
-                "reference": "87d3fd7c3a31767b21c0d167e726d8cdb608655c"
+                "reference": "5c6f359cd5261082a36ec0532182029064926866"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/87d3fd7c3a31767b21c0d167e726d8cdb608655c",
-                "reference": "87d3fd7c3a31767b21c0d167e726d8cdb608655c",
+                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/5c6f359cd5261082a36ec0532182029064926866",
+                "reference": "5c6f359cd5261082a36ec0532182029064926866",
                 "shasum": ""
             },
             "require-dev": {
@@ -88,7 +88,7 @@
                 "php",
                 "validation"
             ],
-            "time": "2015-01-21 17:52:17"
+            "time": "2015-01-22 14:39:04"
         },
         {
             "name": "monomelodies/improse",
