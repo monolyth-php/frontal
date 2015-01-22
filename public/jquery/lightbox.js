@@ -1,1 +1,0 @@
-../../vendor/lightbox.jquery.js
