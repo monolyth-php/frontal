@@ -19,7 +19,7 @@
         "monomelodies/reroute": "@dev",
         "monomelodies/improse": "@dev",
         "monomelodies/disclosure": "@dev",
-        "monomelodies/formulaic": "@dev"
+        "monomelodies/formulaic": "0.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*"
