@@ -6,6 +6,10 @@
     "repositories": [
         {
             "type": "vcs",
+            "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/dabble"
+        },
+        {
+            "type": "vcs",
             "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/improse"
         }
     ],
@@ -19,10 +23,12 @@
         "monomelodies/reroute": "@dev",
         "monomelodies/improse": "@dev",
         "monomelodies/disclosure": "@dev",
-        "monomelodies/formulaic": "0.*"
+        "monomelodies/formulaic": "0.*",
+        "monomelodies/dabble": "@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.0.*"
+        "phpunit/phpunit": ">=4",
+        "phpunit/dbunit": ">=1.2"
     },
     "autoload": {
         "psr-4": {
