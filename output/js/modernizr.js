@@ -1,1 +1,0 @@
-../../3rdparty/modernizr.js
