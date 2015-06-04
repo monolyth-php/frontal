@@ -3,16 +3,6 @@
     "description": "Object oriented PHP5 MVC unframework",
     "keywords": ["PHP","OO","MVC","framework","unframework"],
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/dabble"
-        },
-        {
-            "type": "vcs",
-            "url": "ssh://git@dev.sensimedia.nl/home/git/libraries/improse"
-        }
-    ],
     "authors": [
         {
             "name": "Marijn Ophorst",
