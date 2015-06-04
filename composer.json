@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "monomelodies/reroute": "@dev",
+        "monomelodies/reroute": "^1.0.0",
         "monomelodies/improse": "@dev",
-        "monomelodies/disclosure": "@dev",
-        "monomelodies/formulaic": "0.*",
-        "monomelodies/dabble": "@dev",
-        "hautelook/phpass": "dev-master",
+        "monomelodies/disclosure": "^1.0.0",
+        "monomelodies/formulaic": "^1.0.0",
+        "monomelodies/dabble": "^1.0.0",
+        "hautelook/phpass": "^0.3.4",
         "twig/twig": "~1.0"
     },
     "require-dev": {
