@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3761ccf853e0e564e462629154a62108",
+    "hash": "989e581dd5b126a78c2eee86267f35b8",
     "packages": [
         {
             "name": "hautelook/phpass",
@@ -135,6 +135,51 @@
                 "php"
             ],
             "time": "2015-06-04 13:45:37"
+        },
+        {
+            "name": "monomelodies/emily",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monomelodies/emily.git",
+                "reference": "b7cc71d82989e8a14b8f450c7008b5450c38ff74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monomelodies/emily/zipball/b7cc71d82989e8a14b8f450c7008b5450c38ff74",
+                "reference": "b7cc71d82989e8a14b8f450c7008b5450c38ff74",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/dbunit": ">=1.2",
+                "phpunit/phpunit": ">=4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Emily\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Ophorst",
+                    "email": "marijn@monomelodies.nl"
+                }
+            ],
+            "description": "Twig-based PHP mailer",
+            "keywords": [
+                "mail",
+                "php",
+                "twig"
+            ],
+            "time": "2015-06-04 15:21:11"
         },
         {
             "name": "monomelodies/formulaic",
@@ -1333,7 +1378,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "monomelodies/improse": 20
+        "monomelodies/improse": 20,
+        "monomelodies/emily": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
