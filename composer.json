@@ -15,6 +15,7 @@
         "monomelodies/disclosure": "^1.0.0",
         "monomelodies/formulaic": "^1.0.0",
         "monomelodies/dabble": "^1.0.0",
+        "monomelodies/emily": "@dev",
         "hautelook/phpass": "^0.3.4",
         "twig/twig": "~1.0"
     },
