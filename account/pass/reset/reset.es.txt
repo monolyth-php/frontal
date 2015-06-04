@@ -1,1 +1,0 @@
-Tu nueva contrase&ntilde;a es <strong>%1$s</strong>.

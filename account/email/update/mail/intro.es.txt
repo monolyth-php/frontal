@@ -1,6 +1,0 @@
-<p>Estimado(a) %1$s,</p>
-
-<p>
-    Para confirmar tu nuevo correo electr&oacute;nico y reactivar tu cuenta,
-    presiona en el enlace a continuaci&oacute;n:
-</p>

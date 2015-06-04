@@ -1,3 +1,0 @@
-<p>
-    Uw profiel is nu geactiveerd.
-</p>

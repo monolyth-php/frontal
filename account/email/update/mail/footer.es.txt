@@ -1,7 +1,0 @@
-<p>
-    Tambi&eacute;n puedes copiar/pegar el enlace en la barra de direcciones de tu navegador preferido. Ten en cuenta que debes copiar la <em>totalidad</em> del enlace;
-    algunos programas de correo electr&oacute;nico dividen un solo enlace en varias l&iacute;neas de texto.
-</p>
-
-<p>Atentamente,</p>
-<p>Tu webmaster</p>

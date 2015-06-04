@@ -1,2 +1,0 @@
-Un correo de activaci&oacute;n ha sido enviado a %1$s. Por favor sigue las instrucciones
-en este correo para completar tu registro.
