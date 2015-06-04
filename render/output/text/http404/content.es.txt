@@ -1,5 +1,0 @@
-<p>
-    El archivo que solicitaste no fue encontrado en este servidor. &iquest;Quiz&aacute;s introdujiste mal la
-    direcci&oacute;n? Si llegaste aqu&iacute; desde un enlace en otro sitio, puede que desees
-    notificarlo al webmaster.
-</p>

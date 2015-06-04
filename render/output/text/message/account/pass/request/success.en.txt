@@ -1,1 +1,0 @@
-An e-mail containing instructions was sent to <code>%1$s</code>

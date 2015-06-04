@@ -1,4 +1,0 @@
-<p>
-    El servidor meti&oacute; la pata.
-    Por favor intenta luego.
-</p>
