@@ -1,2 +1,0 @@
-If you aren't redirected automatically,
-<a href="%1$s">please follow this link</a>.
