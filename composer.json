@@ -14,7 +14,8 @@
         "monomelodies/improse": "@dev",
         "monomelodies/disclosure": "@dev",
         "monomelodies/formulaic": "0.*",
-        "monomelodies/dabble": "@dev"
+        "monomelodies/dabble": "@dev",
+        "hautelook/phpass": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4",

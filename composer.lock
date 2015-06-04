@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9d098ab1e823ef578862a17f13f01c56",
+    "hash": "8584ca55f82674a4d451ffff001b7f95",
     "packages": [
+        {
+            "name": "hautelook/phpass",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hautelook/phpass.git",
+                "reference": "f0217d804225822f9bdb0d392839029b0fcb0914"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hautelook/phpass/zipball/f0217d804225822f9bdb0d392839029b0fcb0914",
+                "reference": "f0217d804225822f9bdb0d392839029b0fcb0914",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hautelook": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Public Domain"
+            ],
+            "authors": [
+                {
+                    "name": "Solar Designer",
+                    "email": "solar@openwall.com",
+                    "homepage": "http://openwall.com/phpass/"
+                }
+            ],
+            "description": "Portable PHP password hashing framework",
+            "homepage": "http://github.com/hautelook/phpass/",
+            "keywords": [
+                "blowfish",
+                "crypt",
+                "password",
+                "security"
+            ],
+            "time": "2015-05-12 10:04:16"
+        },
         {
             "name": "monomelodies/dabble",
             "version": "dev-master",
@@ -1235,7 +1279,8 @@
         "monomelodies/reroute": 20,
         "monomelodies/improse": 20,
         "monomelodies/disclosure": 20,
-        "monomelodies/dabble": 20
+        "monomelodies/dabble": 20,
+        "hautelook/phpass": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
