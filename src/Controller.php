@@ -7,12 +7,12 @@
  * Note that you should use custom controllers for your project;
  * e.g. MyController extends Controller.
  *
- * @package monolyth
- * @subpackage core
+ * @package Monolyth
  * @author Marijn Ophorst <marijn@monomelodies.nl>
- * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2013, 2014
+ * @copyright MonoMelodies 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015
  */
-namespace monolyth\core;
+
+namespace Monolyth;
 use monolyth\render\View;
 use monolyth\render\FileNotFound_Exception;
 use monolyth\DependencyContainer;
