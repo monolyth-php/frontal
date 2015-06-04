@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @package monolyth
+ * @package Monolyth
+ * @subpackage Autolanguage
  */
 
-namespace monolyth\core;
-use monolyth\HTTP301_Exception;
-use monolyth\Language_Model;
+namespace Monolyth\Autolanguage;
 
-trait Autolanguage
+use Monolyth;
+
+class Controller extends Monolyth\Controller
 {
     /**
      * Default autolanguage action.
@@ -44,7 +45,7 @@ trait Autolanguage
             '_',
             '-',
             strtolower($languages->default->code)
-        );
+        ); 
         if (isset($_COOKIE['language'])
             && $languages->isAvailable($_COOKIE['language'])
         ) {
@@ -66,9 +67,8 @@ trait Autolanguage
         }
         foreach (array_reverse($options) as $lan => $weight) {
             $try = str_replace('-', '_', strtolower($lan));
-            if (
-                isset($languages->$try) &&
-                in_array($languages->$try, $languages->available)
+            if (isset($languages->$try)
+                && in_array($languages->$try, $languages->available)
             ) {
                 return $try;
             }
@@ -92,6 +92,16 @@ trait Autolanguage
                 }
             }
         }
+    }
+
+    protected function guessLanguage()
+    {
+        return $this->_guessLanguage($this->language());
+    }
+    
+    protected function get(array $args)
+    {
+        return $this->_get($args);
     }
 }
 
