@@ -15,7 +15,8 @@
         "monomelodies/disclosure": "@dev",
         "monomelodies/formulaic": "0.*",
         "monomelodies/dabble": "@dev",
-        "hautelook/phpass": "dev-master"
+        "hautelook/phpass": "dev-master",
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4",
