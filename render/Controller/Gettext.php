@@ -14,7 +14,7 @@ class Gettext_Controller extends Controller
         }
         $parse = true;
         $view = $this->view(
-            'monolyth\render\page/json',
+            'monolyth\render\json',
             compact('data', 'parse')
         );
         return $view;

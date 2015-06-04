@@ -20,6 +20,7 @@ use monolyth\account\Logout_Controller;
 use monolyth\HTTP301_Exception;
 use monolyth\HTTP400_Exception;
 use monolyth\HTTP403_Exception;
+use monolyth\HTTP401_Exception;
 use monolyth\HTTP404_Exception;
 use monolyth\render\HTTP404_Controller;
 use monolyth\HTTP405_Exception;
@@ -160,6 +161,13 @@ abstract class Controller
             }
         );
         $this->addRequirement(
+            'monolyth\Ajax_Login_Required',
+            $user->loggedIn(),
+            function() use($project, $redir) {
+                throw new HTTP401_Exception;
+            }
+        );
+        $this->addRequirement(
             'monolyth\Nologin_Required',
             !$user->loggedIn(),
             function() { throw new HTTP301_Exception($this->url('')); }
@@ -296,10 +304,7 @@ abstract class Controller
                 );
             } else {
                 try {
-                    $this->template = $this->view([
-                        '\template/body',
-                        'monolyth\template/page',
-                    ]);
+                    $this->template = $this->view('\template/page');
                 } catch (FileNotFound_Exception $e) {
                     $this->template = $this->view([
                         'monolyth\template/body',
@@ -320,30 +325,8 @@ abstract class Controller
                     and $errors = $this->form->errors($this->form->validate())
                 ) {
                     // Automatically add error messages based on form errors.
-                    $test = [get_class($this->form), get_class($this)];
-                    $self = $this;
-                    $text = new Text_Model($this);
-                    $fn = function($field, $err) use ($test, $text) {
-                        $opts = [];
-                        foreach ($test as $option) {
-                            $try = strtolower(str_replace(
-                                '_',
-                                DIRECTORY_SEPARATOR,
-                                $this->merge($field, $option)
-                            ));
-                            if ($text->exists($try)) {
-                                $label = $text->get($try);
-                            } else {
-                                $label = $field;
-                            }
-                            $opts[] = "$try/error.$err";
-                            $try = substr($try, 0, strrpos($try, '/'));
-                            $opts[] = "$try/error.$err";
-                        }
-                        return $text->get($opts, $label);
-                    };
                     foreach ($errors as $field => $err) {
-                        self::message()->add('error', $fn($field, $err));
+                        self::message()->add('error', "$err.$field");
                     }
                 }
             case 'GET':

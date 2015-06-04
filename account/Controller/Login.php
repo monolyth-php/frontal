@@ -15,20 +15,19 @@ class Login_Controller extends Controller implements Logout_Required
     public function __construct()
     {
         parent::__construct();
+        if (self::user()->loggedIn()) {
+            self::user()->logout();
+        }
         $this->form = new Login_Form;
     }
 
     protected function get(array $args)
     {
-        if (self::user()->loggedIn()) {
-            self::user()->logout();
-        }
         return $this->view('page/login');
     }
 
     protected function post(array $args)
     {
-        $view = $this->get($args);
         if (!($this->form->errors()
             or $error = self::user()->login($this->form)
         )) {
@@ -52,11 +51,11 @@ class Login_Controller extends Controller implements Logout_Required
             if (isset($error)) {
                 self::message()->add(
                     'error',
-                    $this->text("login/error.$error")
+                    __NAMESPACE__."\\login/error.$error"
                 );
             }
         }
-        return $view;
+        return $this->get($args);
     }
 }
 

@@ -1,5 +1,5 @@
 # vim swapfiles
-.*.swp
+.*.sw*
 
 # Kate swapfiles
 *~
@@ -12,3 +12,7 @@
 
 # Mac swapfile
 ._*
+
+.sass-cache
+
+vendor

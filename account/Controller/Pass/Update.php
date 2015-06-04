@@ -25,7 +25,7 @@ class Update_Pass_Controller extends Controller implements Login_Required
 
     protected function post(array $args)
     {
-        if (!$this->form->errors()) {
+        if (!($errors = $this->form->validate())) {
             /** All okay; update the password. */
             $pass = new Pass_Model;
             if (!($error = $pass->update($this->form['new']->value))) {
@@ -35,6 +35,18 @@ class Update_Pass_Controller extends Controller implements Login_Required
                 );
                 $url = $this->url('monolyth/account/update');
                 throw new HTTP301_Exception($url);
+            } else {
+                self::message()->add(
+                    'error',
+                    "monolyth\\account\\pass/update/error.$error"
+                );
+            }
+        } else {
+            foreach ($errors as $error) {
+                self::message()->add(
+                    'error',
+                    "monolyth\\account\\pass/update/error.$error"
+                );
             }
         }
         return $this->get($args);

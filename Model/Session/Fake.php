@@ -18,6 +18,10 @@ class Fake_Session_Model extends core\Session_Model
 {
     use core\Singleton;
 
+    public function __construct()
+    {
+    }
+
     /**
      * "Constructor". Initialise a new or existing session.
      *

@@ -38,7 +38,7 @@ class Language_Model extends I18n_Model
             } catch (KeyNotFound_Exception $e) {
             }
         }
-        if (!isset($rows)) {
+        if (!(isset($rows) && $rows)) {
             $adapter = self::adapter();
             try {
                 $rows = $adapter->rows(

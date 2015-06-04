@@ -137,7 +137,7 @@ abstract class Monolyth
         try {
             $language = self::language();
             $router = call_user_func(
-                require_once 'config/routing.php',
+                require 'config/routing.php',
                 render\Router::instance()
             );
             $uri = isset($_GET['path']) ?
