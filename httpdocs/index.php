@@ -5,23 +5,12 @@
  * Be sure to change paths to reflect your server environment.
  */
 
-$base = dirname(__DIR__);
-set_include_path(join(PATH_SEPARATOR, [
-    // Public root, just in case crappy plugins need it:
-    "$base/httpdocs",
-    // Source for this project:
-    "$base/src",
-    // Vendor (Composer modules):
-    "$base/vendor",
-]));
-
 // Require and setup the Composer autoloader:
-$autoloader = require_once 'autoload.php';
-$autoloader->setUseIncludePath(true);
+$autoloader = require_once '/path/to/vendor/autoload.php';
 
 // Dependencies and routing:
-require_once 'dependencies.php';
-require_once 'routing.php';
+require_once '/path/to/src/dependencies.php';
+require_once '/path/to/src/routing.php';
 
 try {
     $state = $router->resolve(
