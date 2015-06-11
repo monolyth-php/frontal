@@ -1,0 +1,8 @@
+site_name: Monolyth documentation
+site_url: http://monolyth.monomelodies.nl/docs/
+repo_url: https://github.com/monomelodies/monolyth
+
+pages:
+- Home:
+    - 'Quickstart': 'index.md'
+
