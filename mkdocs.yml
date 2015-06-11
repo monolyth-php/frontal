@@ -5,4 +5,9 @@ repo_url: https://github.com/monomelodies/monolyth
 pages:
 - Home:
     - 'Quickstart': 'index.md'
+- Demo site:
+    - 'Prerequisites': 'demo/prerequisites.md'
+- Packages:
+    - 'Required packages': 'packages/required.md'
+    - 'Optional packages': 'packages/optional.md'
 
