@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "316ff8ebb298f1c798c09a330098b9b0",
+    "hash": "39102d38800222c6d67cd2d497f5ae70",
     "packages": [
         {
             "name": "jakeasmith/http_build_url",
@@ -129,51 +129,6 @@
             "time": "2015-06-04 13:45:37"
         },
         {
-            "name": "monomelodies/emily",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/emily.git",
-                "reference": "b7cc71d82989e8a14b8f450c7008b5450c38ff74"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/emily/zipball/b7cc71d82989e8a14b8f450c7008b5450c38ff74",
-                "reference": "b7cc71d82989e8a14b8f450c7008b5450c38ff74",
-                "shasum": ""
-            },
-            "require": {
-                "twig/twig": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/dbunit": ">=1.2",
-                "phpunit/phpunit": ">=4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Emily\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Twig-based PHP mailer",
-            "keywords": [
-                "mail",
-                "php",
-                "twig"
-            ],
-            "time": "2015-06-04 15:21:11"
-        },
-        {
             "name": "monomelodies/formulaic",
             "version": "1.0.0",
             "source": {
@@ -259,17 +214,65 @@
             "time": "2015-06-06 07:12:58"
         },
         {
-            "name": "monomelodies/reroute",
-            "version": "1.1.0",
+            "name": "monomelodies/metaculous",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/monomelodies/reroute.git",
-                "reference": "25d13eb901be0d33aa53b1ff1ebf1493a6a074ab"
+                "url": "https://github.com/monomelodies/metaculous.git",
+                "reference": "0fd89e094c8c7d340176de3e42784e5dd1e5d6c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/reroute/zipball/25d13eb901be0d33aa53b1ff1ebf1493a6a074ab",
-                "reference": "25d13eb901be0d33aa53b1ff1ebf1493a6a074ab",
+                "url": "https://api.github.com/repos/monomelodies/metaculous/zipball/0fd89e094c8c7d340176de3e42784e5dd1e5d6c3",
+                "reference": "0fd89e094c8c7d340176de3e42784e5dd1e5d6c3",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/dbunit": ">=1.2",
+                "phpunit/phpunit": ">=4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Metaculous\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Ophorst",
+                    "email": "marijn@monomelodies.nl"
+                }
+            ],
+            "description": "Metadata helpers",
+            "keywords": [
+                "description",
+                "keywords",
+                "metadata",
+                "php",
+                "template",
+                "twig"
+            ],
+            "time": "2015-06-11 10:21:35"
+        },
+        {
+            "name": "monomelodies/reroute",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monomelodies/reroute.git",
+                "reference": "0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monomelodies/reroute/zipball/0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1",
+                "reference": "0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1",
                 "shasum": ""
             },
             "require": {
@@ -300,7 +303,7 @@
                 "php",
                 "router"
             ],
-            "time": "2015-06-06 14:13:00"
+            "time": "2015-06-10 08:52:21"
         },
         {
             "name": "twig/twig",
@@ -525,76 +528,17 @@
             "time": "2015-04-27 22:15:08"
         },
         {
-            "name": "phpunit/dbunit",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/dbunit.git",
-                "reference": "1afe25c90834ec499f007f48dd73767fdec3bf4f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/dbunit/zipball/1afe25c90834ec499f007f48dd73767fdec3bf4f",
-                "reference": "1afe25c90834ec499f007f48dd73767fdec3bf4f",
-                "shasum": ""
-            },
-            "require": {
-                "ext-pdo": "*",
-                "ext-simplexml": "*",
-                "php": ">=5.3.3",
-                "phpunit/phpunit": "~4.0",
-                "symfony/yaml": "~2.1"
-            },
-            "bin": [
-                "composer/bin/dbunit"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "PHPUnit/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "",
-                "../../symfony/yaml/"
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
-                    "role": "lead"
-                }
-            ],
-            "description": "DbUnit port for PHP/PHPUnit to support database interaction testing.",
-            "homepage": "https://github.com/sebastianbergmann/dbunit/",
-            "keywords": [
-                "database",
-                "testing",
-                "xunit"
-            ],
-            "time": "2015-05-21 21:11:02"
-        },
-        {
             "name": "phpunit/php-code-coverage",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "3703c4bb67c8700957dd41c843254658539d091d"
+                "reference": "be2286cb8c7e1773eded49d9719219e6f74f9e3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/3703c4bb67c8700957dd41c843254658539d091d",
-                "reference": "3703c4bb67c8700957dd41c843254658539d091d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/be2286cb8c7e1773eded49d9719219e6f74f9e3e",
+                "reference": "be2286cb8c7e1773eded49d9719219e6f74f9e3e",
                 "shasum": ""
             },
             "require": {
@@ -643,7 +587,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-06-06 08:33:23"
+            "time": "2015-06-09 13:05:42"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1380,8 +1324,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "monomelodies/improse": 20,
-        "monomelodies/emily": 20
+        "monomelodies/improse": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
