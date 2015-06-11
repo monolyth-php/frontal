@@ -10,17 +10,17 @@
         }
     ],
     "require": {
-        "monomelodies/reroute": "^1.0.0",
-        "monomelodies/improse": "@dev",
-        "monomelodies/disclosure": "^1.0.0",
-        "monomelodies/formulaic": "^1.0.0",
+        "php": ">=5.5",
         "monomelodies/dabble": "^1.0.0",
+        "monomelodies/disclosure": "^1.0.0",
+        "monomelodies/improse": "@dev",
+        "monomelodies/formulaic": "^1.0.0",
         "monomelodies/metaculous": "^1.0.0",
+        "monomelodies/reroute": "^1.0.0",
         "twig/twig": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4",
-        "phpunit/dbunit": ">=1.2"
+        "phpunit/phpunit": ">=4"
     },
     "autoload": {
         "psr-4": {
