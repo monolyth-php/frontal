@@ -6,6 +6,9 @@ correcting a number of problems (we find) with existing frameworks out there.
 Where possible, we have let ourselves be inspired by existing frameworks, both
 inside and outside of the PHP world. Where necessary, we chose our own path :)
 
+- [Website](http://monolyth.monomelodies.nl)
+- [Documentation](http://monolyth.monomelodies.nl/docs/)
+
 ## Installation
 `$ composer install --save monolyth`
 
@@ -36,4 +39,7 @@ helper classes and utility scripts.
 
 Our Wiki contains a full example project with code and explanation, and will
 also tell you more about the various modules and how they work together.
+
+> *Note:* the current major version is 6, but is a complete rewrite from the
+> older versions.
 
