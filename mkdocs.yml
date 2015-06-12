@@ -7,6 +7,10 @@ pages:
     - 'Quickstart': 'index.md'
 - Demo site:
     - 'Prerequisites': 'demo/prerequisites.md'
+    - 'Dependencies': 'demo/dependencies.md'
+    - 'Routing': 'demo/routing.md'
+    - 'Views': 'demo/view.md'
+    - 'Controllers': 'demo/controller.md'
 - Packages:
     - 'Required packages': 'packages/required.md'
     - 'Optional packages': 'packages/optional.md'
