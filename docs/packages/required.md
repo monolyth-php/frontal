@@ -2,6 +2,9 @@
 These are installed automatically as Composer dependencies. Visit the module's
 dedicated website for more information.
 
+Note that "required" just means they're installed automatically as a part of
+Monolyth; there's nothing that forces you to use them.
+
 ## [Dabble](http://dabble.monomelodies.nl)
 PHP database abstraction library
 
