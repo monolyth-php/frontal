@@ -65,3 +65,6 @@ class Controller
 > An added benefit of using an actual class to glue stuff together is that you
 > can utilise [dependency injection](http://disclosure.monomelodies.nl).
 
+The above assumes both `GET` and `POST` actions use the same view to render. Of
+course, this is entirely up to you.
+
