@@ -29,9 +29,15 @@ being a matter of taste of course):
             ...etc...
         /src <- PHP files for your project
         /tests <- Unit tests
+        /bin <- executables
+        /bower_components <- Bower packages
+        /node_modules <- Node modules
         /vendor <- Composer packages
             /monolyth
             ...etc...
+        composer.json
+        composer.lock
+        phpunit.xml
 
 In your `composer.json`, register the `src` directory with the autoloader:
 
@@ -48,6 +54,10 @@ In your `composer.json`, register the `src` directory with the autoloader:
 
 Optionally, you could set your `include_path` to include `/path/to/account/src`
 for easy access.
+
+If you have different preferences on how to organise your code, be our guest. As
+long as the autoloader points to the right directory containing your PHP files,
+it's all fair game.
 
 ## `index.php`, URL rewrites and other "required" files
 `index.php` will act as a front controller, so we'll need to rewrite any URL
