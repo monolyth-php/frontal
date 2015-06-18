@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "52433826b982286a77401324d6fd3d05",
+    "hash": "a6628e45dd9865c29fbb569450a5305e",
     "packages": [
         {
             "name": "jakeasmith/http_build_url",
@@ -44,17 +44,20 @@
         },
         {
             "name": "monomelodies/dabble",
-            "version": "1.1.2",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/dabble.git",
-                "reference": "cb1d45551f156d5f346d8875e5e3a3541ff761e3"
+                "reference": "c4abff58d24a38a3a2d57e89256eeb2314ab86c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/dabble/zipball/cb1d45551f156d5f346d8875e5e3a3541ff761e3",
-                "reference": "cb1d45551f156d5f346d8875e5e3a3541ff761e3",
+                "url": "https://api.github.com/repos/monomelodies/dabble/zipball/c4abff58d24a38a3a2d57e89256eeb2314ab86c1",
+                "reference": "c4abff58d24a38a3a2d57e89256eeb2314ab86c1",
                 "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
             },
             "require-dev": {
                 "phpunit/dbunit": ">=1.2",
@@ -82,7 +85,7 @@
                 "database",
                 "php"
             ],
-            "time": "2015-06-13 14:48:40"
+            "time": "2015-06-17 06:41:02"
         },
         {
             "name": "monomelodies/disclosure",
@@ -173,7 +176,7 @@
         },
         {
             "name": "monomelodies/improse",
-            "version": "dev-master",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/improse.git",
@@ -263,16 +266,16 @@
         },
         {
             "name": "monomelodies/reroute",
-            "version": "1.1.2",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/reroute.git",
-                "reference": "0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1"
+                "reference": "2430f39449fcaf520bf25295f4fe9deb98f14aa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/reroute/zipball/0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1",
-                "reference": "0b7de5aaaaf80fbaf8dcd6af371c87d586de67d1",
+                "url": "https://api.github.com/repos/monomelodies/reroute/zipball/2430f39449fcaf520bf25295f4fe9deb98f14aa6",
+                "reference": "2430f39449fcaf520bf25295f4fe9deb98f14aa6",
                 "shasum": ""
             },
             "require": {
@@ -303,7 +306,7 @@
                 "php",
                 "router"
             ],
-            "time": "2015-06-10 08:52:21"
+            "time": "2015-06-18 09:10:56"
         },
         {
             "name": "twig/twig",
@@ -366,16 +369,16 @@
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +389,7 @@
                 "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "2.0.*@ALPHA"
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -395,8 +398,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Instantiator\\": "src"
+                "psr-4": {
+                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -416,7 +419,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-10-13 12:58:55"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1320,9 +1323,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "monomelodies/improse": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
