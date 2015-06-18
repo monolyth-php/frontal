@@ -13,7 +13,7 @@
         "php": ">=5.5",
         "monomelodies/dabble": "^1.0.0",
         "monomelodies/disclosure": "^1.0.0",
-        "monomelodies/improse": "@dev",
+        "monomelodies/improse": "^0.3.0",
         "monomelodies/formulaic": "^1.0.0",
         "monomelodies/metaculous": "^1.0.0",
         "monomelodies/reroute": "^1.0.0",
