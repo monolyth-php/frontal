@@ -1,0 +1,26 @@
+
+# Auto-agg caching headers:
+FileETag MTime Size
+RequestHeader edit "If-None-Match" "^\"(.*)-gzip\"$" "\"$1\""
+Header edit "ETag" "^\"(.*[^g][^z][^i][^p])\"$" "\"$1-gzip\""
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Redirect example.com/foo to www.example.com/foo
+    RewriteCond  %{HTTP_HOST}  ^example\.com
+    RewriteRule  ^(.*)$          http://www.example.com/$1 [R=permanent,L]
+    
+    # Add trailing slash for "directories", i.e. www.example.com/foo > www.example.com/foo/
+    RewriteCond %{REQUEST_URI} ^/[^\.]+[^/]$
+    RewriteRule ^(.*)$ /$1/ [R=301,L]
+    
+    # For all non-existant files, rewrite to "front controller" index.php
+    # for further processing
+    RewriteCond   %{DOCUMENT_ROOT}/$1                  !-f
+    RewriteCond   %{DOCUMENT_ROOT}/$1                  !-d
+    RewriteCond   %{DOCUMENT_ROOT}/$1                  !-l
+    RewriteRule     ^(.*?)$ /index.php [L]
+</IfModule>
+

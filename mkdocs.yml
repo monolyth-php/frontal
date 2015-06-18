@@ -11,6 +11,7 @@ pages:
     - 'Routing': 'demo/routing.md'
     - 'Views': 'demo/view.md'
     - 'Controllers': 'demo/controller.md'
+    - 'Models': 'demo/models.md'
 - Packages:
     - 'Required packages': 'packages/required.md'
     - 'Optional packages': 'packages/optional.md'
