@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1fb05d84d07466e0e05a8a3c3c8fee1f",
+    "hash": "5a4175beb25421c3ac89eb9bf079ae07",
     "packages": [
         {
             "name": "jakeasmith/http_build_url",
@@ -176,16 +176,16 @@
         },
         {
             "name": "monomelodies/gentry",
-            "version": "0.1.8",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/monomelodies/gentry.git",
-                "reference": "ab2dbb9fa48d2e102530952e7392f5e4716da608"
+                "reference": "4c3a36f99b6a769e18005a11226f37874e270b1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/gentry/zipball/ab2dbb9fa48d2e102530952e7392f5e4716da608",
-                "reference": "ab2dbb9fa48d2e102530952e7392f5e4716da608",
+                "url": "https://api.github.com/repos/monomelodies/gentry/zipball/4c3a36f99b6a769e18005a11226f37874e270b1d",
+                "reference": "4c3a36f99b6a769e18005a11226f37874e270b1d",
                 "shasum": ""
             },
             "require": {
@@ -211,7 +211,7 @@
                 }
             ],
             "description": "PHP unit test generation tools",
-            "time": "2015-06-20 08:26:12"
+            "time": "2015-06-21 08:35:32"
         },
         {
             "name": "monomelodies/improse",
@@ -898,16 +898,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.7.4",
+            "version": "4.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e5f851f324f7add846316f39e668e9deac97a103"
+                "reference": "f6701ef3faea759acd1910a7751d8d102a7fd5bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e5f851f324f7add846316f39e668e9deac97a103",
-                "reference": "e5f851f324f7add846316f39e668e9deac97a103",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f6701ef3faea759acd1910a7751d8d102a7fd5bc",
+                "reference": "f6701ef3faea759acd1910a7751d8d102a7fd5bc",
                 "shasum": ""
             },
             "require": {
@@ -966,7 +966,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-06-18 13:33:26"
+            "time": "2015-06-21 07:23:36"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
