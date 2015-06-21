@@ -18,7 +18,7 @@
         "monomelodies/metaculous": "^1.0.0",
         "monomelodies/mural": "^0.1.0",
         "monomelodies/reroute": "^1.0.0",
-        "php": ">=5.5",
+        "php": ">=5.4",
         "twig/twig": "^1.0.0"
     },
     "require-dev": {
