@@ -1,5 +1,7 @@
 <?php
 
+namespace Monolyth;
+
 use Disclosure\Injector;
 use Disclosure\Container;
 use Improse\View;
@@ -13,7 +15,7 @@ abstract class TwigView extends View
     
     public function __construct()
     {
-        $this->inject(function ($adapter, $url, $twig) {});
+        $this->inject(function ($twig) {});
     }
     
     public function __invoke(array $__viewdata = [])
@@ -22,11 +24,36 @@ abstract class TwigView extends View
     }
 }
 
+/**
+ * Example injection of Twig into your views (we don't want to make any
+ * assumptions about your path structure etc.:
+ */
+/*
 TwigView::inject(function (&$twig) {
-    $base = dirname(dirname(__DIR__));
-    $loader = new Twig_Loader_Filesystem($base);
+    $loader = new Twig_Loader_Filesystem('/path/to/code');
     $twig = new Twig_Environment($loader, [
-        'cache' => "$base/.twig-cache",
+        'cache' => '/path/to/cache',
+        'debug' => true|false,
+        'auto_reload' => true|false,
     ]);
+    
+    // Example url function, assuming `$router` is available:
+    $url = function ($name, array $args = []) use ($router) {
+        if (!isset($_SERVER['SERVER_NAME'])) {
+            $_SERVER['SERVER_NAME'] = 'http://localhost';
+        }
+        return $router->get($name)->url()->short(
+            "http://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}",
+            $args
+        );
+    };
+    $twig->addFunction(new Twig_SimpleFunction('url', $url));
+    
+    // Example integration of Metaculous:
+    $twig->addExtension(new Metaculous\TwigExtension(
+        $arrayOfIgnoreWords,
+        $hashOfRiggedWords
+    ));
 });
+*/
 
