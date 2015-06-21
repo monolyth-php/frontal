@@ -2,7 +2,7 @@
 
 namespace Monolyth\Http;
 
-class InternalServerErrorException
+class InternalServerErrorException extends Exception
 {
 }
 
