@@ -7,10 +7,21 @@
 
 namespace Monolyth\Autolanguage;
 
-use Monolyth;
+use Reroute\Router;
 
-class Controller extends Monolyth\Controller
+class Controller
 {
+    private $router;
+    private $state;
+    private $arguments;
+
+    public function __construct(Router $router, $state, array $arguments = [])
+    {
+        $this->router = $router;
+        $this->state = $state;
+        $this->arguments = $arguments;
+    }
+
     /**
      * Default autolanguage action.
      *
@@ -19,89 +30,39 @@ class Controller extends Monolyth\Controller
      *
      * @return void
      */
-    protected function _get(array $args)
+    public function guess($argument_name, array $languages = ['en'])
     {
-        if (!isset($args['format'])) {
-            $args['format'] = '/%s/';
-        }
-        throw new HTTP301_Exception(sprintf(
-            $args['format'],
-            $this->guessLanguage()
-        ));
-    }
-
-    /**
-     * Guess the current language based on Apache's $_SERVER info.
-     *
-     * @return string The language code found.
-     * @todo Make this work for other servers than Apache.
-     */
-    protected function _guessLanguage(Language_Model $languages = null)
-    {
-        if (!isset($languages)) {
-            $languages = self::language();
-        }
-        $default = str_replace(
-            '_',
-            '-',
-            strtolower($languages->default->code)
-        ); 
         if (isset($_COOKIE['language'])
-            && $languages->isAvailable($_COOKIE['language'])
+            && in_array($_COOKIE['language'], $languages)
         ) {
-            return $_COOKIE['language'];
-        }
-        $options = [$default => 0];
-        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            $parts = preg_split('@,\s*@', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-            foreach ($parts as $part) {
-                $code = strtolower(array_shift(explode(';', $part)));
-                if (preg_match('@;q=(.*?)$@', $part, $match)) {
-                    $weight = $match[1];
-                } else {
-                    $weight = 1;
-                }
-                $options[$code] = $weight;
-            }
-            asort($options);
-        }
-        foreach (array_reverse($options) as $lan => $weight) {
-            $try = str_replace('-', '_', strtolower($lan));
-            if (isset($languages->$try)
-                && in_array($languages->$try, $languages->available)
-            ) {
-                return $try;
-            }
-            $parts = array_unique(array_reverse(preg_split(
-                '/[-_]/',
-                strtolower($lan)
-            )));
-            foreach ($parts as $try) {
-                if (isset($languages->$try)
-                    && in_array($languages->$try, $languages->available)
-                ) {
-                    if (count($parts) == 2
-                        && $parts[0] != $parts[1]
-                        && $try == $parts[0]
-                        && isset($languages->{$parts[1]})
-                        && $languages->$try === $languages->{$parts[1]}
-                    ) {
-                        return $parts[1];
+            $language = $_COOKIE['language'];
+        } else {
+            $options = [];
+            if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                $parts = preg_split('@,\s*@', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+                foreach ($parts as $part) {
+                    $code = strtolower(array_shift(explode(';', $part)));
+                    if (preg_match('@;q=(.*?)$@', $part, $match)) {
+                        $weight = $match[1];
+                    } else {
+                        $weight = 1;
                     }
-                    return $try;
+                    $options[$code] = $weight;
+                }
+                arsort($options);
+            }
+            foreach ($options as $try => $weight) {
+                if (in_array($try, $languages)) {
+                    $language = $try;
+                    break;
                 }
             }
         }
-    }
-
-    protected function guessLanguage()
-    {
-        return $this->_guessLanguage($this->language());
-    }
-    
-    protected function get(array $args)
-    {
-        return $this->_get($args);
+        if (!isset($language)) {
+            $language = $languages[0];
+        }
+        $this->arguments[$argument_name] = $language;
+        $this->router->get($this->state)->url()->move($this->arguments);
     }
 }
 
