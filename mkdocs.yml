@@ -16,3 +16,5 @@ pages:
     - 'Required packages': 'packages/required.md'
     - 'Optional packages': 'packages/optional.md'
 
+copyright: Copyright &copy; 2015, <a href="http://www.monomelodies.nl/">Marijn Ophorst</a>
+
