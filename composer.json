@@ -9,17 +9,20 @@
             "email": "marijn@monomelodies.nl"
         }
     ],
+    "suggest": {
+        "monomelodies/dabble": "Flexible PDO database query builder/abstraction layer",
+        "monomelodies/formulaic": "Form handling on steroids",
+        "monomelodies/gentry": "Unit test generator and checker",
+        "monomelodies/metaculous": "Automate your meta-tags for SEO",
+        "monomelodies/mural": "Rewrite classnames for a multi-site project in a single repository",
+        "monomelodies/reroute": "Flexible routing package",
+        "phpunit/dbunit": "Unit-test your database-dependant classes"
+    },
     "require": {
-        "monomelodies/dabble": "^1.0.0",
-        "monomelodies/disclosure": "^1.0.0",
-        "monomelodies/improse": "^0.3.0",
-        "monomelodies/formulaic": "^1.0.0",
-        "monomelodies/gentry": "^0.2.0",
-        "monomelodies/metaculous": "^1.0.0",
-        "monomelodies/mural": "^0.1.0",
-        "monomelodies/reroute": "^1.0.0",
-        "php": ">=5.4",
-        "twig/twig": "^1.0.0"
+        "monomelodies/disclosure": ">=1.0.0",
+        "monomelodies/improse": ">=0.3.0",
+        "php": ">=5.3",
+        "twig/twig": ">=1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
