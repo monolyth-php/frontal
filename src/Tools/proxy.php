@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle REMOTE_ADDR in Apache when behind a proxy.
+ * Handle REMOTE_ADDR in when behind a proxy.
  *
  * @package Monolyth
  * @subpackage Tools
@@ -15,7 +15,8 @@ namespace Monolyth\Tools;
  * This code is by no means extensive; there's prolly 1.000 other
  * cases you'll want to handle.
  *
- * TODO: make this work for other servers besides Apache.
+ * To use, simply include this somewhere early in your front controller
+ * (typically index.php).
  */
 if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
     $_SERVER['REMOTE_ADDR'] = trim(array_shift(explode(
