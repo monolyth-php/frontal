@@ -11,7 +11,10 @@
  */
 namespace Monolyth\Tools;
 
-/** Required to make PHP handle UTF8 in a sane way. */
+/**
+ * Required to make PHP handle UTF8 in a sane way. To use, simply include
+ * somewhere early in your front controller (typically index.php).
+ */
 if (function_exists('mb_internal_encoding')) {
     mb_internal_encoding('UTF-8');
 }
