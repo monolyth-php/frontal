@@ -2,14 +2,14 @@
 
 /**
  * @package Monolyth
- * @subpackage Autolanguage
  */
 
-namespace Monolyth\Autolanguage;
+namespace Monolyth;
 
+use Improse\View;
 use Reroute\Router;
 
-class Controller
+class Autolanguage extends View
 {
     private $router;
     private $state;
