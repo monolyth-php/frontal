@@ -10,16 +10,20 @@
         }
     ],
     "require": {
-        "monomelodies/dabble": "^1.0.0",
-        "monomelodies/disclosure": "^1.0.0",
-        "monomelodies/improse": "^0.3.0",
-        "monomelodies/formulaic": "^1.0.0",
-        "monomelodies/gentry": "^0.2.0",
-        "monomelodies/metaculous": "^1.0.0",
-        "monomelodies/mural": "^0.1.0",
-        "monomelodies/reroute": "^1.0.0",
         "php": ">=5.4",
-        "twig/twig": "^1.0.0"
+        "twig/twig": ">=1.0.0",
+        "monomelodies/disclosure": ">=1.0.0",
+        "monomelodies/improse": ">=0.3.0"
+    },
+    "suggest": {
+        "monomelodies/dabble": "Database abstraction layer",
+        "monomelodies/formulaic": "Easy form handling",
+        "monomelodies/gentry": "Generate skeleton unit tests",
+        "monomelodies/metaculous": "Metatag helpers",
+        "monomelodies/mural": "Multiple resource autoloader for several apps in one repository",
+        "monomelodies/ornament": "ORM toolkit",
+        "monomelodies/reroute": "Flexible object oriented router",
+        "phpunit/dbunit": "Test your database classes too"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
