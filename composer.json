@@ -15,18 +15,20 @@
         "monomelodies/disclosure": ">=1.0.0",
         "monomelodies/improse": ">=0.3.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": ">=4"
+    },
     "suggest": {
         "monomelodies/dabble": "Database abstraction layer",
+        "monomelodies/emily": "Swift and Twig-based HTML mailer",
         "monomelodies/formulaic": "Easy form handling",
         "monomelodies/gentry": "Generate skeleton unit tests",
         "monomelodies/metaculous": "Metatag helpers",
+        "monomelodies/monki": "API generation bootstrapper",
         "monomelodies/mural": "Multiple resource autoloader for several apps in one repository",
         "monomelodies/ornament": "ORM toolkit",
         "monomelodies/reroute": "Flexible object oriented router",
         "phpunit/dbunit": "Test your database classes too"
-    },
-    "require-dev": {
-        "phpunit/phpunit": ">=4"
     },
     "autoload": {
         "psr-4": {
