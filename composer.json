@@ -19,6 +19,7 @@
         "phpunit/phpunit": ">=4"
     },
     "suggest": {
+        "monomelodies/cesession": "Alternative PHP session handler",
         "monomelodies/dabble": "Database abstraction layer",
         "monomelodies/emily": "Swift and Twig-based HTML mailer",
         "monomelodies/formulaic": "Easy form handling",
