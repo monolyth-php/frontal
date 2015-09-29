@@ -4,14 +4,21 @@ use Disclosure\Container;
 use Dabble\Adapter\Sqlite;
 
 /**
- * Example dependencies for use with Disclosure. This example injects Twig into
- * the base View, which is probably what you're going to want (although feel
- * free to use a different templating engine, e.g. Moustache).
+ * Example dependencies for use with Disclosure.
+
+/**
+ * Setup a database connection. This uses Sqlite with an in-memory temporary
+ * database; presumably you'll want something different in the real world ;)
  */
 Container::inject('*', function (&$adapter) {
     $adapter = new Sqlite(':memory:');
 });
 
+/*
+ * This example injects Twig into the base View, which is probably what you're
+ * going to want (although feel free to use a different templating engine, e.g.
+ * Moustache).
+ */
 View::inject(function (&$twig) use ($router) {
     $loader = new Twig_Loader_Filesystem(__DIR__);
     $twig = new Twig_Environment($loader, [
@@ -38,14 +45,13 @@ View::inject(function (&$twig) use ($router) {
     $twig->addFunction(new Twig_SimpleFunction('url', $url));
     
     /**
-     * Example integration of Metaculous:
-     *
-     * <code>
-     * $twig->addExtension(new Metaculous\TwigExtension(
-     *     $arrayOfIgnoreWords,
-     *     $hashOfRiggedWords
-     * ));
-     * </code>
+     * Example integration of Metaculous: (See
+     * http://metaculous.monomelodies.nl, usage is of course optional.)
      */
+    $arrayOfIgnoreWords = $hashOfRiggedWords = [];
+    $twig->addExtension(new Metaculous\TwigExtension(
+        $arrayOfIgnoreWords,
+        $hashOfRiggedWords
+    ));
 });
 
