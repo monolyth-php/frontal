@@ -36,13 +36,13 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
     )));
 }
 
-// Dependencies and routing:
-require_once '../src/dependencies.php';
+// Routing and dependencies:
 require_once '../src/routing.php';
+require_once '../src/dependencies.php';
 
 try {
     if (!($state = $router->resolve(
-        $_SERVER['HTTP_HOST'],
+        $_SERVER['REQUEST_URI'],
         $_SERVER['REQUEST_METHOD']
     ))) {
         throw new Exception;
@@ -54,5 +54,8 @@ try {
     }
 } catch (Exception $e) {
     // You should do something useful here...
+    echo $e->getMessage();
+    echo $e->getFile();
+    echo $e->getLine();
 }
 
