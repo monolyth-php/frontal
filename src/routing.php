@@ -8,7 +8,7 @@
 use Reroute\Router;
 use Reroute\Url\Flat;
 
-$route = new Router;
+$router = new Router;
 
 $router->state('welcome', new Flat('/'), function () {
     return new Welcome\View;
