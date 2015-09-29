@@ -1,10 +1,17 @@
 <?php
 
+use Disclosure\Container;
+use Dabble\Adapter\Sqlite;
+
 /**
  * Example dependencies for use with Disclosure. This example injects Twig into
  * the base View, which is probably what you're going to want (although feel
  * free to use a different templating engine, e.g. Moustache).
  */
+Container::inject('*', function (&$adapter) {
+    $adapter = new Sqlite(':memory:');
+});
+
 View::inject(function (&$twig) use ($router) {
     $loader = new Twig_Loader_Filesystem(__DIR__);
     $twig = new Twig_Environment($loader, [
