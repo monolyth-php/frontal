@@ -3,9 +3,11 @@
     <head>
         <title>{% block title %}An example default title{% endblock title %} - Monolyth skeleton</title>
         <link rel="stylesheet" href="/css/project.css">
+        <link rel="icon" type="image/png" href="/favicon.png">
     </head>
 
-    <body>
+    <body style="text-align: center">
+        <img src="/favicon.png">
         <p>
             This is an example Twig template for Monolyth projects; please adapt
             it to your own needs.
@@ -17,7 +19,7 @@
 
         <div role="main">{% block content %}This gets replaced in the page temlate.{% endblock content %}</div>
 
-        <footer>&copy; ACME international industries etc. ;)</footer>
+        <footer>&copy; Joe Developer (ACME international industries)</footer>
     </body>
 </html>
 
