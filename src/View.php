@@ -1,12 +1,14 @@
 <?php
 
-namespace Monolyth;
-
+/**
+ * This is an example base view you can extend for all your pages. It uses Twig,
+ * so you need to set that up correctly in your dependencies.
+ */
 use Disclosure\Injector;
 use Disclosure\Container;
-use Improse\View;
+use Improse;
 
-abstract class TwigView extends View
+abstract class View extends Improse\View
 {
     use Injector;
 
@@ -29,7 +31,7 @@ abstract class TwigView extends View
  * assumptions about your path structure etc.:
  */
 /*
-TwigView::inject(function (&$twig) {
+View::inject(function (&$twig) {
     $loader = new Twig_Loader_Filesystem('/path/to/code');
     $twig = new Twig_Environment($loader, [
         'cache' => '/path/to/cache',
