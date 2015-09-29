@@ -12,6 +12,9 @@ use Dabble\Adapter\Sqlite;
  */
 Container::inject('*', function (&$adapter) {
     $adapter = new Sqlite(':memory:');
+    $adapter->exec(file_get_contents(
+        '../vendor/monomelodies/cesession/info/sql/sqlite.sql'
+    ));
 });
 
 /*
