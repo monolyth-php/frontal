@@ -11,9 +11,10 @@
     ],
     "require": {
         "php": ">=5.4",
-        "twig/twig": ">=1.0.0",
-        "monomelodies/disclosure": ">=1.0.0",
-        "monomelodies/improse": ">=0.3.0"
+        "twig/twig": "^1.0.0",
+        "monomelodies/disclosure": "^1.0.0",
+        "monomelodies/improse": "^0.3.0",
+        "monomelodies/reroute": "^1.1.8"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
@@ -22,6 +23,8 @@
         "monomelodies/cesession": "Alternative PHP session handler",
         "monomelodies/dabble": "Database abstraction layer",
         "monomelodies/emily": "Swift and Twig-based HTML mailer",
+        "monomelodies/booby": "Display 'flash messages' to users",
+        "monomelodies/envy": "Manage your project's environments",
         "monomelodies/formulaic": "Easy form handling",
         "monomelodies/gentry": "Generate skeleton unit tests",
         "monomelodies/metaculous": "Metatag helpers",
@@ -30,7 +33,8 @@
         "monomelodies/ornament": "ORM toolkit",
         "monomelodies/dormant": "Dabble adapter for Ornament",
         "monomelodies/reroute": "Flexible object oriented router",
-        "phpunit/dbunit": "Test your database classes too"
+        "phpunit/dbunit": "Test your database classes too",
+        "twig/extensions": "Handy Twig extensions (e.g. for i18n)"
     },
     "autoload": {
         "psr-4": {
