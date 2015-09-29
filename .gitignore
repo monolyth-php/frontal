@@ -15,4 +15,7 @@
 
 .sass-cache
 
+# Common repositories
 vendor
+bower_components
+node_modules

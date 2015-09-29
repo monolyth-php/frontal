@@ -10,7 +10,7 @@ inside and outside of the PHP world. Where necessary, we chose our own path :)
 - [Documentation](http://monolyth.monomelodies.nl/docs/)
 
 ## Installation
-`$ composer install --save monolyth`
+`$ composer create-project monomelodies/monolyth /path/to/project`
 
 Ehm, that's it, really.
 
@@ -34,12 +34,24 @@ but our design goal is to make optional what we can.
 The name is a pun; Monolyth is anything but monolithic. We have tried to
 abstract every function you might need for an MVC PHP project into an isolated
 module, and allow you to mix and match what you find convenient. Essentially,
-you've just installed a bunch of composer dependencies we recommend, and a few
-helper classes and utility scripts.
+you've just installed a bunch of Composer dependencies we recommend, as well as
+a fairly generic project skeleton (which you should adapt to reflect your own
+needs of course).
 
-Our Wiki contains a full example project with code and explanation, and will
-also tell you more about the various modules and how they work together.
+Our [Wiki](http://monolyth.monomelodies.nl/wiki/) contains a full example
+project with code and explanation, and will also tell you more about the various
+modules and how they work together.
 
 > *Note:* the current major version is 6, but is a complete rewrite from the
 > older versions.
+
+## Now what?
+- Replace this README.md with something applicable for your project;
+- Optionally add extra Composer dependencies;
+- Optionally setup build scripts (e.g. using Grunt);
+- Make sure the `./httpdocs` folder (or whatever you decide to call it) points
+  to the public root for your testdomain (e.g. `http://localhost/`);
+- Whip up your favourite browser and navigate to `http://localhost/`. There's a
+  welcome page to get you started.
+- Go build that awesome project!
 
