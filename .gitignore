@@ -13,7 +13,9 @@
 # Mac swapfile
 ._*
 
+# You can rename these depending on your liking:
 .sass-cache
+.twig-cache
 
 # Common repositories
 vendor
