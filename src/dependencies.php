@@ -2,6 +2,7 @@
 
 use Disclosure\Container;
 use Dabble\Adapter\Sqlite;
+use Envy\Envy;
 
 /**
  * Example dependencies for use with Disclosure.
@@ -15,6 +16,45 @@ Container::inject('*', function (&$adapter) {
     $adapter->exec(file_get_contents(
         '../vendor/monomelodies/cesession/info/sql/sqlite.sql'
     ));
+});
+
+/**
+ * Example Envy configuration. See http://envy.monomelodies.nl for more info.
+ */
+Container::inject('*', function (&$env) {
+    $env = new Envy(dirname(__DIR__).'/Envy.json', function ($env) {
+        $envs = [];
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $envs[] = 'web';
+            if (preg_match(
+                '@\localhost$@',
+                $_SERVER['HTTP_HOST']
+            )) {
+                $envs[] = 'dev';
+            } else {
+                $envs[] = 'prod';
+            }
+        } elseif (class_exists('PHPUnit_Framework_TestCase', false)) {
+            $envs[] = 'test';
+        } else {
+            $envs[] = 'cli';
+            if (php_uname('n') == 'name-of-your-machine') {
+                $envs[] = 'dev';
+            } else {
+                $envs[] = 'prod';
+            }
+        }
+        if (in_array('dev', $envs)) {
+            error_reporting(E_ALL & ~E_STRICT);
+            ini_set('display_errors', 'On');
+            if (in_array('web', $envs)) {
+                $env->host = "http://{$_SERVER['HTTP_HOST']}";
+            } elseif (in_array('cli', $envs)) {
+                $env->user = get_current_user();
+            }
+        }
+        return $envs;
+    });
 });
 
 /*
