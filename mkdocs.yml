@@ -1,20 +1,10 @@
-site_name: Monolyth documentation
-site_url: http://monolyth.monomelodies.nl/docs/
-repo_url: https://github.com/monomelodies/monolyth
+site_name: Example documentation
+site_url: http://example.com/
+repo_url: https://github.com/author/package
 
 pages:
 - Home:
     - 'Quickstart': 'index.md'
-- Demo site:
-    - 'Prerequisites': 'demo/prerequisites.md'
-    - 'Dependencies': 'demo/dependencies.md'
-    - 'Routing': 'demo/routing.md'
-    - 'Views': 'demo/view.md'
-    - 'Controllers': 'demo/controller.md'
-    - 'Models': 'demo/models.md'
-- Packages:
-    - 'Required packages': 'packages/required.md'
-    - 'Optional packages': 'packages/optional.md'
 
-copyright: Copyright &copy; 2015, <a href="http://www.monomelodies.nl/">Marijn Ophorst</a>
+copyright: Copyright &copy; 2015, <a href="http://example.com/">Joe Developer</a>
 
