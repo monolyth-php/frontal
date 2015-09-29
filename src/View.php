@@ -6,7 +6,6 @@
  * `./src/dependencies.php` for an example.
  */
 use Disclosure\Injector;
-use Improse;
 
 abstract class View extends Improse\View
 {
