@@ -28,12 +28,13 @@
         "monomelodies/monki": "API generation bootstrapper",
         "monomelodies/mural": "Multiple resource autoloader for several apps in one repository",
         "monomelodies/ornament": "ORM toolkit",
+        "monomelodies/dormant": "Dabble adapter for Ornament",
         "monomelodies/reroute": "Flexible object oriented router",
         "phpunit/dbunit": "Test your database classes too"
     },
     "autoload": {
         "psr-4": {
-            "Monolyth\\": "src"
+            "": "src/"
         }
     }
 }
