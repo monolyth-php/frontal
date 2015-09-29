@@ -14,25 +14,22 @@
         "twig/twig": "^1.0.0",
         "monomelodies/disclosure": "^1.0.0",
         "monomelodies/improse": "^0.3.0",
-        "monomelodies/reroute": "^1.1.8"
+        "monomelodies/reroute": "^1.1.8",
+        "monomelodies/cesession": "^0.0.2",
+        "monomelodies/emily": "^1.1.5",
+        "monomelodies/booby": "^1.1.1",
+        "monomelodies/envy": "^0.2.0",
+        "monomelodies/formulaic": "^1.4.3",
+        "monomelodies/gentry": "^0.3.0",
+        "monomelodies/metaculous": "^1.0.1",
+        "monomelodies/monki": "^0.1.4",
+        "monomelodies/mural": "^0.2.0",
+        "monomelodies/dormant": "^0.0.4"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
     },
     "suggest": {
-        "monomelodies/cesession": "Alternative PHP session handler",
-        "monomelodies/dabble": "Database abstraction layer",
-        "monomelodies/emily": "Swift and Twig-based HTML mailer",
-        "monomelodies/booby": "Display 'flash messages' to users",
-        "monomelodies/envy": "Manage your project's environments",
-        "monomelodies/formulaic": "Easy form handling",
-        "monomelodies/gentry": "Generate skeleton unit tests",
-        "monomelodies/metaculous": "Metatag helpers",
-        "monomelodies/monki": "API generation bootstrapper",
-        "monomelodies/mural": "Multiple resource autoloader for several apps in one repository",
-        "monomelodies/ornament": "ORM toolkit",
-        "monomelodies/dormant": "Dabble adapter for Ornament",
-        "monomelodies/reroute": "Flexible object oriented router",
         "phpunit/dbunit": "Test your database classes too",
         "twig/extensions": "Handy Twig extensions (e.g. for i18n)"
     },
