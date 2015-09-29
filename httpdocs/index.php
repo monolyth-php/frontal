@@ -5,6 +5,10 @@
  * Be sure to change paths to reflect your server environment.
  */
 
+use Disclosure\Container;
+use Cesession\Session;
+use Cesession\Handler;
+
 // Require and setup the Composer autoloader:
 $autoloader = require_once '../vendor/autoload.php';
 
@@ -39,6 +43,15 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 // Routing and dependencies:
 require_once '../src/routing.php';
 require_once '../src/dependencies.php';
+
+/**
+ * We use Cesession sessions by default; remove or change this if your
+ * preferences are different.
+ */
+$session = new Session('my-session-name');
+extract(Container::inject('*', function ($adapter) {}));
+$session->registerHandler(new Handler\Pdo($adapter));
+session_start();
 
 try {
     if (!($state = $router->resolve(
