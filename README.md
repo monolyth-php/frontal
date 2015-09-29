@@ -49,6 +49,8 @@ modules and how they work together.
 - Replace this README.md with something applicable for your project;
 - Optionally add extra Composer dependencies;
 - Optionally setup build scripts (e.g. using Grunt);
+- Prune your `composer.json` file - we've probably installed dependencies you
+  don't really need anyway;
 - Make sure the `./httpdocs` folder (or whatever you decide to call it) points
   to the public root for your testdomain (e.g. `http://localhost/`);
 - Whip up your favourite browser and navigate to `http://localhost/`. There's a
