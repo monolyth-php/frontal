@@ -6,17 +6,7 @@ use Envy\Envy;
 
 /**
  * Example dependencies for use with Disclosure.
-
-/**
- * Setup a database connection. This uses Sqlite with an in-memory temporary
- * database; presumably you'll want something different in the real world ;)
  */
-Container::inject('*', function (&$adapter) {
-    $adapter = new Sqlite(':memory:');
-    $adapter->exec(file_get_contents(
-        '../vendor/monomelodies/cesession/info/sql/sqlite.sql'
-    ));
-});
 
 /**
  * Example Envy configuration. See http://envy.monomelodies.nl for more info.
@@ -55,6 +45,17 @@ Container::inject('*', function (&$env) {
         }
         return $envs;
     });
+});
+
+/**
+ * Setup a database connection. This uses Sqlite with an in-memory temporary
+ * database; presumably you'll want something different in the real world ;)
+ */
+Container::inject('*', function (&$adapter) {
+    $adapter = new Sqlite(':memory:');
+    $adapter->exec(file_get_contents(
+        '../vendor/monomelodies/cesession/info/sql/sqlite.sql'
+    ));
 });
 
 /*
