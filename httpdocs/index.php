@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Example index.php you can copy and reuse.
+ * Example index.php you can extend on.
  * Be sure to change paths to reflect your server environment.
  */
 
 // Require and setup the Composer autoloader:
-$autoloader = require_once '/path/to/vendor/autoload.php';
+$autoloader = require_once '../vendor/autoload.php';
 
 // Dependencies and routing:
-require_once '/path/to/src/dependencies.php';
-require_once '/path/to/src/routing.php';
+require_once '../src/dependencies.php';
+require_once '../src/routing.php';
 
 try {
     if (!($state = $router->resolve(
-        $_SERVER['REQUEST_URI'],
+        $_SERVER['HTTP_HOST'],
         $_SERVER['REQUEST_METHOD']
     ))) {
         throw new Exception;
