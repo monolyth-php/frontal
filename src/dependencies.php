@@ -5,7 +5,7 @@
  * the base View, which is probably what you're going to want (although feel
  * free to use a different templating engine, e.g. Moustache).
  */
-View::inject(function (&$twig) {
+View::inject(function (&$twig) use ($router) {
     $loader = new Twig_Loader_Filesystem(__DIR__);
     $twig = new Twig_Environment($loader, [
         // This will depend on your preferences.
