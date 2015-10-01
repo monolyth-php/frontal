@@ -14,7 +14,7 @@
         "twig/twig": "^1.0.0",
         "monomelodies/disclosure": "^1.0.0",
         "monomelodies/improse": "^0.3.0",
-        "monomelodies/reroute": "^1.1.8",
+        "monomelodies/reroute": "^2.0.0",
         "monomelodies/cesession": "^0.0.3",
         "monomelodies/emily": "^1.1.5",
         "monomelodies/booby": "^1.1.1",
