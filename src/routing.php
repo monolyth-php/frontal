@@ -6,11 +6,10 @@
  */
 
 use Reroute\Router;
-use Reroute\Url\Flat;
 
 $router = new Router;
 
-$router->state('welcome', new Flat('/'), function () {
+$router->state('welcome', '/')->then(function () {
     return new Welcome\View;
 });
 
