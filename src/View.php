@@ -23,9 +23,12 @@ abstract class View extends Improse\View
         $this->inject(function ($twig) {});
     }
     
-    public function __invoke(array $__viewdata = [])
+    /**
+     * Render this view as a Twig template.
+     */
+    public function __invoke(array $data = [])
     {
-        return $this->twig->render($this->template, $__viewdata);
+        return $this->twig->render($this->template, $data);
     }
 }
 
