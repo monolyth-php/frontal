@@ -77,11 +77,6 @@ View::inject(function (&$twig) use ($router) {
     
     // Example url function, assuming `$router` is available:
     $url = function ($name, array $args = []) use ($router) {
-        if (!isset($_SERVER['HTTP_HOST'])) {
-            // Again, you could/should use something like monomelodies/envy to
-            // set this to a sane default for your environment.
-            $_SERVER['HTTP_HOST'] = 'http://localhost';
-        }
         return $router->generate($name, $args);
     };
     $twig->addFunction(new Twig_SimpleFunction('url', $url));
