@@ -76,10 +76,7 @@ View::inject(function (&$twig) use ($router) {
     ]);
     
     // Example url function, assuming `$router` is available:
-    $url = function ($name, array $args = []) use ($router) {
-        return $router->generate($name, $args);
-    };
-    $twig->addFunction(new Twig_SimpleFunction('url', $url));
+    $twig->addFunction(new Twig_SimpleFunction('url', [$router, 'generate']));
     
     /**
      * Example integration of Metaculous: (See
