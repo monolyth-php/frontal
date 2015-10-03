@@ -9,7 +9,7 @@ use Reroute\Router;
 
 $router = new Router;
 
-$router->state('welcome', '/')->then(function () {
+$router->when('/')->then('welcome', function () {
     return new Welcome\View;
 });
 
