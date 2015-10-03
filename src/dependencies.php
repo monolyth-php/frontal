@@ -63,6 +63,7 @@ Container::inject('*', function (&$adapter) {
  * going to want (although feel free to use a different templating engine, e.g.
  * Moustache).
  */
+$router = require 'router.php';
 View::inject(function (&$twig) use ($router) {
     $loader = new Twig_Loader_Filesystem(__DIR__);
     $twig = new Twig_Environment($loader, [

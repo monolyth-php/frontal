@@ -40,8 +40,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
     )));
 }
 
-// Routing and dependencies:
-require_once '../src/routing.php';
 require_once '../src/dependencies.php';
 
 /**
