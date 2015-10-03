@@ -10,9 +10,48 @@ inside and outside of the PHP world. Where necessary, we chose our own path :)
 - [Documentation](http://monolyth.monomelodies.nl/docs/)
 
 ## Installation
-`$ composer create-project monomelodies/monolyth /path/to/project`
 
-Ehm, that's it, really.
+### Composer project (recommended)
+`$ composer create-project monomelodies/monolyth /path/to/new/project`
+
+Ehm, that's it, really. Well, your web server needs to serve from
+`/path/to/new/project`, you might want to add it to version control and you'll
+probably need a database, but you get the idea.
+
+### Composer dependency
+To migrate an existing project to Monolyth, install as a composer _dependency_
+instead:
+
+`$ cd /path/to/existing/project && composer require monomelodies/monolyth`
+
+You'll probably want to copy the `httpdocs` and `src` directories into your
+project, since they're meant as example templates and will have to be edited by
+the implementor (i.e., you).
+
+Using this strategy, _all_ Monolyth dependencies are loaded and you cannot
+prune. Also, any updates to Monolyth will be loaded whenever you do
+`composer update`, along with updates to Monolyth dependencies. That's not
+really how it's designed to work - the dependencies are rather recommendations
+(but `composer create-project` doesn't honour the `suggest` key) and your
+project might require different versions than the latest Monolyth recommends.
+So in the real world (if you don't mind having the extra depedencies floating
+around in `./vendor`) when using this strategy you should lockdown Monolyth to
+the exact version you installed with, or your project might break in unexpected
+ways in the future!
+
+### Download, cherry pick, remove
+This is actually closer to the recommended installation, as it's really a manual
+version of what `composer create-project` does:
+
+1. Download or clone the library somewhere (doesn't matter where):
+   `git clone https://github.com/monomelodies/monolyth.git some/path`
+   or
+   `wget https://github.com/monomelodies/monolyth/archive/master.zip`
+   `mkdir some/path && mv master.zip some/path/`
+   `cd some/path && unzip master.zip`
+2. Copy what you need into `/path/to/project`. From Monolyth's `composer.json`,
+   be sure to review the dependencies and remove what you're not going to use.
+3. When done, you can `rm -rf` the cloned or downloaded repository.
 
 ## What Monolyth is _NOT_
 Monolyth is _not_ a full stack framework, at least not as you'll know it.
@@ -24,7 +63,7 @@ convenient.
 
 Monolyth is _not_ a package manager; utilities like Bower or Composer are much
 better suited to this task. If you're not worried about version mismatches, you
-could also just add modules as git submodules and be done with it. We don't want
+could also just add modules as Git submodules and be done with it. We don't want
 to tell you how you should work!
 
 Monolyth is _not_ here to tell you what to do. We can help you if you let us,
