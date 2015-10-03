@@ -13,9 +13,10 @@
         "php": ">=5.4",
         "twig/twig": "^1.0.0",
         "monomelodies/disclosure": "^1.0.0",
+        "monomelodies/dabble": "^1.2.6",
         "monomelodies/improse": "^0.3.0",
         "monomelodies/reroute": "^2.0.0",
-        "monomelodies/cesession": "^0.0.3",
+        "monomelodies/cesession": "^1.0.0",
         "monomelodies/emily": "^1.1.5",
         "monomelodies/booby": "^1.1.1",
         "monomelodies/envy": "^0.2.0",
@@ -24,6 +25,7 @@
         "monomelodies/metaculous": "^1.0.1",
         "monomelodies/monki": "^0.1.4",
         "monomelodies/mural": "^0.2.0",
+        "monomelodies/ornament": "^0.1.1",
         "monomelodies/dormant": "^0.0.4"
     },
     "require-dev": {
