@@ -52,15 +52,12 @@ $session->registerHandler(new Handler\Pdo($adapter));
 session_start();
 
 try {
-    if (!($state = $router->resolve(
-        $_SERVER['REQUEST_URI'],
-        $_SERVER['REQUEST_METHOD']
-    ))) {
+    if (!($state = $router->resolve($_SERVER['REQUEST_URI']))) {
         throw new Exception;
     }
     switch ($state->group()) {
         default:
-            echo $state->run();
+            echo $state();
             break;
     }
 } catch (Exception $e) {
