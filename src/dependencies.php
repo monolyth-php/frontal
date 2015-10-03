@@ -81,10 +81,7 @@ View::inject(function (&$twig) use ($router) {
             // set this to a sane default for your environment.
             $_SERVER['HTTP_HOST'] = 'http://localhost';
         }
-        return $router->get($name)->url()->short(
-            "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
-            $args
-        );
+        return $router->generate($name, $args);
     };
     $twig->addFunction(new Twig_SimpleFunction('url', $url));
     
