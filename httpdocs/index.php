@@ -53,13 +53,9 @@ session_start();
 
 try {
     if (!($state = $router->resolve($_SERVER['REQUEST_URI']))) {
-        throw new Exception;
+        throw new Exception('404');
     }
-    switch ($state->group()) {
-        default:
-            echo $state();
-            break;
-    }
+    echo $state();
 } catch (Exception $e) {
     // You should do something useful here...
     echo $e->getMessage();
