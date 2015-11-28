@@ -12,6 +12,15 @@
     "require": {
         "php": ">=5.4",
         "twig/twig": "^1.0.0",
+        "league/pipeline": "@dev",
+        "zendframework/zend-diactoros": "^1.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=4"
+    },
+    "suggest": {
+        "phpunit/dbunit": "Test your database classes too",
+        "twig/extensions": "Handy Twig extensions (e.g. for i18n)",
         "monomelodies/disclosure": "^1.0.0",
         "monomelodies/dabble": "^1.2.6",
         "monomelodies/improse": "^0.3.0",
@@ -28,16 +37,17 @@
         "monomelodies/ornament": "^0.1.1",
         "monomelodies/dormant": "^0.0.4"
     },
-    "require-dev": {
-        "phpunit/phpunit": ">=4"
-    },
-    "suggest": {
-        "phpunit/dbunit": "Test your database classes too",
-        "twig/extensions": "Handy Twig extensions (e.g. for i18n)"
-    },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Monolyth\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Monolyth\\Test\\": "tests/"
+        },
+        "files": [
+            "tests/HeaderStack.php"
+        ]
     }
 }
