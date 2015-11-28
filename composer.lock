@@ -4,68 +4,33 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "078a427e25c18b7b69c82649491de758",
+    "hash": "0254b77661b9b49bd0c8991f3427df5b",
     "packages": [
         {
-            "name": "jakeasmith/http_build_url",
-            "version": "1.0.0",
+            "name": "league/pipeline",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jakeasmith/http_build_url.git",
-                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb"
+                "url": "https://github.com/thephpleague/pipeline.git",
+                "reference": "5e2a8f3450a6f68220c2dcc2db65cbdb473740bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/15bdd686e5178ddfa3e88de60fa585adffb292bb",
-                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/http_build_url.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jake A. Smith",
-                    "email": "theman@jakeasmith.com"
-                }
-            ],
-            "description": "Provides functionality for http_build_url() to environments without pecl_http.",
-            "time": "2015-05-06 12:27:20"
-        },
-        {
-            "name": "monomelodies/booby",
-            "version": "1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/booby.git",
-                "reference": "c436e438379434dece4e5b76e956dbc77bdc9b44"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/booby/zipball/c436e438379434dece4e5b76e956dbc77bdc9b44",
-                "reference": "c436e438379434dece4e5b76e956dbc77bdc9b44",
+                "url": "https://api.github.com/repos/thephpleague/pipeline/zipball/5e2a8f3450a6f68220c2dcc2db65cbdb473740bc",
+                "reference": "5e2a8f3450a6f68220c2dcc2db65cbdb473740bc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.0.*"
+                "henrikbjorn/phpspec-code-coverage": "^1.0",
+                "phpspec/phpspec": "^2.2"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Booby\\": "src"
+                    "League\\Pipeline\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -74,736 +39,46 @@
             ],
             "authors": [
                 {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
                 }
             ],
-            "description": "Generic flash message storage system",
+            "description": "A plug and play pipeline implementation.",
             "keywords": [
-                "flash",
-                "message",
-                "php",
-                "storage"
+                "composition",
+                "design pattern",
+                "pattern",
+                "pipeline",
+                "sequential"
             ],
-            "time": "2015-09-26 10:34:30"
+            "time": "2015-11-22 18:29:48"
         },
         {
-            "name": "monomelodies/cesession",
-            "version": "0.0.2",
+            "name": "psr/http-message",
+            "version": "1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/monomelodies/cesession.git",
-                "reference": "9b5a2e29e2369374209485b41f3b2eef2c908077"
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/cesession/zipball/9b5a2e29e2369374209485b41f3b2eef2c908077",
-                "reference": "9b5a2e29e2369374209485b41f3b2eef2c908077",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/dbunit": ">=1.0",
-                "phpunit/phpunit": ">=4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cesession\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Alternative PHP session handler",
-            "keywords": [
-                "handler",
-                "php",
-                "session"
-            ],
-            "time": "2015-09-06 09:22:18"
-        },
-        {
-            "name": "monomelodies/dabble",
-            "version": "1.2.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/dabble.git",
-                "reference": "ac5a356903c7b2ae8b9cb8a4ac7469097e55a4b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/dabble/zipball/ac5a356903c7b2ae8b9cb8a4ac7469097e55a4b5",
-                "reference": "ac5a356903c7b2ae8b9cb8a4ac7469097e55a4b5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/dbunit": ">=1.2",
-                "phpunit/phpunit": ">=4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Dabble\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "PHP5 database abstraction layer",
-            "keywords": [
-                "abstraction",
-                "database",
-                "php"
-            ],
-            "time": "2015-09-24 05:59:32"
-        },
-        {
-            "name": "monomelodies/disclosure",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/disclosure.git",
-                "reference": "1e1cbf319b0d7574c083d7e634e2ffd9e88d15da"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/disclosure/zipball/1e1cbf319b0d7574c083d7e634e2ffd9e88d15da",
-                "reference": "1e1cbf319b0d7574c083d7e634e2ffd9e88d15da",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Disclosure\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "PHP5 dependency injection framework",
-            "keywords": [
-                "dependency",
-                "injection",
-                "php"
-            ],
-            "time": "2015-06-04 13:45:37"
-        },
-        {
-            "name": "monomelodies/dormant",
-            "version": "0.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/dormant.git",
-                "reference": "c005936bf18022abe5cd282e1ef9f78bcd9bcb97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/dormant/zipball/c005936bf18022abe5cd282e1ef9f78bcd9bcb97",
-                "reference": "c005936bf18022abe5cd282e1ef9f78bcd9bcb97",
-                "shasum": ""
-            },
-            "require": {
-                "monomelodies/dabble": "^1.2.0",
-                "monomelodies/ornament": "^0.1.0",
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "phpunit/dbunit": ">=1.2",
-                "phpunit/phpunit": ">=4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Dormant\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Dabble-based Ornament adapter",
-            "keywords": [
-                "orm",
-                "php"
-            ],
-            "time": "2015-09-27 17:32:55"
-        },
-        {
-            "name": "monomelodies/emily",
-            "version": "1.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/emily.git",
-                "reference": "9c967219259457e88b5fa10174a9362414624d9e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/emily/zipball/9c967219259457e88b5fa10174a9362414624d9e",
-                "reference": "9c967219259457e88b5fa10174a9362414624d9e",
-                "shasum": ""
-            },
-            "require": {
-                "swiftmailer/swiftmailer": "@stable",
-                "twig/twig": ">=1.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Emily\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Twig-based PHP mailer",
-            "keywords": [
-                "mail",
-                "php",
-                "twig"
-            ],
-            "time": "2015-07-27 15:16:55"
-        },
-        {
-            "name": "monomelodies/envy",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/envy.git",
-                "reference": "f67a7f3c8b98c509a45a5c9daf16ad0215fdc8c0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/envy/zipball/f67a7f3c8b98c509a45a5c9daf16ad0215fdc8c0",
-                "reference": "f67a7f3c8b98c509a45a5c9daf16ad0215fdc8c0",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/yaml": "^2.7"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Envy\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Flexible environment handler for PHP projects (including unit tests!)",
-            "time": "2015-09-18 08:07:20"
-        },
-        {
-            "name": "monomelodies/formulaic",
-            "version": "1.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/formulaic.git",
-                "reference": "61488b16dbfa20019ac95ed2d68b24cb211ba17d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/formulaic/zipball/61488b16dbfa20019ac95ed2d68b24cb211ba17d",
-                "reference": "61488b16dbfa20019ac95ed2d68b24cb211ba17d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "monomelodies/docile": "@dev",
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Formulaic\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Object oriented PHP5 form tools",
-            "keywords": [
-                "HTML5",
-                "form",
-                "oo",
-                "php",
-                "validation"
-            ],
-            "time": "2015-09-26 07:28:15"
-        },
-        {
-            "name": "monomelodies/gentry",
-            "version": "0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/gentry.git",
-                "reference": "b631b2abf6f525d8c001a3c011ce135a883d1ccf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/gentry/zipball/b631b2abf6f525d8c001a3c011ce135a883d1ccf",
-                "reference": "b631b2abf6f525d8c001a3c011ce135a883d1ccf",
-                "shasum": ""
-            },
-            "require": {
-                "zeptech/annotations": "^1.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "bin": [
-                "gentry"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Gentry\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "PHP unit test generation tools",
-            "time": "2015-09-13 17:33:28"
-        },
-        {
-            "name": "monomelodies/improse",
-            "version": "0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/improse.git",
-                "reference": "4b76c74f1a94bbe8384af6c2e44be11cae1efc2b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/improse/zipball/4b76c74f1a94bbe8384af6c2e44be11cae1efc2b",
-                "reference": "4b76c74f1a94bbe8384af6c2e44be11cae1efc2b",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Improse\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "PHP5 View and templating system for MVC projects",
-            "keywords": [
-                "mvc",
-                "php",
-                "template",
-                "view"
-            ],
-            "time": "2015-06-06 07:12:58"
-        },
-        {
-            "name": "monomelodies/metaculous",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/metaculous.git",
-                "reference": "504c0fddb1a2680f5e7efc6d9eb9ac819aa56a13"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/metaculous/zipball/504c0fddb1a2680f5e7efc6d9eb9ac819aa56a13",
-                "reference": "504c0fddb1a2680f5e7efc6d9eb9ac819aa56a13",
-                "shasum": ""
-            },
-            "require": {
-                "twig/twig": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/dbunit": ">=1.2",
-                "phpunit/phpunit": ">=4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Metaculous\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Metadata helpers",
-            "keywords": [
-                "description",
-                "keywords",
-                "metadata",
-                "php",
-                "template",
-                "twig"
-            ],
-            "time": "2015-08-16 08:07:35"
-        },
-        {
-            "name": "monomelodies/monki",
-            "version": "0.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/monki.git",
-                "reference": "42bbb47a76b44cb1a56bf5c635d26171d765bc6e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/monki/zipball/42bbb47a76b44cb1a56bf5c635d26171d765bc6e",
-                "reference": "42bbb47a76b44cb1a56bf5c635d26171d765bc6e",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-pcre": "*",
-                "ext-reflection": "*",
-                "ext-spl": "*",
-                "monomelodies/dabble": "^1.2",
-                "monomelodies/improse": "^0.3.0",
-                "monomelodies/reroute": "^1.1",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/dbunit": "^1.2",
-                "phpunit/phpunit": "^4.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Monki\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP5 API generation utilities",
-            "keywords": [
-                "api",
-                "generation",
-                "php5"
-            ],
-            "time": "2015-07-07 07:05:35"
-        },
-        {
-            "name": "monomelodies/mural",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/mural.git",
-                "reference": "0a0d39a55b811afc267c64db30aac7538c1afca9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/mural/zipball/0a0d39a55b811afc267c64db30aac7538c1afca9",
-                "reference": "0a0d39a55b811afc267c64db30aac7538c1afca9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "": [
-                        "tests"
-                    ],
-                    "Mural\\": [
-                        "src"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "MUltiple \"Resource\" AutoLoader",
-            "time": "2015-06-23 08:02:48"
-        },
-        {
-            "name": "monomelodies/ornament",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/ornament.git",
-                "reference": "c2342a8c296b0357be1bcf2106c748daea54e4b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/ornament/zipball/c2342a8c296b0357be1bcf2106c748daea54e4b0",
-                "reference": "c2342a8c296b0357be1bcf2106c748daea54e4b0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5",
-                "zeptech/annotations": "^1.1"
-            },
-            "require-dev": {
-                "monomelodies/docile": "@dev",
-                "phpunit/dbunit": ">=1.2",
-                "phpunit/phpunit": ">=4.0"
-            },
-            "suggest": {
-                "monomelodies/dabble": "PDO-based database abstraction layer",
-                "monomelodies/dormant": "Dabble-specific Ornament adapter",
-                "monomelodies/formulaic": "PHP5 OO-forms with data binding for (Ornament) models"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Ornament\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "PHP5 ORM toolkit",
-            "keywords": [
-                "orm",
-                "php"
-            ],
-            "time": "2015-09-28 07:39:38"
-        },
-        {
-            "name": "monomelodies/reroute",
-            "version": "1.1.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monomelodies/reroute.git",
-                "reference": "20774beb6116ce824bd910051895302b5b94e72e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monomelodies/reroute/zipball/20774beb6116ce824bd910051895302b5b94e72e",
-                "reference": "20774beb6116ce824bd910051895302b5b94e72e",
-                "shasum": ""
-            },
-            "require": {
-                "jakeasmith/http_build_url": "^1.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Reroute\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marijn Ophorst",
-                    "email": "marijn@monomelodies.nl"
-                }
-            ],
-            "description": "Extremely flexible PHP5 router",
-            "keywords": [
-                "mvc",
-                "php",
-                "router"
-            ],
-            "time": "2015-08-28 02:16:09"
-        },
-        {
-            "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9.1,<0.9.4"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "lib/swift_required.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Corbyn"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Swiftmailer, free feature-rich PHP mailer",
-            "homepage": "http://swiftmailer.org",
-            "keywords": [
-                "email",
-                "mail",
-                "mailer"
-            ],
-            "time": "2015-06-06 14:19:39"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v2.7.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
-                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "~2.7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
+                    "Psr\\Http\\Message\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -812,30 +87,33 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
-            "description": "Symfony Yaml Component",
-            "homepage": "https://symfony.com",
-            "time": "2015-09-14 14:14:09"
+            "description": "Common interface for HTTP messages",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2015-05-04 20:22:00"
         },
         {
             "name": "twig/twig",
-            "version": "v1.22.2",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "79249fc8c9ff62e41e217e0c630e2e00bcadda6a"
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/79249fc8c9ff62e41e217e0c630e2e00bcadda6a",
-                "reference": "79249fc8c9ff62e41e217e0c630e2e00bcadda6a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
                 "shasum": ""
             },
             "require": {
@@ -848,7 +126,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.22-dev"
+                    "dev-master": "1.23-dev"
                 }
             },
             "autoload": {
@@ -883,47 +161,57 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-09-22 13:59:32"
+            "time": "2015-11-05 12:49:06"
         },
         {
-            "name": "zeptech/annotations",
-            "version": "1.1.0",
+            "name": "zendframework/zend-diactoros",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pgraham/php-annotations.git",
-                "reference": "9cd042daa9ace184d04b49f0605edf73f19a9c71"
+                "url": "https://github.com/zendframework/zend-diactoros.git",
+                "reference": "edfda00b9831630c19c411f85f50a47bb66af457"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pgraham/php-annotations/zipball/9cd042daa9ace184d04b49f0605edf73f19a9c71",
-                "reference": "9cd042daa9ace184d04b49f0605edf73f19a9c71",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/edfda00b9831630c19c411f85f50a47bb66af457",
+                "reference": "edfda00b9831630c19c411f85f50a47bb66af457",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4",
+                "psr/http-message": "~1.0"
+            },
+            "provide": {
+                "psr/http-message-implementation": "~1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6",
+                "squizlabs/php_codesniffer": "^2.3.1"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev",
+                    "dev-develop": "1.3-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "zpt\\anno": ""
+                "psr-4": {
+                    "Zend\\Diactoros\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-2-Clause"
             ],
-            "authors": [
-                {
-                    "name": "Philip Graham",
-                    "email": "philip@zeptech.ca"
-                }
-            ],
-            "description": "DOC Block annotation parsing for PHP",
-            "homepage": "https://github.com/pgraham/php-annotations",
+            "description": "PSR HTTP Message implementations",
+            "homepage": "https://github.com/zendframework/zend-diactoros",
             "keywords": [
-                "annotations"
+                "http",
+                "psr",
+                "psr-7"
             ],
-            "time": "2013-05-29 02:35:23"
+            "time": "2015-11-24 19:16:22"
         }
     ],
     "packages-dev": [
@@ -980,6 +268,48 @@
                 "instantiate"
             ],
             "time": "2015-06-14 21:17:01"
+        },
+        {
+            "name": "myclabs/deep-copy",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myclabs/DeepCopy.git",
+                "reference": "e3abefcd7f106677fd352cd7c187d6c969aa9ddc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/e3abefcd7f106677fd352cd7c187d6c969aa9ddc",
+                "reference": "e3abefcd7f106677fd352cd7c187d6c969aa9ddc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "doctrine/collections": "1.*",
+                "phpunit/phpunit": "~4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Create deep copies (clones) of your objects",
+            "homepage": "https://github.com/myclabs/DeepCopy",
+            "keywords": [
+                "clone",
+                "copy",
+                "duplicate",
+                "object",
+                "object graph"
+            ],
+            "time": "2015-11-07 22:20:37"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1092,20 +422,20 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.2.3",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f"
+                "reference": "f7bb5cddf4ffe113eeb737b05241adb947b43f9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef1ca6835468857944d5c3b48fa503d5554cff2f",
-                "reference": "ef1ca6835468857944d5c3b48fa503d5554cff2f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/f7bb5cddf4ffe113eeb737b05241adb947b43f9d",
+                "reference": "f7bb5cddf4ffe113eeb737b05241adb947b43f9d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
+                "php": ">=5.6",
                 "phpunit/php-file-iterator": "~1.3",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-token-stream": "~1.3",
@@ -1114,7 +444,7 @@
             },
             "require-dev": {
                 "ext-xdebug": ">=2.1.4",
-                "phpunit/phpunit": "~4"
+                "phpunit/phpunit": "~5"
             },
             "suggest": {
                 "ext-dom": "*",
@@ -1124,7 +454,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -1150,7 +480,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-14 06:51:16"
+            "time": "2015-11-12 21:08:20"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1332,16 +662,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.9",
+            "version": "5.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b"
+                "reference": "ed084be6b5b912f11c3559e17110f8d8a1e3a8a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/73fad41adb5b7bc3a494bb930d90648df1d5e74b",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ed084be6b5b912f11c3559e17110f8d8a1e3a8a1",
+                "reference": "ed084be6b5b912f11c3559e17110f8d8a1e3a8a1",
                 "shasum": ""
             },
             "require": {
@@ -1350,18 +680,20 @@
                 "ext-pcre": "*",
                 "ext-reflection": "*",
                 "ext-spl": "*",
-                "php": ">=5.3.3",
+                "myclabs/deep-copy": "~1.3",
+                "php": ">=5.6",
                 "phpspec/prophecy": "^1.3.1",
-                "phpunit/php-code-coverage": "~2.1",
+                "phpunit/php-code-coverage": "~3.0",
                 "phpunit/php-file-iterator": "~1.4",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": ">=1.0.6",
-                "phpunit/phpunit-mock-objects": "~2.3",
+                "phpunit/phpunit-mock-objects": ">=3.0",
                 "sebastian/comparator": "~1.1",
                 "sebastian/diff": "~1.2",
                 "sebastian/environment": "~1.3",
                 "sebastian/exporter": "~1.2",
                 "sebastian/global-state": "~1.0",
+                "sebastian/resource-operations": "~1.0",
                 "sebastian/version": "~1.0",
                 "symfony/yaml": "~2.1|~3.0"
             },
@@ -1374,7 +706,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.8.x-dev"
+                    "dev-master": "5.0.x-dev"
                 }
             },
             "autoload": {
@@ -1400,30 +732,30 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-20 12:56:44"
+            "time": "2015-11-10 21:47:43"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.7",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a"
+                "reference": "b28b029356e65091dfbf8c2bc4ef106ffece509e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5e2645ad49d196e020b85598d7c97e482725786a",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/b28b029356e65091dfbf8c2bc4ef106ffece509e",
+                "reference": "b28b029356e65091dfbf8c2bc4ef106ffece509e",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
-                "php": ">=5.3.3",
+                "php": ">=5.6",
                 "phpunit/php-text-template": "~1.2",
                 "sebastian/exporter": "~1.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.4"
+                "phpunit/phpunit": "~5"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -1431,7 +763,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -1456,7 +788,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-08-19 09:14:08"
+            "time": "2015-11-09 15:37:17"
         },
         {
             "name": "sebastian/comparator",
@@ -1692,16 +1024,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
+                "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4",
+                "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4",
                 "shasum": ""
             },
             "require": {
@@ -1739,7 +1071,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2014-10-06 09:23:50"
+            "time": "2015-10-12 03:26:01"
         },
         {
             "name": "sebastian/recursion-context",
@@ -1795,6 +1127,48 @@
             "time": "2015-06-21 08:04:50"
         },
         {
+            "name": "sebastian/resource-operations",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/resource-operations.git",
+                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
+                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                }
+            ],
+            "description": "Provides a list of PHP built-in functions that operate on resources",
+            "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "time": "2015-07-28 20:34:47"
+        },
+        {
             "name": "sebastian/version",
             "version": "1.0.6",
             "source": {
@@ -1828,11 +1202,62 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2015-06-21 13:59:46"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v2.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "4cfcd7a9fceba662b3c036b7d9a91f6197af046c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4cfcd7a9fceba662b3c036b7d9a91f6197af046c",
+                "reference": "4cfcd7a9fceba662b3c036b7d9a91f6197af046c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-11-18 13:41:01"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "league/pipeline": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
