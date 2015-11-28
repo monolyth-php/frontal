@@ -59,9 +59,8 @@ Container::inject('*', function (&$adapter) {
 });
 
 /*
- * This example injects Twig into the base View, which is probably what you're
- * going to want (although feel free to use a different templating engine, e.g.
- * Moustache).
+ * This example injects Twig into the base View. Feel free to use a different
+ * templating engine, e.g. Moustache).
  */
 $router = require 'router.php';
 View::inject(function (&$twig) use ($router) {
@@ -79,7 +78,7 @@ View::inject(function (&$twig) use ($router) {
     $twig->addFunction(new Twig_SimpleFunction('url', [$router, 'generate']));
     
     /**
-     * Example integration of Metaculous: (See
+     * Example integration of Metaculous. (See
      * http://metaculous.monomelodies.nl, usage is of course optional.)
      */
     $arrayOfIgnoreWords = $hashOfRiggedWords = [];
