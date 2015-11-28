@@ -11,49 +11,24 @@ inside and outside of the PHP world. Where necessary, we chose our own path :)
 
 ## Installation
 
-### Composer project (recommended)
-`$ composer create-project monomelodies/monolyth /path/to/new/project`
+### Composer (recommended)
+```bash
+$ cd /path/to/project
+$ composer require monomelodies/monolyth
+```
 
-Ehm, that's it, really. Well, your web server needs to serve from
-`/path/to/new/project`, you might want to add it to version control and you'll
-probably need a database, but you get the idea.
+You'll note that Monolyth installs a few dependencies, but mostly does a lot of
+_recommendations_. You're free to follow up on these or not. Note that most of
+the manual assumes these packages are also `composer require`d, though.
 
-### Composer dependency
-To migrate an existing project to Monolyth, install as a composer _dependency_
-instead:
+### Manual
+1. Download or clone the library somewhere to your liking;
+2. Register `/path/to/monolyth/src` for the `Monolyth\\` namespace in your
+   autoloader;
+3. Repeat for desired submodules (see `composer.json` for a list of recommended
+   additional modules).
 
-`$ cd /path/to/existing/project && composer require monomelodies/monolyth`
-
-You'll probably want to copy the `httpdocs` and `src` directories into your
-project, since they're meant as example templates and will have to be edited by
-the implementor (i.e., you).
-
-Using this strategy, _all_ Monolyth dependencies are loaded and you cannot
-prune. Also, any updates to Monolyth will be loaded whenever you do
-`composer update`, along with updates to Monolyth dependencies. That's not
-really how it's designed to work - the dependencies are rather recommendations
-(but `composer create-project` doesn't honour the `suggest` key) and your
-project might require different versions than the latest Monolyth recommends.
-So in the real world (if you don't mind having the extra depedencies floating
-around in `./vendor`) when using this strategy you should lockdown Monolyth to
-the exact version you installed with, or your project might break in unexpected
-ways in the future!
-
-### Download, cherry pick, remove
-This is actually closer to the recommended installation, as it's really a manual
-version of what `composer create-project` does:
-
-1. Download or clone the library somewhere (doesn't matter where):
-   `git clone https://github.com/monomelodies/monolyth.git some/path`
-   or
-   `wget https://github.com/monomelodies/monolyth/archive/master.zip`
-   `mkdir some/path && mv master.zip some/path/`
-   `cd some/path && unzip master.zip`
-2. Copy what you need into `/path/to/project`. From Monolyth's `composer.json`,
-   be sure to review the dependencies and remove what you're not going to use.
-3. When done, you can `rm -rf` the cloned or downloaded repository.
-
-## What Monolyth is _NOT_
+## What Monolyth is _not_
 Monolyth is _not_ a full stack framework, at least not as you'll know it.
 Rather, it is a set of best practices surrounded by a number of (sub)modules
 that work nicely together, but mostly can also be used on their own. You can mix
@@ -85,14 +60,12 @@ modules and how they work together.
 > older versions.
 
 ## Now what?
-- Replace this README.md with something applicable for your project;
 - Optionally add extra Composer dependencies;
 - Optionally setup build scripts (e.g. using Grunt);
-- Prune your `composer.json` file - we've probably installed dependencies you
-  don't really need anyway;
 - Make sure the `./httpdocs` folder (or whatever you decide to call it) points
   to the public root for your testdomain (e.g. `http://localhost/`);
-- Whip up your favourite browser and navigate to `http://localhost/`. There's a
-  welcome page to get you started.
+- The `./example/httpdocs` folder contains an example entry point;
+- The `./example/src` folder contains our version of "Hello world". Copy it into
+  your own `./src` or whatever folder to get started;
 - Go build that awesome project!
 
