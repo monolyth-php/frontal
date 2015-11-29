@@ -11,39 +11,31 @@ use Cesession\Handler;
 use Monolyth\Utilities;
 use Monolyth\HttpController;
 use League\Pipeline\Pipeline;
+use Zend\Diactoros\Response\HtmlResponse;
 
 /** Require and setup the Composer autoloader. */
-$autoloader = require_once '../vendor/autoload.php';
+$autoloader = require_once '../../vendor/autoload.php';
 
 /** @see Monolyth\Utilities::utf8 */
 Utilities::utf8();
 /** @see Monolyth\Utilities::proxy */
 Utilities::proxy();
 
-require_once '../src/dependencies.php';
-
 $pipeline = new Pipeline;
 $controller = new HttpController;
-$controller->run();
 
 /**
- * We use Cesession sessions by default; remove or change this if your
- * preferences are different.
+ * This is just an example for the default welcome page. Real projects
+ * should use a router of some sort.
  */
-$session = new Session('my-session-name');
-extract(Container::inject('*', function ($adapter) {}));
-$session->registerHandler(new Handler\Pdo($adapter));
-session_start();
+$controller->pipe(function ($request) {
+    return new HtmlResponse(file_get_contents('../src/template.html'));
+});
 
 try {
-    if (!($state = $router->resolve($_SERVER['REQUEST_URI']))) {
-        throw new Exception('404');
-    }
-    echo $state();
+    $controller->run();
 } catch (Exception $e) {
     // You should do something useful here...
-    echo $e->getMessage();
-    echo $e->getFile();
-    echo $e->getLine();
+    throw $e;
 }
 

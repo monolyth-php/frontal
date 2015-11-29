@@ -33,3 +33,17 @@ something different:
 > need to modify a few `include` statements here and there as well, especially
 > in `index.php` which sets things up.
 
+A very basic project skeleton is included In `./example`. To view it in action,
+you can do the following:
+
+```bash
+cd /path/to/example/httpdocs
+php -S 127.0.0.1:8080
+```
+
+...and point your browser to `http://127.0.0.1:8080`. You can also use it as a
+skeleton for your own project.
+
+> Note that the include call for the autoloader will most likely use a different
+> path.
+

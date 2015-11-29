@@ -11,15 +11,15 @@
     ],
     "require": {
         "php": ">=5.4",
-        "twig/twig": "^1.0.0",
-        "zendframework/zend-diactoros": "^1.2",
-        "league/pipeline": "^0.1.0"
+        "league/pipeline": "^0.1.0",
+        "zendframework/zend-diactoros": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
     },
     "suggest": {
         "phpunit/dbunit": "Test your database classes too",
+        "twig/twig": "The Twig templating engine",
         "twig/extensions": "Handy Twig extensions (e.g. for i18n)",
         "monomelodies/disclosure": "Dependency injection module",
         "monomelodies/dabble": "Database abstraction layer",
@@ -44,6 +44,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "": "example/src",
             "Monolyth\\": "src/",
             "Monolyth\\Test\\": "tests/"
         },
