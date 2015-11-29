@@ -5,7 +5,7 @@ namespace Monolyth;
 use Zend\Diactoros\Server;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\Response\HtmlResponse;
+use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\SapiEmitter;
 use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
@@ -25,17 +25,17 @@ class HttpController
 
     public function pipe(callable $stage)
     {
-        $this->pipeline->add($stage);
+        $this->pipeline->add(new Stage($stage));
         return $this;
     }
 
     public function run()
     {
         $this->pipeline->build()
-            ->pipe(function ($response) {
+            ->pipe(new Stage(function (ResponseInterface $response) {
                 $emitter = new SapiEmitter;
                 return $emitter->emit($response);
-            })
+            }))
             ->process(ServerRequestFactory::fromGlobals());
     }
 }
