@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0254b77661b9b49bd0c8991f3427df5b",
-    "content-hash": "5fbdf80d11ce75cc0e9b6625a29240b5",
+    "hash": "912102e79aed694c8821bd4227f2b8e2",
+    "content-hash": "6f251ee623c1670a0d224cde4cc6bf49",
     "packages": [
         {
             "name": "league/pipeline",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/pipeline.git",
-                "reference": "5e2a8f3450a6f68220c2dcc2db65cbdb473740bc"
+                "reference": "c8145611b588ab20bb5dd7a12d0f741b40fc57bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/pipeline/zipball/5e2a8f3450a6f68220c2dcc2db65cbdb473740bc",
-                "reference": "5e2a8f3450a6f68220c2dcc2db65cbdb473740bc",
+                "url": "https://api.github.com/repos/thephpleague/pipeline/zipball/c8145611b588ab20bb5dd7a12d0f741b40fc57bd",
+                "reference": "c8145611b588ab20bb5dd7a12d0f741b40fc57bd",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "pipeline",
                 "sequential"
             ],
-            "time": "2015-11-22 18:29:48"
+            "time": "2015-06-25 16:50:06"
         },
         {
             "name": "psr/http-message",
@@ -1256,9 +1256,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "league/pipeline": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
