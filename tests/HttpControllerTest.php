@@ -7,8 +7,6 @@ use Monolyth\HttpController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\SapiEmitter;
-use League\Pipeline\Pipeline;
 
 class HttpControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -31,9 +29,7 @@ class HttpControllerTest extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_URI'] = '/';
         $front = new HttpController;
         $front->pipe(function ($request) {
-            $response = new HtmlResponse('Hello world');
-            $emitter = new SapiEmitter;
-            $emitter->emit($response);
+            return new HtmlResponse('Hello world');
         });
         $front->run();
     }
