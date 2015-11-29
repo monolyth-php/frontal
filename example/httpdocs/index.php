@@ -14,7 +14,7 @@ use League\Pipeline\Pipeline;
 use Zend\Diactoros\Response\HtmlResponse;
 
 /** Require and setup the Composer autoloader. */
-$autoloader = require_once '../vendor/autoload.php';
+$autoloader = require_once '../../vendor/autoload.php';
 
 /** @see Monolyth\Utilities::utf8 */
 Utilities::utf8();
