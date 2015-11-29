@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "0254b77661b9b49bd0c8991f3427df5b",
+    "content-hash": "5fbdf80d11ce75cc0e9b6625a29240b5",
     "packages": [
         {
             "name": "league/pipeline",
