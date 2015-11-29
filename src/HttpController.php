@@ -31,7 +31,12 @@ class HttpController
 
     public function run()
     {
-        $this->pipeline->build()->process(ServerRequestFactory::fromGlobals());
+        $this->pipeline->build()
+            ->pipe(function ($response) {
+                $emitter = new SapiEmitter;
+                return $emitter->emit($response);
+            })
+            ->process(ServerRequestFactory::fromGlobals());
     }
 }
 
