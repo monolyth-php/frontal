@@ -11,14 +11,12 @@ use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Exception;
 use Whoops\Run;
-use Whoops\Handler\SoapResponseHandler;
-use Whoops\Handler\XmlResponseHandler;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Handler\JsonResponseHandler;
+use Whoops\Handler\HandlerInterface;
 
 class HttpController
 {
     protected $pipeline;
+    private $whoops;
 
     public function __construct(Pipeline $pipeline = null)
     {
@@ -26,12 +24,6 @@ class HttpController
         if (isset($pipeline)) {
             $this->pipeline->add($pipeline);
         }
-        $whoops = new Run;
-        $whoops->pushHandler(new SoapResponseHandler);
-        $whoops->pushHandler(new XmlResponseHandler);
-        $whoops->pushHandler(new PrettyPageHandler);
-        $whoops->pushHandler(new JsonResponseHandler);
-        $whoops->register();
     }
 
     public function pipe(callable $stage)
@@ -48,6 +40,15 @@ class HttpController
                 return $emitter->emit($response);
             }))
             ->process(ServerRequestFactory::fromGlobals());
+    }
+
+    public function whoops(HandlerInterface $handler)
+    {
+        if (!isset($this->whoops)) {
+            $this->whoops = new Run;
+        }
+        $this->whoops->pushHandler($handler);
+        $this->whoops->register();
     }
 }
 
