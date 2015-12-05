@@ -11,11 +11,10 @@ use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Exception;
 use Whoops\Run;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\SoapResponseHandler;
 use Whoops\Handler\XmlResponseHandler;
-use Whoops\Handler\PlainTextHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Handler\JsonResponseHandler;
 
 class HttpController
 {
@@ -28,11 +27,10 @@ class HttpController
             $this->pipeline->add($pipeline);
         }
         $whoops = new Run;
-        $whoops->pushHandler(new PrettyPageHandler);
-        $whoops->pushHandler(new JsonResponseHandler);
         $whoops->pushHandler(new SoapResponseHandler);
         $whoops->pushHandler(new XmlResponseHandler);
-        $whoops->pushHandler(new PlainTextHandler);
+        $whoops->pushHandler(new PrettyPageHandler);
+        $whoops->pushHandler(new JsonResponseHandler);
         $whoops->register();
     }
 
