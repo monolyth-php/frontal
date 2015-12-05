@@ -62,3 +62,20 @@ your `run` override in a derived controller.
 The example `index.php` uses the first method and just re-throws the exception.
 Obviously this is not fit for production code, it's just an example.
 
+Monolyth comes bundled with `filp/whoops`, which is a nice little library that
+quickly formats your error pages. The `HttpController` offers a public `whoops`
+method to set this up:
+
+```php
+<?php
+
+use Whoops\Handler\PrettyPageHandler;
+
+// ...
+
+$controller->whoops(new PrettyPageHandler);
+```
+
+Whoops comes bundled with some other handlers, e.g. `JsonResponseHandler`. It's
+up to you to pick the right one for your application.
+
