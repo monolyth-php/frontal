@@ -7,6 +7,7 @@ use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\SapiEmitter;
+use Zend\Diactoros\Response\EmptyResponse;
 use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Exception;
@@ -35,8 +36,11 @@ class HttpController
     public function run()
     {
         $this->pipeline->build()
-            ->pipe(new Stage(function (ResponseInterface $response) {
+            ->pipe(new Stage(function (ResponseInterface $response = null) {
                 $emitter = new SapiEmitter;
+                if (is_null($response)) {
+                    $response = new EmptyResponse(404);
+                }
                 return $emitter->emit($response);
             }))
             ->process(ServerRequestFactory::fromGlobals());
