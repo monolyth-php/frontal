@@ -11,33 +11,46 @@
     ],
     "require": {
         "php": ">=5.4",
-        "twig/twig": "^1.0.0",
-        "monomelodies/disclosure": "^1.0.0",
-        "monomelodies/dabble": "^1.2.6",
-        "monomelodies/improse": "^0.3.0",
-        "monomelodies/reroute": "^2.0.0",
-        "monomelodies/cesession": "^1.0.0",
-        "monomelodies/emily": "^1.1.5",
-        "monomelodies/booby": "^1.1.1",
-        "monomelodies/envy": "^0.2.0",
-        "monomelodies/formulaic": "^1.4.3",
-        "monomelodies/gentry": "^0.3.0",
-        "monomelodies/metaculous": "^1.0.1",
-        "monomelodies/monki": "^0.1.4",
-        "monomelodies/mural": "^0.2.0",
-        "monomelodies/ornament": "^0.1.1",
-        "monomelodies/dormant": "^0.0.4"
+        "league/pipeline": "^0.1.0",
+        "zendframework/zend-diactoros": "^1.2",
+        "filp/whoops": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4"
     },
     "suggest": {
         "phpunit/dbunit": "Test your database classes too",
-        "twig/extensions": "Handy Twig extensions (e.g. for i18n)"
+        "twig/twig": "The Twig templating engine",
+        "twig/extensions": "Handy Twig extensions (e.g. for i18n)",
+        "monomelodies/disclosure": "Dependency injection module",
+        "monomelodies/dabble": "Database abstraction layer",
+        "monomelodies/improse": "MVC view library",
+        "monomelodies/reroute": "Flexible URL router",
+        "monomelodies/cesession": "Alternative PHP session handler",
+        "monomelodies/emily": "Twig-based mailer",
+        "monomelodies/booby": "Flash messaging",
+        "monomelodies/envy": "Environment handling",
+        "monomelodies/formulaic": "Form utilities",
+        "monomelodies/gentry": "Generate unit tests",
+        "monomelodies/metaculous": "Metadata helpers",
+        "monomelodies/monki": "Simple API bootstrapper",
+        "monomelodies/mural": "Mulitple resource autoloader",
+        "monomelodies/ornament": "ORM toolkit",
+        "monomelodies/dormant": "Dabble adapter for Ornament"
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Monolyth\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "": "example/src",
+            "Monolyth\\": "src/",
+            "Monolyth\\Test\\": "tests/"
+        },
+        "files": [
+            "tests/HeaderStack.php"
+        ]
     }
 }
