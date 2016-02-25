@@ -51,6 +51,6 @@ $controller->pipe(function ($request) use ($router) {
 $controller->run();
 ```
 
-> Of course, you can also choose not to use `HttpController` at all and
+> Of course, you can also choose not to use `Http\Controller` at all and
 > implement your own or an alternative package's logic.
 

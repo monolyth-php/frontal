@@ -19,5 +19,6 @@ More information:
 
 > As always, you're free to ignore our advice on this and implement controllers
 > with their own HTML generation logic. As long as you wrap that HTML in a
-> `ResponseInterface`-compatible object, the `HttpController` is fine with that.
+> `ResponseInterface`-compatible object, the `Http\Controller` is fine with
+> that.
 
