@@ -11,19 +11,19 @@ behind a proxy - YMMV depending on your server software/proxy brand). It then
 instantiates, configures and runs the _front controller_.
 
 
-## `HttpController`
+## `Http\Controller`
 A front controller, in MVC terms, is sort of your central hub where all
 non-static requests get funelled to, and that decides what should happen next
 (usually based on some routing table).
 
-Monolyth's front controller - the `HttpController`, since it will be used to
+Monolyth's front controller - the `Http\Controller`, since it will be used to
 build a web app - works with _pipelines_. This means that your application is
 effectively wrapped in transformers (like an onion skin), each of which forwards
 its result to the next one.
 
-For simple apps, you can call `pipe` on the `HttpController` object to build
+For simple apps, you can call `pipe` on the `Http\Controller` object to build
 the pipeline. For more complicated apps (or lots of pipes), you could extend the
-default `HttpController` and use the constructor and/or overridden `run` method
+default `Http\Controller` and use the constructor and/or overridden `run` method
 to setup your logic.
 
 The pipeline is initialized by calling `run` and is started with a _request
@@ -63,7 +63,7 @@ The example `index.php` uses the first method and just re-throws the exception.
 Obviously this is not fit for production code, it's just an example.
 
 Monolyth comes bundled with `filp/whoops`, which is a nice little library that
-quickly formats your error pages. The `HttpController` offers a public `whoops`
+quickly formats your error pages. The `Http\Controller` offers a public `whoops`
 method to set this up:
 
 ```php

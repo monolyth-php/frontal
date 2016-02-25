@@ -12,7 +12,7 @@ libraries that can accomplish the same task, e.g.
 your preference (and, in fact, you can choose not to use dependency injection
 _at all_, though we'd advise against that particular route :)).
 
-Since `HttpController` is IoC-agnostic, you can either load your dependencies
+Since `Http\Controller` is IoC-agnostic, you can either load your dependencies
 in their own `pipe`, `require` an external file or if your project is _really_
 simple, define them in `index.php` itself:
 
