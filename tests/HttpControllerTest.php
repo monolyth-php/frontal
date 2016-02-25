@@ -3,7 +3,7 @@
 namespace Monolyth\Test;
 
 use PHPUnit_Framework_TestCase;
-use Monolyth\HttpController;
+use Monolyth\Http\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -27,7 +27,7 @@ class HttpControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->expectOutputString('Hello world');
         $_SERVER['REQUEST_URI'] = '/';
-        $front = new HttpController;
+        $front = new Controller;
         $front->pipe(function ($request) {
             return new HtmlResponse('Hello world');
         });

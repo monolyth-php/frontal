@@ -19,7 +19,7 @@
         "phpunit/phpunit": ">=4"
     },
     "suggest": {
-        "phpunit/dbunit": "Test your database classes too",
+        "monomelodies/gentry": "Test your code!",
         "twig/twig": "The Twig templating engine",
         "twig/extensions": "Handy Twig extensions (e.g. for i18n)",
         "monomelodies/disclosure": "Dependency injection module",
