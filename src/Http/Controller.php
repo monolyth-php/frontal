@@ -45,6 +45,9 @@ class Controller
                     if (is_null($response)) {
                         $response = new EmptyResponse(404);
                     }
+                    if (session_status() == PHP_SESSION_ACTIVE) {
+                        session_write_close();
+                    }
                     return $emitter->emit($response);
                 }))
                 ->process($request);
@@ -52,6 +55,9 @@ class Controller
             if (isset($errorHandler)) {
                 $response = $errorHandler($e, $request);
                 $emitter = new SapiEmitter;
+                if (session_status() == PHP_SESSION_ACTIVE) {
+                    session_write_close();
+                }
                 return $emitter->emit($response);
             } else {
                 throw $e;
