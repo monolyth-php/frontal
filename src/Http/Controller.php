@@ -55,6 +55,9 @@ class Controller
             if (isset($errorHandler)) {
                 $response = $errorHandler($e, $request);
                 $emitter = new SapiEmitter;
+                if (session_status() == PHP_SESSION_ACTIVE) {
+                    session_write_close();
+                }
                 return $emitter->emit($response);
             } else {
                 throw $e;
