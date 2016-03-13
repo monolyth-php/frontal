@@ -23,7 +23,7 @@ pages:
     - 'Flashing people': 'booby.md'
     - 'Quickly adding an API': 'monki.md'
     - 'Multiple sites in one project': 'mural.md'
-    - 'Generating test skeletons': 'gentry.md'
+    - 'Testing your code': 'gentry.md'
 
-copyright: Copyright &copy; 2002-2015, <a href="http://monomelodies.nl/">Marijn Ophorst</a>
+copyright: Copyright &copy; 2002-2016, <a href="http://monomelodies.nl/">Marijn Ophorst</a>
 

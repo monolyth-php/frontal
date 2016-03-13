@@ -4,16 +4,17 @@ dating sites with specific variants for straights, gays and lesbians) you'll
 want to be able to share a lot of code, and only override what's actually
 different.
 
-The `Mural` module is a multiple resource autoloader that allows you to define
-the overrides in their own namespace (so everything remains testable), whilst
-allowing your code to refer to the "generic" classname.
+The [Mural](http://mural.monomelodies.nl) package is a multiple resource
+autoloader that allows you to define the overrides in their own namespace (so
+everything remains testable), whilst allowing your code to refer to the
+"generic" classname.
 
 An example:
 
 ```php
 <?php
 
-// This would go in a file specific to one of the sites in the projhect, so
+// This would go in a file specific to one of the sites in the project, so
 // typically `index.php` is a fine candidate:
 $mural = new Mural\Autoloader;
 $mural->rewrite('\\', 'Straight\\'); // Or 'Gay\\' or 'Lesbian\\'
@@ -41,7 +42,7 @@ $mural->rewrite('Search\\', 'Straight\\Search\\');
 This is obviously slightly more efficient.
 
 In your unit tests, you can now explicitly test `Straight\Search\View` as well
-as `Gay\Search\View` (etc.) to see if they returns results of the correct sex,
+as `Gay\Search\View` (etc.) to see if they return results of the correct sex,
 without any naming conflicts or the need to run multiple test suites.
 
 More information: [Mural documentation](http://mural.monomelodies.nl)

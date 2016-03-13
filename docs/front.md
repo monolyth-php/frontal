@@ -62,20 +62,68 @@ your `run` override in a derived controller.
 The example `index.php` uses the first method and just re-throws the exception.
 Obviously this is not fit for production code, it's just an example.
 
-Monolyth comes bundled with `filp/whoops`, which is a nice little library that
-quickly formats your error pages. The `Http\Controller` offers a public `whoops`
-method to set this up:
+For more user-friendly errors you can use e.g. `filp/whoops`, which is a nice
+little library that quickly formats your error pages. Here's an example of error
+handling:
 
 ```php
 <?php
 
+use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
 
 // ...
-
-$controller->whoops(new PrettyPageHandler);
+$whoops = new Whoops\Run;
+$whoops->pushHandler(new PrettyPageHandler);
+$whoops->register();
+try {
+    $controller->run();
+} catch (Throwable $e) {
+    // PHP7 throws an instance of `Throwable`. For PHP5.*, you would catch
+    // `Exception` instead.
+    if (!($e instanceof Exception)) {
+        // Whoops isn't PHP7 compatible, so we fake it:
+        throw new Exception($e->getMessage(), $e->getCode(), $e);
+    }
+}
 ```
 
 Whoops comes bundled with some other handlers, e.g. `JsonResponseHandler`. It's
 up to you to pick the right one for your application.
+
+Obviously the above example should be extended to [check for
+environment](http://envy.monomelodies.nl) and only use Whoops for development.
+In production mode it should should a friendlier HTTP 500 page.
+
+Monolyth comes with the `Monolyth\Http\Exception` which you can throw in your
+own code and inspect in the catch handler. Its `getCode()` method returns the
+desired HTTP state, so e.g. a 403 exception could redirect to a login page.
+
+A best practice is to have a generic fallback that gives a HTTP 500 error for
+any other uncaught `Throwable`.
+
+Note that if your pipeline resolves to `null`, and empty 404 is emitted by
+default. It usually means you forgot something in your pipeline, or a route
+isn't matching due to a typo or whatever.
+
+## Manually emitting a response
+When `run` fails and you want to show a custom error page instead, it's good
+practice to use an _emitter_ instead of just dumping to `STDOUT`. The emitter
+takes care of setting the correct headers:
+
+```php
+<?php
+
+use Zend\Diactoros\Response\SapiEmitter;
+use Zend\Diactoros\Response\HtmlResponse;
+
+// ...
+try {
+    $controller->run();
+} catch (Throwable $e) {
+    $response = new HtmlResponse('The server did a boo boo', 500);
+    $emitter = new SapiEmitter;
+    $emitter->emit($response);
+}
+```
 
