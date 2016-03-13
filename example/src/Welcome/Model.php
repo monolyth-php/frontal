@@ -2,7 +2,8 @@
 
 namespace Welcome;
 
-use Dormant\Dabble;
+use Dormant\Adapter;
+use Ornament\Model as Base;
 use Ornament\Query;
 use Disclosure\Injector;
 
@@ -11,7 +12,7 @@ use Disclosure\Injector;
  */
 class Model
 {
-    use Dabble;
+    use Base;
     use Query;
     use Injector;
 
@@ -29,8 +30,10 @@ class Model
 
     public function __construct()
     {
+        // Assuming you've registered your PDO database resource under
+        // `adapter` in the `Disclosure\Container`:
         $this->inject(function ($adapter) {});
-        $this->addDabbleAdapter($this->adapter);
+        $this->addAdapter(new Adapter($this->adapter));
     }
 }
 
