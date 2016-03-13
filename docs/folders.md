@@ -17,7 +17,8 @@ own liking, but we've found the following a sane default for modern projects:
   prefer `mkdocs` in combination with `phpdocumentor` and/or `esdoc` (for API
   documentation), but feel free to use whatever you want.
 - `tests` contains your unit tests. For hybrid projects (combining e.g. PHP and
-  AngularJS code) we usually create subdirectories, e.g. `tests/phpunit` and
+  AngularJS code) we usually create subdirectories, e.g.
+  [`tests/gentry`](http://gentry.monomelodies.nl) and
   `tests/karma`. Again, choose your own test framework (the default is PHPUnit).
 
 Additionally, we have the following recommendations for extra folders. You can
