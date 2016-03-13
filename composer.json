@@ -15,7 +15,7 @@
         "zendframework/zend-diactoros": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4"
+        "monomelodies/gentry": "^0.8.0"
     },
     "suggest": {
         "monomelodies/gentry": "Test your code!",
@@ -47,7 +47,7 @@
         "psr-4": {
             "": "example/src",
             "Monolyth\\": "src/",
-            "Monolyth\\Test\\": "tests/"
+            "Monolyth\\Test\\": "tests/gentry/"
         },
         "files": [
             "tests/HeaderStack.php"
