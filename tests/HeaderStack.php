@@ -11,6 +11,7 @@ class HeaderStack
      * @var array
      */
     private static $data = [];
+
     /**
      * Reset state
      */
@@ -18,6 +19,7 @@ class HeaderStack
     {
         self::$data = [];
     }
+
     /**
      * Push a header on the stack
      *
@@ -27,6 +29,7 @@ class HeaderStack
     {
         self::$data[] = $header;
     }
+
     /**
      * Return the current header stack
      *
