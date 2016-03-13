@@ -9,16 +9,21 @@ own liking, but we've found the following a sane default for modern projects:
   these should be denied direct access in your server configuration.
 - `src` contains your source code. For PHP files, it should be in the autoloader
   configuration for Composer (e.g. `"psr-4": {"": "src/"}`).
-    - `src/_sass` contains SASS partials. For huge projects you might want to
-      move each partial into a module directory, but usually keeping them
-      together makes it easier to write build tasks using e.g. Grunt
-      (`./src/_sass/**/*.scss` etc.)
 - `docs` should contain your documentation, if you have any. We personally
   prefer `mkdocs` in combination with `phpdocumentor` and/or `esdoc` (for API
   documentation), but feel free to use whatever you want.
 - `tests` contains your unit tests. For hybrid projects (combining e.g. PHP and
-  AngularJS code) we usually create subdirectories, e.g. `tests/phpunit` and
-  `tests/karma`. Again, choose your own test framework (the default is PHPUnit).
+  AngularJS code) we usually create subdirectories, e.g.
+  [`tests/gentry`](http://gentry.monomelodies.nl) and
+  `tests/karma`. Again, choose your own test framework (the default is
+  [Gentry](http://gentry.monomelodies.nl)).
+
+> Where you place your Javascript is up to you. We usually use
+> [AngularJS](https://angularjs.org) and transpile it from ES6 to ES5 using
+> Babel, so for us it makes sense to put the separate source files alongside
+> their PHP counterparts. More or less the same goes for CSS - we usually use
+> SASS but it's really your choice. The example has a `_sass` folder for these,
+> but Monolyth really doesn't care.
 
 Additionally, we have the following recommendations for extra folders. You can
 ignore them safely if your project doesn't need or use them, or if you prefer

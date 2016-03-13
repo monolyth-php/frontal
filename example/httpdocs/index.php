@@ -9,7 +9,7 @@ use Disclosure\Container;
 use Cesession\Session;
 use Cesession\Handler;
 use Monolyth\Utilities;
-use Monolyth\HttpController;
+use Monolyth\Http\Controller;
 use League\Pipeline\Pipeline;
 use Zend\Diactoros\Response\HtmlResponse;
 
@@ -22,7 +22,7 @@ Utilities::utf8();
 Utilities::proxy();
 
 $pipeline = new Pipeline;
-$controller = new HttpController;
+$controller = new Controller;
 
 /**
  * This is just an example for the default welcome page. Real projects
@@ -34,8 +34,12 @@ $controller->pipe(function ($request) {
 
 try {
     $controller->run();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     // You should do something useful here...
+    throw $e;
+} catch (Exception $e) {
+    // For PHP5.* compatibility. Should contain the same logic as the previous
+    // handler block.
     throw $e;
 }
 

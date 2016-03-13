@@ -12,11 +12,10 @@
     "require": {
         "php": ">=5.4",
         "league/pipeline": "^0.1.0",
-        "zendframework/zend-diactoros": "^1.2",
-        "filp/whoops": "^1.1"
+        "zendframework/zend-diactoros": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4"
+        "monomelodies/gentry": "^0.8.0"
     },
     "suggest": {
         "monomelodies/gentry": "Test your code!",
@@ -36,7 +35,8 @@
         "monomelodies/monki": "Simple API bootstrapper",
         "monomelodies/mural": "Mulitple resource autoloader",
         "monomelodies/ornament": "ORM toolkit",
-        "monomelodies/dormant": "Dabble adapter for Ornament"
+        "monomelodies/dormant": "Dabble adapter for Ornament",
+        "filp/whoops": "PHP errors for cool kids"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +47,7 @@
         "psr-4": {
             "": "example/src",
             "Monolyth\\": "src/",
-            "Monolyth\\Test\\": "tests/"
+            "Monolyth\\Test\\": "tests/gentry/"
         },
         "files": [
             "tests/HeaderStack.php"
