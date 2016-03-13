@@ -36,6 +36,7 @@
         "monomelodies/mural": "Mulitple resource autoloader",
         "monomelodies/ornament": "ORM toolkit",
         "monomelodies/dormant": "Dabble adapter for Ornament",
+        "monomelodies/dbmover": "Keep your database up to date",
         "filp/whoops": "PHP errors for cool kids"
     },
     "autoload": {
