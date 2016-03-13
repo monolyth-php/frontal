@@ -69,7 +69,7 @@ class Controller
             ->pipe(new Stage(function (ResponseInterface $response = null) {
                 $emitter = new SapiEmitter;
                 if (is_null($response)) {
-                    $response = new EmptyResponse(404);
+                    throw new Exception(404);
                 }
                 return $emitter->emit($response);
             }))
