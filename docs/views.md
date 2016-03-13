@@ -4,13 +4,13 @@ there (at least in the PHP world). In MVC theory, a "view" is an object that is
 responsible for its own data. Most frameworks treat the HTML template as the
 "view" and have controllers get and inject data into it. This is simply wrong.
 
-To fix that we created `Improse`, a simple object oriented view wrapper. Routes
-which only display data don't need a controller and should simply return a view
-containing the requested data. It is then the view's job to render this data
-using some _template_, which could be HTML, PHP or something like
-[Twig](http://twig.sensiolabs.org) (our preferred choice). The important thing
-is, it should once again eventually end up as an object implementing
-`Psr\Http\Message\ResponseInterface`.
+To fix that we created [Improse](http://improse.monomelodies.nl), a simple
+object oriented view wrapper. Routes which only display data don't need a
+controller and should simply return a view containing the requested data. It is
+then the view's job to render this data using some _template_, which could be
+HTML, PHP or something like [Twig](http://twig.sensiolabs.org) (our preferred
+choice). The important thing is, it should once again eventually end up as an
+object implementing `Psr\Http\Message\ResponseInterface`.
 
 More information:
 

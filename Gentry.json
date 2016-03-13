@@ -1,9 +1,4 @@
 {
     "src": "./src",
-    "tests": "./tests",
-    "includePath": ["./tests"],
-    "useIncludePath": false,
-    "base": "AbstractTest",
-    "prepend": false,
-    "strip": false
+    "tests": "./tests/gentry"
 }
