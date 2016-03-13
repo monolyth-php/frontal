@@ -19,7 +19,8 @@ own liking, but we've found the following a sane default for modern projects:
 - `tests` contains your unit tests. For hybrid projects (combining e.g. PHP and
   AngularJS code) we usually create subdirectories, e.g.
   [`tests/gentry`](http://gentry.monomelodies.nl) and
-  `tests/karma`. Again, choose your own test framework (the default is PHPUnit).
+  `tests/karma`. Again, choose your own test framework (the default is
+  [Gentry](http://gentry.monomelodies.nl)).
 
 Additionally, we have the following recommendations for extra folders. You can
 ignore them safely if your project doesn't need or use them, or if you prefer
