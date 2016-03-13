@@ -34,8 +34,12 @@ $controller->pipe(function ($request) {
 
 try {
     $controller->run();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     // You should do something useful here...
+    throw $e;
+} catch (Exception $e) {
+    // For PHP5.* compatibility. Should contain the same logic as the previous
+    // handler block.
     throw $e;
 }
 
