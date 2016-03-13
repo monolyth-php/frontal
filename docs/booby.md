@@ -10,7 +10,6 @@ the last one ought to be slightly more helpful...).
 `Booby` is a small module that allows you to generate messages anywhere in your
 code. You can then retrieve them in your template and display them.
 
-@@ Example
 ```php
 <?php
 
@@ -40,25 +39,23 @@ now do something like this:
 ```php
     public function __invoke(array $data)
     {
-        $data['messages'] = Flash::all();
+        $data['messages'] = Flash::each();
     }
 ```
 
 ...and in the template conditionally display and format them:
 
 ```html
-{% if messages %}
 <ul class="messages">
     {% for message in messages %}
     <li>{{ message }}</li>
     {% endfor %}
 </ul>
-{% endif %}
 ```
 
-You can also use `Flash::each()` to retrieve the next message. Messages
-self-destruct after they are `__toString`'d.
+You can also use `Flash::all()` to retrieve all messages as an array (`each`
+returns a generator). That way you can do checks like `{% if messages|length
+%}`. Messages self-destruct after they are `__toString`'d.
 
 More information: [Booby documentation](http://booby.monomelodies.nl)
-
 

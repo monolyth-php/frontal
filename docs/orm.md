@@ -1,6 +1,8 @@
 # Object-relational mapper
-Supplied are the `Ornament` ORM toolkit, along with `Dormant` which is a
-[Dabble](dabble.md) adapter for Ornament.
+Our own preferred take on ORM is to use
+[Ornament](http://ornament.monomelodies.nl) along with
+[Dormant](http://dormant.monomelodies.nl) (a [Dabble](dabble.md) adapter for
+Ornament).
 
 We're not going to go into Ornament too much here; it has its own extensive
 documentation. But as a quick example, look at the (otherwise unused) model in
