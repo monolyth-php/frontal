@@ -1,7 +1,7 @@
 {
-    "name": "monomelodies/monolyth",
-    "description": "Object oriented PHP5 MVC unframework",
-    "keywords": ["PHP","OO","MVC","framework","unframework"],
+    "name": "monolyth/frontal",
+    "description": "Monolyth unframework Front controller package",
+    "keywords": ["PHP","OO","MVC","framework","unframework","front controller"],
     "license": "MIT",
     "authors": [
         {
