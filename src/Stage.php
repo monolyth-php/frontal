@@ -1,6 +1,6 @@
 <?php
 
-namespace Monolyth;
+namespace Monolyth\Frontal;
 
 use League\Pipeline\StageInterface;
 

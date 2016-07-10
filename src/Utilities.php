@@ -1,6 +1,6 @@
 <?php
 
-namespace Monolyth;
+namespace Monolyth\Frontal;
 
 abstract class Utilities
 {

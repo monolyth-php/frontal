@@ -41,7 +41,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Monolyth\\": "src/"
+            "Monolyth\\Frontal\\": "src/"
         }
     },
     "autoload-dev": {
