@@ -1,5 +1,7 @@
 <?php
 
+namespace Monolyth\Frontal;
+
 /**
  * Example index.php you can extend on.
  * Be sure to change paths to reflect your server environment.
@@ -8,7 +10,6 @@
 use Disclosure\Container;
 use Cesession\Session;
 use Cesession\Handler;
-use Monolyth\Http\Controller;
 use League\Pipeline\Pipeline;
 use Zend\Diactoros\Response\HtmlResponse;
 
