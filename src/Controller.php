@@ -12,7 +12,6 @@ use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Whoops\Run;
 use Whoops\Handler\HandlerInterface;
-use Monolyth\Stage;
 
 /**
  * Monolyth's front controller or "kernel".
