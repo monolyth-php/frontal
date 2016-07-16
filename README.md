@@ -4,7 +4,7 @@ Default front controller/HTTP kernel for the Monolyth unframework
 ## Installation
 
 ### Composer (recommended)
-```bash
+```sh
 $ composer require monolyth/frontal
 ```
 
@@ -14,4 +14,11 @@ $ composer require monolyth/frontal
    autoloader.
 
 ## Usage
-See the `example` directory for a working example project.
+See the `example` directory for a working example project. You can also run the
+example project directly using PHP's built-in webserver:
+
+```sh
+$ cd example/httpdocs
+$ php -S localhost:8000
+```
+
