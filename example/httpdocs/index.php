@@ -8,7 +8,6 @@
 use Disclosure\Container;
 use Cesession\Session;
 use Cesession\Handler;
-use Monolyth\Utilities;
 use Monolyth\Http\Controller;
 use League\Pipeline\Pipeline;
 use Zend\Diactoros\Response\HtmlResponse;
