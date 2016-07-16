@@ -33,6 +33,7 @@
         ]
     },
     "suggest": {
-        "filp/whoops": "PHP errors for cool kids"
+        "filp/whoops": "PHP errors for cool kids",
+        "twig/twig": "Twig templating engine"
     }
 }
