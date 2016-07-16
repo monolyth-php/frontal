@@ -31,5 +31,8 @@
         "files": [
             "tests/HeaderStack.php"
         ]
+    },
+    "suggest": {
+        "filp/whoops": "PHP errors for cool kids"
     }
 }
