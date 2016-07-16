@@ -1,30 +1,10 @@
-site_name: Monolyth documentation
-site_url: http://monolyth.monomelodies.nl/
-repo_url: https://github.com/monomelodies/monolyth
+site_name: Monolyth Frontal documentation
+site_url: http://monolyth.monomelodies.nl/frontal/
+repo_url: https://github.com/monolyth-php/frontal/
 
 pages:
 - Home:
     - 'Overview': 'index.md'
-- General structure:
-    - 'Folder layout': 'folders.md'
-    - 'The front controller': 'front.md'
-    - 'Routing': 'routing.md'
-    - 'Dependencies': 'dependencies.md'
-    - 'Views': 'views.md'
-- Optional modules:
-    - 'Did you say "optional"?': 'optional.md'
-    - 'Database abstraction': 'dabble.md'
-    - 'Object-relational mapper': 'orm.md'
-    - 'Environments': 'envy.md'
-    - 'Handling forms': 'forms.md'
-    - 'Sending emails': 'emails.md'
-- Utility modules:
-    - 'Sometimes good is not enough': 'utility.md'
-    - 'Flashing people': 'booby.md'
-    - 'Quickly adding an API': 'monki.md'
-    - 'Multiple sites in one project': 'mural.md'
-    - 'Testing your code': 'gentry.md'
-    - 'Keeping your database up to date': 'dbmover.md'
 
 copyright: Copyright &copy; 2002-2016, <a href="http://monomelodies.nl/">Marijn Ophorst</a>
 
