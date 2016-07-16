@@ -16,10 +16,14 @@ use Zend\Diactoros\Response\HtmlResponse;
 /** Require and setup the Composer autoloader. */
 $autoloader = require_once '../../vendor/autoload.php';
 
-/** @see Monolyth\Utilities::utf8 */
-Utilities::utf8();
-/** @see Monolyth\Utilities::proxy */
-Utilities::proxy();
+/** @see Monolyth\Plumber\Utf8 */
+if (class_exists('Monolyth\Plumber\Utf8')) {
+    Monolyth\Plumber\Utf8::handle();
+}
+/** @see Monolyth\Plumber\Proxy */
+if (class_exists('Monolyth\Plumber\Proxy')) {
+    Monolyth\Plumber\Proxy::handle();
+}
 
 $pipeline = new Pipeline;
 $controller = new Controller;
