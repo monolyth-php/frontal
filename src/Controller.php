@@ -1,6 +1,6 @@
 <?php
 
-namespace Monolyth\Http;
+namespace Monolyth\Frontal;
 
 use Zend\Diactoros\Server;
 use Zend\Diactoros\ServerRequest;
@@ -12,7 +12,6 @@ use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Whoops\Run;
 use Whoops\Handler\HandlerInterface;
-use Monolyth\Stage;
 
 /**
  * Monolyth's front controller or "kernel".

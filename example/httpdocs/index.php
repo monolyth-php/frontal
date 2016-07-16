@@ -1,5 +1,7 @@
 <?php
 
+namespace Monolyth\Frontal;
+
 /**
  * Example index.php you can extend on.
  * Be sure to change paths to reflect your server environment.
@@ -8,18 +10,20 @@
 use Disclosure\Container;
 use Cesession\Session;
 use Cesession\Handler;
-use Monolyth\Utilities;
-use Monolyth\Http\Controller;
 use League\Pipeline\Pipeline;
 use Zend\Diactoros\Response\HtmlResponse;
 
 /** Require and setup the Composer autoloader. */
 $autoloader = require_once '../../vendor/autoload.php';
 
-/** @see Monolyth\Utilities::utf8 */
-Utilities::utf8();
-/** @see Monolyth\Utilities::proxy */
-Utilities::proxy();
+/** @see Monolyth\Plumber\Utf8 */
+if (class_exists('Monolyth\Plumber\Utf8')) {
+    Monolyth\Plumber\Utf8::handle();
+}
+/** @see Monolyth\Plumber\Proxy */
+if (class_exists('Monolyth\Plumber\Proxy')) {
+    Monolyth\Plumber\Proxy::handle();
+}
 
 $pipeline = new Pipeline;
 $controller = new Controller;
