@@ -1,6 +1,6 @@
 <?php
 
-namespace Monolyth\Frontal\Http;
+namespace Monolyth\Frontal;
 
 class Exception extends \Exception
 {

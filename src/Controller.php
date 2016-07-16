@@ -1,6 +1,6 @@
 <?php
 
-namespace Monolyth\Frontal\Http;
+namespace Monolyth\Frontal;
 
 use Zend\Diactoros\Server;
 use Zend\Diactoros\ServerRequest;
