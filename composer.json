@@ -33,6 +33,7 @@
         ]
     },
     "suggest": {
+        "monolyth/plumber": "Monolyth utilities",
         "filp/whoops": "PHP errors for cool kids",
         "twig/twig": "Twig templating engine"
     }
