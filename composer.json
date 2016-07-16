@@ -15,29 +15,7 @@
         "zendframework/zend-diactoros": "^1.2"
     },
     "require-dev": {
-        "monomelodies/gentry": "^0.8.0"
-    },
-    "suggest": {
-        "monomelodies/gentry": "Test your code!",
-        "twig/twig": "The Twig templating engine",
-        "twig/extensions": "Handy Twig extensions (e.g. for i18n)",
-        "monomelodies/disclosure": "Dependency injection module",
-        "monomelodies/dabble": "Database abstraction layer",
-        "monomelodies/improse": "MVC view library",
-        "monomelodies/reroute": "Flexible URL router",
-        "monomelodies/cesession": "Alternative PHP session handler",
-        "monomelodies/emily": "Twig-based mailer",
-        "monomelodies/booby": "Flash messaging",
-        "monomelodies/envy": "Environment handling",
-        "monomelodies/formulaic": "Form utilities",
-        "monomelodies/gentry": "Generate unit tests",
-        "monomelodies/metaculous": "Metadata helpers",
-        "monomelodies/monki": "Simple API bootstrapper",
-        "monomelodies/mural": "Mulitple resource autoloader",
-        "monomelodies/ornament": "ORM toolkit",
-        "monomelodies/dormant": "Dabble adapter for Ornament",
-        "monomelodies/dbmover": "Keep your database up to date",
-        "filp/whoops": "PHP errors for cool kids"
+        "gentry/gentry": "^0.10.0"
     },
     "autoload": {
         "psr-4": {
@@ -47,8 +25,8 @@
     "autoload-dev": {
         "psr-4": {
             "": "example/src",
-            "Monolyth\\": "src/",
-            "Monolyth\\Test\\": "tests/gentry/"
+            "Monolyth\\Frontal\\": "src/",
+            "Monolyth\\Frontal\\Test\\": "tests/gentry/"
         },
         "files": [
             "tests/HeaderStack.php"
