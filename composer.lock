@@ -1,0 +1,475 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "571c429aff05199c6150661bd44fc9d6",
+    "packages": [
+        {
+            "name": "league/pipeline",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/pipeline.git",
+                "reference": "c8145611b588ab20bb5dd7a12d0f741b40fc57bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/pipeline/zipball/c8145611b588ab20bb5dd7a12d0f741b40fc57bd",
+                "reference": "c8145611b588ab20bb5dd7a12d0f741b40fc57bd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "^1.0",
+                "phpspec/phpspec": "^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Pipeline\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "A plug and play pipeline implementation.",
+            "keywords": [
+                "composition",
+                "design pattern",
+                "pattern",
+                "pipeline",
+                "sequential"
+            ],
+            "time": "2015-06-25T16:50:06+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "zendframework/zend-diactoros",
+            "version": "1.8.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-diactoros.git",
+                "reference": "a85e67b86e9b8520d07e6415fcbcb8391b44a75b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/a85e67b86e9b8520d07e6415fcbcb8391b44a75b",
+                "reference": "a85e67b86e9b8520d07e6415fcbcb8391b44a75b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "psr/http-message": "^1.0"
+            },
+            "provide": {
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "php-http/psr7-integration-tests": "dev-master",
+                "phpunit/phpunit": "^5.7.16 || ^6.0.8 || ^7.2.7",
+                "zendframework/zend-coding-standard": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-release-1.8": "1.8.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php"
+                ],
+                "psr-4": {
+                    "Zend\\Diactoros\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "PSR HTTP Message implementations",
+            "homepage": "https://github.com/zendframework/zend-diactoros",
+            "keywords": [
+                "http",
+                "psr",
+                "psr-7"
+            ],
+            "time": "2019-08-06T17:53:53+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "gentry/gentry",
+            "version": "0.10.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gentry-php/gentry.git",
+                "reference": "4e97d4d754b3d6624a3a3d24c63d5c80ad9d0726"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gentry-php/gentry/zipball/4e97d4d754b3d6624a3a3d24c63d5c80ad9d0726",
+                "reference": "4e97d4d754b3d6624a3a3d24c63d5c80ad9d0726",
+                "shasum": ""
+            },
+            "require": {
+                "monomelodies/kingconf": "^1.1.0",
+                "php": ">=7",
+                "simoneast/simple-ansi-colors": "^1.0",
+                "zeptech/annotations": "^1.0.0"
+            },
+            "bin": [
+                "bin/gentry"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gentry\\Gentry\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Ophorst",
+                    "email": "marijn@monomelodies.nl"
+                }
+            ],
+            "description": "PHP unit test generation tools",
+            "time": "2016-10-09T14:45:24+00:00"
+        },
+        {
+            "name": "monomelodies/kingconf",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monomelodies/kingconf.git",
+                "reference": "6709a1b23cd906a2a16bf8780730a404ca769e63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monomelodies/kingconf/zipball/6709a1b23cd906a2a16bf8780730a404ca769e63",
+                "reference": "6709a1b23cd906a2a16bf8780730a404ca769e63",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "symfony/yaml": "^4.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Monomelodies\\Kingconf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Ophorst",
+                    "email": "marijn@monomelodies.nl"
+                }
+            ],
+            "description": "Load configuration in any sane format",
+            "keywords": [
+                "config",
+                "configuration",
+                "ini",
+                "json",
+                "loader",
+                "php",
+                "xml",
+                "yaml"
+            ],
+            "time": "2019-06-06T13:16:02+00:00"
+        },
+        {
+            "name": "simoneast/simple-ansi-colors",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SimonEast/Simple-Ansi-Colors.git",
+                "reference": "7b0abb5d779e25fffd26bcceb3d88278d1c064ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SimonEast/Simple-Ansi-Colors/zipball/7b0abb5d779e25fffd26bcceb3d88278d1c064ed",
+                "reference": "7b0abb5d779e25fffd26bcceb3d88278d1c064ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ansi": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon East",
+                    "email": "simon@yump.com.au"
+                }
+            ],
+            "description": "Simple PHP class for converting basic HTML-like color tags into ANSI escape codes for use in console apps and scripts. Auto-detection for Windows/Ansicon users included.",
+            "homepage": "https://github.com/SimonEast/Simple-Ansi-Colors",
+            "keywords": [
+                "ansi",
+                "ansicon",
+                "color",
+                "colors",
+                "colour",
+                "colours",
+                "console"
+            ],
+            "time": "2015-11-24T03:03:27+00:00"
+        },
+        {
+            "name": "symfony/polyfill-ctype",
+            "version": "v1.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "550ebaac289296ce228a706d0867afc34687e3f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/550ebaac289296ce228a706d0867afc34687e3f4",
+                "reference": "550ebaac289296ce228a706d0867afc34687e3f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-ctype": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.12-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gert de Pagter",
+                    "email": "BackEndTea@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for ctype functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "ctype",
+                "polyfill",
+                "portable"
+            ],
+            "time": "2019-08-06T08:03:45+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v4.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "5a0b7c32dc3ec56fd4abae8a4a71b0cf05013686"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/5a0b7c32dc3ec56fd4abae8a4a71b0cf05013686",
+                "reference": "5a0b7c32dc3ec56fd4abae8a4a71b0cf05013686",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "conflict": {
+                "symfony/console": "<3.4"
+            },
+            "require-dev": {
+                "symfony/console": "~3.4|~4.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2019-08-20T14:27:59+00:00"
+        },
+        {
+            "name": "zeptech/annotations",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pgraham/php-annotations.git",
+                "reference": "9cd042daa9ace184d04b49f0605edf73f19a9c71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pgraham/php-annotations/zipball/9cd042daa9ace184d04b49f0605edf73f19a9c71",
+                "reference": "9cd042daa9ace184d04b49f0605edf73f19a9c71",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "zpt\\anno": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Philip Graham",
+                    "email": "philip@zeptech.ca"
+                }
+            ],
+            "description": "DOC Block annotation parsing for PHP",
+            "homepage": "https://github.com/pgraham/php-annotations",
+            "keywords": [
+                "annotations"
+            ],
+            "time": "2013-05-29T02:35:23+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4"
+    },
+    "platform-dev": []
+}
