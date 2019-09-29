@@ -12,7 +12,8 @@
     "require": {
         "php": ">=5.4",
         "league/pipeline": "^0.1.0",
-        "zendframework/zend-diactoros": "^1.2"
+        "zendframework/zend-diactoros": "^1.2",
+        "monolyth/cachet": "^1.0"
     },
     "require-dev": {
         "gentry/gentry": "^0.10.0"
