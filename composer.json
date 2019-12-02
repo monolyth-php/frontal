@@ -10,12 +10,14 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "league/pipeline": "^0.1.0",
         "zendframework/zend-diactoros": "^1.2"
     },
     "require-dev": {
-        "gentry/gentry": "^0.10.0"
+        "toast/unit": "^2.0",
+        "gentry/gentry": "^0.13.12",
+        "gentry/toast": "^0.1.1"
     },
     "autoload": {
         "psr-4": {
@@ -24,13 +26,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "": "example/src",
-            "Monolyth\\Frontal\\": "src/",
-            "Monolyth\\Frontal\\Test\\": "tests/gentry/"
-        },
-        "files": [
-            "tests/HeaderStack.php"
-        ]
+            "Monolyth\\Frontal\\": "src/"
+        }
     },
     "suggest": {
         "monolyth/plumber": "Monolyth utilities",

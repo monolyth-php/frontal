@@ -2,16 +2,9 @@
 
 namespace Monolyth\Frontal;
 
-use Zend\Diactoros\Server;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\{ ServerRequestFactory, Response\SapiEmitter };
 use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response\SapiEmitter;
-use Zend\Diactoros\Response\EmptyResponse;
-use League\Pipeline\Pipeline;
-use League\Pipeline\PipelineBuilder;
-use Whoops\Run;
-use Whoops\Handler\HandlerInterface;
+use League\Pipeline\{ Pipeline, PipelineBuilder };
 
 /**
  * Monolyth's front controller or "kernel".
@@ -37,9 +30,9 @@ class Controller
 
     /**
      * Add a stage to the pipeline. The callable gets wrapped in
-     * `Monolyth\Stage` so its interface satisfies `league\pipeline`.
+     * `Monolyth\Frontal\Stage` so its interface satisfies `league\pipeline`.
      *
-     * HTTP pipe stages accept on argument (`$payload`) and should return either
+     * HTTP pipe stages accept an argument (`$payload`) and should return either
      * an instance of `Psr\Http\Message\RequestInterface` (in which case the
      * next stage will be called) or `Psr\Http\Message\ResponseInterface` (in
      * which case the pipeline is terminated).
