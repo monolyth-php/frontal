@@ -26,13 +26,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "": "example/src",
-            "Monolyth\\Frontal\\": "src/",
-            "Monolyth\\Frontal\\Test\\": "tests/gentry/"
-        },
-        "files": [
-            "tests/HeaderStack.php"
-        ]
+            "Monolyth\\Frontal\\": "src/"
+        }
     },
     "suggest": {
         "monolyth/plumber": "Monolyth utilities",
