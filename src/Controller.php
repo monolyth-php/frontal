@@ -2,13 +2,9 @@
 
 namespace Monolyth\Frontal;
 
-use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\{ ServerRequestFactory, Response\SapiEmitter };
 use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response\SapiEmitter;
-use League\Pipeline\Pipeline;
-use League\Pipeline\PipelineBuilder;
-use Whoops\Run;
-use Whoops\Handler\HandlerInterface;
+use League\Pipeline\{ Pipeline, PipelineBuilder };
 
 /**
  * Monolyth's front controller or "kernel".
