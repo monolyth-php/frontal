@@ -30,9 +30,9 @@ class Controller
 
     /**
      * Add a stage to the pipeline. The callable gets wrapped in
-     * `Monolyth\Stage` so its interface satisfies `league\pipeline`.
+     * `Monolyth\Frontal\Stage` so its interface satisfies `league\pipeline`.
      *
-     * HTTP pipe stages accept on argument (`$payload`) and should return either
+     * HTTP pipe stages accept an argument (`$payload`) and should return either
      * an instance of `Psr\Http\Message\RequestInterface` (in which case the
      * next stage will be called) or `Psr\Http\Message\ResponseInterface` (in
      * which case the pipeline is terminated).
