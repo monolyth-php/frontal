@@ -2,12 +2,9 @@
 
 namespace Monolyth\Frontal;
 
-use Zend\Diactoros\Server;
-use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\SapiEmitter;
-use Zend\Diactoros\Response\EmptyResponse;
 use League\Pipeline\Pipeline;
 use League\Pipeline\PipelineBuilder;
 use Whoops\Run;
