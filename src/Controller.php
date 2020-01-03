@@ -2,7 +2,8 @@
 
 namespace Monolyth\Frontal;
 
-use Zend\Diactoros\{ ServerRequestFactory, Response\SapiEmitter };
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use Psr\Http\Message\ResponseInterface;
 use League\Pipeline\{ Pipeline, PipelineBuilder };
 

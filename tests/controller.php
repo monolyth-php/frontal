@@ -1,7 +1,7 @@
 <?php
 
 use Monolyth\Frontal\Controller;
-use Zend\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\HtmlResponse;
 
 /**
  * Tests for Monolyth's HTTP kernel.
