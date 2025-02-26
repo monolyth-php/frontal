@@ -21,7 +21,7 @@ class Controller
      *
      * @param League\Pipeline\Pipeline $pipeline
      */
-    public function __construct(Pipeline $pipeline = null)
+    public function __construct(?Pipeline $pipeline = null)
     {
         $this->pipeline = new PipelineBuilder;
         if (isset($pipeline)) {
@@ -59,7 +59,7 @@ class Controller
     {
         $request = ServerRequestFactory::fromGlobals();
         $this->pipeline->build()
-            ->pipe(new Stage(function (ResponseInterface $response = null) {
+            ->pipe(new Stage(function (?ResponseInterface $response = null) {
                 $emitter = new SapiEmitter;
                 if (is_null($response)) {
                     throw new Exception(404);
