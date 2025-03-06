@@ -16,9 +16,9 @@
         "laminas/laminas-httphandlerrunner": "^2.11"
     },
     "require-dev": {
-        "toast/unit": "^2.0",
-        "gentry/gentry": "^0.13.12",
-        "gentry/toast": "^0.1.1"
+        "toast/unit": "^2.2.2",
+        "gentry/gentry": "^0.16.1",
+        "gentry/toast": "^0.2.1"
     },
     "autoload": {
         "psr-4": {
